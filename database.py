@@ -31,23 +31,76 @@ class Database:
     
     # Adds user to the user table in database
     def insertUser(self, firstName, lastName, username, password):
+        cursor = self._connection.cursor()
         # SELF.? JUST NUMUSERS?
         self.numUsers = self.numUsers + 1
         userID = 'u' + str(self.numUsers)
         user = User(firstName, lastName, userID, username, password)
+        # Assume the table already exists
+        stmtStr = "INSERT INTO user(firstName, lastName, userID, username, password) VALUES (?, ?, ?, ?, ?)"
+        
+        try:
+            cursor.execute(stmtStr, [str(user)])
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        cursor.close()
+        self._connection.close()
 
     # # Adds user to the user table in database
     # def deleteUser(self, firstName, lastName, username, password):
 
+
     # Adds article to the article table in database    
-    def insertArticle(self, user, url, tags):
+    def insertArticle(self, user, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
+        cursor = self._connection.cursor()
         self.numArticles = self.numArticles + 1
         # Unique articleIDs are the hash of the url
         articleID = hash(url)
-        articleID = 
         article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
-        # SQL STATMENT - add article to the table
-        # if articleID already exists, 
+        # Assume the table already exists
+        stmtStr = "INSERT INTO article(articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL) VALUES (?, ?, ?, ?, ?)"
+        
+        try:
+            cursor.execute(stmtStr, [str(article)])
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        # Assume the table already exists
+        stmtStr = "INSERT INTO user_article_tags(userID, articleID, tags) VALUES user, articleID, tags"
+        
+        try:
+            # does this work below??? w/ one arg?
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        # can I do this??? 
+        stmtStr = "UPDATE user(numArticles) VALUES self.numArticles"
+        
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        cursor.close()
+        self._connection.close()
     
     # Removes an article from a user's archive. If no user has this
     # article saved, remove it from the article table.
