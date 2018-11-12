@@ -14,7 +14,7 @@ const LoginForm = props => {
   return (
     <form onSubmit={submitForm}>
       <Input type="text" name="email" model="email" label="Email:" />
-      <Input type="password" name="password" model="password" label="Password:" />
+      <Input type="password" name="password" model="password" label="Password:" /> 
       <input type="submit" value="Submit" />
       <LoadingView currentlySending={currentlySending} />
       <ErrorView message={errorMessage} />

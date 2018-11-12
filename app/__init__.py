@@ -1,7 +1,13 @@
+#!/usr/bin/env python
+#-----------------------------------------------------------------------
+# init.py
+# Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+#-----------------------------------------------------------------------
 from flask import Flask
 from flask_login import LoginManager
 from views import bp
 from models import User
+from database import Database
 
 app = Flask(__name__)
 app.secret_key = 'super secret string'  # Change this!

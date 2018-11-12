@@ -1,3 +1,9 @@
+
+// ----------------------------------------------------------------------
+//  index.js
+//  Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+// -----------------------------------------------------------------------
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -15,7 +21,9 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
+  <div className="app_container">
     <App />
+   </div>
   </Provider>,
   document.getElementById('root')
 )

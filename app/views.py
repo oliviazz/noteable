@@ -29,6 +29,12 @@ def login():
 def protected():
     return jsonify(message="Hello Protected World!"), 200
 
+@bp.route("/quickadd", methods=["POST"])
+def mypage():
+    return jsonify(message="It's working!"), 200
+
+# Define HTML endpoints, and for this (ie when post to adduser) you do the database function here 
+
 
 @bp.route("/me", methods=["GET"])
 def me():

@@ -1,11 +1,20 @@
+
+// #-----------------------------------------------------------------------
+// # app.js
+// # Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+// #-----------------------------------------------------------------------
+
 import React from 'react'
 import { Route, BrowserRouter as Router } from 'react-router-dom'
 import { connect } from 'react-redux'
 import LoginContainer from 'components/Login/LoginContainer'
 import LogoutContainer from 'components/Logout/LogoutContainer'
 import ProtectedContainer from 'components/Protected/ProtectedContainer'
+import PageContainer from 'components/PageContainer'
 import HomeContainer from 'components/Home/HomeContainer'
 import Header from 'components/Header'
+import ArticleAdd from 'components/ArticleAdd'
+import Article from 'components/Article'
 import LoadingView from 'components/LoadingView'
 import { loadMe } from 'actions/appActions'
 import 'App.css'
@@ -24,8 +33,11 @@ class App extends React.Component {
           {!loadingAuth && (
             <div>
               <Header />
-              <Route exact path="/" component={HomeContainer} />
+              <Route exact path="/" component={LoginContainer} />
               <Route path="/login" component={LoginContainer} />
+              <Route path="/mypage" component={PageContainer} />
+              <Route path="/quickadd" component={ArticleAdd} />
+          
               <Route path="/logout" component={LogoutContainer} />
               <Route path="/protected" component={ProtectedContainer} />
             </div>

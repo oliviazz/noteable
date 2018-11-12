@@ -8,23 +8,23 @@ class Header extends React.Component {
 
     return (
       <header>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
+            <h1>Noteable</h1>
+            <Link to="/">| Home |</Link>
+        
           {!loggedIn ? (
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
+         
+              <Link to="/login">| Login |</Link>
+        
           ) : (
-            <li>
-              <Link to="/logout">Logout</Link>
-            </li>
+          
+              <Link to="/logout">| Logout |</Link>
+          
           )}
-          <li>
-            <Link to="/protected">Protected</Link>
-          </li>
-        </ul>
+            <Link to="/quickadd">| Add Article |</Link>
+             <Link to="/mypage">| My Page |</Link>
+
+
+         
 
         <hr />
       </header>
