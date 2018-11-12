@@ -51,8 +51,27 @@ class Database:
         cursor.close()
         self._connection.close()
 
-    # # Adds user to the user table in database
-    # def deleteUser(self, firstName, lastName, username, password):
+    # # Deletes user from user table in database
+    def deleteUser(self, userID):
+        cursor = self._connection.cursor()
+        # SELF.? JUST NUMUSERS?
+        self.numUsers = self.numUsers + 1
+        userID = 'u' + str(self.numUsers)
+        user = User(firstName, lastName, userID, username, password)
+        # Assume the table already exists
+        stmtStr = "DELETE from user where userID = ?"
+        
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        cursor.close()
+        self._connection.close()
 
 
     # Adds article to the article table in database    
@@ -87,7 +106,7 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        # can I do this??? 
+        # can I do this??? with self.numArticles? I just wanna increment
         stmtStr = "UPDATE user(numArticles) VALUES self.numArticles"
         
         try:
