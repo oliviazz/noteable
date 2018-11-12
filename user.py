@@ -18,15 +18,7 @@ class User:
         self.username = username
         self.password = password
         self.friends = []
-        self.tags = []
-        # Article ID
-        self.articles = []
-        # User specific ID
-        self.userArticles = []
-    
+ 
     def getUserID():
         return self.userID
     
-    def addArticle(article):
-        
-    def removeArticle(article):

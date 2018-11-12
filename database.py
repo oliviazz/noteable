@@ -30,31 +30,56 @@ class Database:
         self._connection.close()
     
     # Adds user to the user table in database
-    def addUser(self, firstName, lastName, username, password):
+    def insertUser(self, firstName, lastName, username, password):
         # SELF.? JUST NUMUSERS?
         self.numUsers = self.numUsers + 1
         userID = 'u' + str(self.numUsers)
         user = User(firstName, lastName, userID, username, password)
-        # SQL STATEMENT - add user to the table
-    
+
+    # # Adds user to the user table in database
+    # def deleteUser(self, firstName, lastName, username, password):
+
     # Adds article to the article table in database    
-    def addArticle(self, user, url):
+    def insertArticle(self, user, url, tags):
         self.numArticles = self.numArticles + 1
         # Unique articleIDs are the hash of the url
         articleID = hash(url)
-        userArticleID = 'au' + str(self.numArticles)
-        article = Article(articleID, userArticleID)
+        articleID = 
+        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
         # SQL STATMENT - add article to the table
         # if articleID already exists, 
     
     # Removes an article from a user's archive. If no user has this
     # article saved, remove it from the article table.
-    def removeArticle(self, user, article):
+    def deleteArticle(self, user, article):
         user.removeArticle(article)
         # SQL STATEMENT
+
+    # Adds user to the user table in database
+    def search(self, requirements):
     
+
+    #-----------------------------------------------------------------3------
+        
     def main(argv):
-    
-#-----------------------------------------------------------------------
+
+        DATABASE_NAME = 'database.sqlite'
+        connect(DATABASE_NAME)
+
+        cursor = connection.cursor()
+
+        #do functions here
+        if ()
+
+        cursor.execute(stmtStr, args)
+        connection.commit()
+
+        #print stuff
+
+        cursor.close()
+        disconnect(DATABASE_NAME)
+        
+    #-----------------------------------------------------------------------
+
     if __name__ == '__main__':
         main(argv)

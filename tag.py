@@ -12,5 +12,4 @@ class Tag:
     # 
     def __init__(self, tagID):
         self.tagID = tagID
-        self.numUsers = 0
         self.numArticles = 0
