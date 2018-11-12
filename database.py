@@ -129,7 +129,7 @@ class Database:
 
     # Adds user to the user table in database
     def search(self, requirements):
-    
+        
 
     #-----------------------------------------------------------------3------
         
