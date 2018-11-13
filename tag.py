@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------
 # tag.py
-# Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+# Author: Olivia Zhang, Zoe Barnswell, Lyra Katzman 
 #-----------------------------------------------------------------------
 
 

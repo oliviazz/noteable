@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------
 # article.py
-# Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+# Author: Olivia Zhang, Zoe Barnswell, Lyra Katzman 
 #-----------------------------------------------------------------------
 
 from user import User
