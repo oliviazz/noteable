@@ -19,7 +19,23 @@ class PageContainer extends React.Component {
                     })
                     // const info = res.data;
                     // this.setState({ info });
-                    // console.log(this.state);
+                    try{
+                        var article_names = [];
+                        var results = this.state.data.articles
+
+                        for (var i = 0; i < results.length; i++) {
+                            article_names.push(results[i][1]);
+                        }
+
+                        this.setState({'cleaned_article_names': article_names});
+                        console.log(this.state.cleaned_article_names, "hihihih");
+                    }
+                    catch(err) {
+                        const n = 4;
+                        console.log(err);
+                    }
+
+                    
 
                 })
                
@@ -30,28 +46,46 @@ class PageContainer extends React.Component {
 
     render() {
         const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-        const temp_descrip = "In the early hours of Friday night, a humble local hero completes miraculous rescue."
+        const temp_descrip = "This is a holder, to be replaced by actual descriptions that are ideally auto-generated!"
             // const title_1 = this.state.article_url
         const title_1 = "Local hero saves wallaby"
         // const title_2 = String(this.state.articles[0])
         // const title_3 = String(this.state.articles[1])
-        return (
+        
+        let articleItems = [];
+        let article_names = [];
+        try {
+            article_names = this.state.cleaned_article_names;
+            console.log(article_names, "we made it")
+            for (var i = 0; i < article_names.length; i++) {
+                articleItems.push(<Article title = {article_names[i]} preview = {temp_descrip}/>);
+            }
+        }
+        catch(e){
+            article_names = [];
+        }
+        
+        
+        return <div>{articleItems}</div>;
+        // return (
 
-            <
-            div >
-            <
-            h1 > My Page < /h1>  <
-            Article title = { title_1 }
-            preview = { temp_descrip }
-            />  <
-            Article title = { title_1 }
-            preview = { temp_descrip }
-            />  <
-            Article title = { title_1 }
-            preview = { temp_descrip }
-            /> < /
-            div >
-        )
+        //         return <div>{menuItems}</div>;
+
+        //     // <
+        //     // div >
+        //     // <
+        //     // h1 > My Page < /h1>  <
+        //     // Article title = { title_1 }
+        //     // preview = { temp_descrip }
+        //     // />  <
+        //     // Article title = { title_1 }
+        //     // preview = { temp_descrip }
+        //     // />  <
+        //     // Article title = { title_1 }
+        //     // preview = { temp_descrip }
+        //     // /> < /
+        //     // div >
+        // )
     }
 }
 
