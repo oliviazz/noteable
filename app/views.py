@@ -2,6 +2,8 @@ from flask import request, jsonify, Blueprint
 from flask_login import login_required, login_user, current_user, logout_user
 from models import User
 from database import Database
+import requests
+
 
 
 bp = Blueprint('blueprint', __name__, template_folder='templates')
@@ -30,6 +32,8 @@ def login():
 def protected():
     return jsonify(message="Hello Protected World!"), 200
 
+  
+
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
     json_payload = request.get_json()
@@ -42,9 +46,9 @@ def addarticle():
     try:
         database.addArticle(article_url=article, article_title="Holder article!", article_descrip="Wow! It's a holder description!")
         database.disconnect()
-        return jsonify(message=article), 200
+        return jsonify(message="Posted article: " + article), 200
     except:
-        return jsonify(message="Error!"), 400
+        return jsonify(message="Error in posting article!"), 400
 
 @bp.route("/quickadd", methods=["GET"])
 def quickadd():
@@ -57,6 +61,7 @@ def getarticle():
     #use dummy userId for now 
     article_query_results = database.getArticles(userid=000)
     return jsonify(articles=article_query_results)
+
 
 
 def quickadd():

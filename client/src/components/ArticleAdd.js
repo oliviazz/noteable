@@ -24,12 +24,13 @@ class ArticleAdd extends React.Component {
 
         const submitArticle = event => {
             event.preventDefault()
-            alert(this.state.article_url);
+            alert('Submitted ' + this.state.article_url);
             axios.post('/api/addarticle', { article_url: this.state.article_url })
                 .then(res => {
-                    console.log(res);
-                    console.log(res.data);
+                    console.log("Received response: ", res.data);
                 })
+            this.props.history.push('/mypage')   
+
         }
         return (
             <div>
