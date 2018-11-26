@@ -18,6 +18,7 @@ class Database:
         self._connection = None
         self.numUsers = 0;
         self.numArticles = 0;
+
         stmtStr = 'CREATE TABLE user(firstName TEXT, lastName TEXT, userID TEXT, username TEXT, numArticles TEXT)'
 
         try:
@@ -61,6 +62,10 @@ class Database:
         except Exception, e:
             print >>stderr, e
             return (False, e)
+
+        cursor.close()
+        self._connection.close()
+
         
     def connect(self):      
         DATABASE_NAME = 'database.sqlite'
@@ -142,6 +147,8 @@ class Database:
             print >>stderr, e
             return (False, e)
 
+        updateTags(self, user, articleID, tags)
+
         stmtStr = "UPDATE user(numArticles) VALUES self.numArticles"
         
         try:
@@ -157,7 +164,6 @@ class Database:
     # Removes an article from a user's archive. If no user has this
     # article saved, remove it from the article table.
     def deleteArticle(self, user, article):
-        articleID = hash(url)
         stmtStr = "DELETE FROM user_article_tags WHERE article = ? AND userID = ?"
         
         try:
@@ -174,7 +180,7 @@ class Database:
         if self.numArticles = 0:
             stmtStr = "DELETE FROM articles WHERE article = ?"
             try:
-                cursor.execute(stmtStr, [str(articleID)])
+                cursor.execute(stmtStr, [str(article)])
                 self._connection.commit()
             except Exception, e:
                 print >>stderr, e
