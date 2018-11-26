@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 #-----------------------------------------------------------------------
 # article.py
-# Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+# Author: Olivia Zhang, Zoe Barnswell, Lyra Katzman 
 #-----------------------------------------------------------------------
-
-from user import User
 
 #-----------------------------------------------------------------------
 
@@ -20,3 +18,4 @@ class Article:
         self.articleAuthor = articleAuthor
         self.articleDate = articleDate
         self.articleURL = articleURL
+        self.numUses = 0
