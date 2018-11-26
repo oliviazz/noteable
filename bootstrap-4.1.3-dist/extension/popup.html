@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      html, body {
+        height: 200px;
+        width: 450px
+      }
+      .form-control:valid {
+         background-color: #A39ACF;
+      }
+      button {
+        background-color: #A39ACF;
+/*        height: 30px;*/
+/*        width: 30px;*/
+        outline: none;
+      }
+    </style>
+  </head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <body style="background-color:#9EB4D1;">
+<!--    <button id="changeColor"></button>-->
+    <div class="d-flex p-2 justify-content-center">
+      <form>
+        <div class="row">
+            <h1>Noteable</h1>
+        </div>
+        <div class="row">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">Article URL</span>
+              </div>
+              <input type="text" class="form-control" placeholder="URL" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                <label class="form-check-label" for="inlineCheckbox1">Tag 1</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                <label class="form-check-label" for="inlineCheckbox2">Tag 2</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+                <label class="form-check-label" for="inlineCheckbox3">Tag 3</label>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn">Add Article</button>
+        </div>
+    </form>
+      </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
