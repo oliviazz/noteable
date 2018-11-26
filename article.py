@@ -4,8 +4,6 @@
 # Author: Olivia Zhang, Zoe Barnswell, Lyra Katzman 
 #-----------------------------------------------------------------------
 
-from user import User
-
 #-----------------------------------------------------------------------
 
 class Article:
@@ -20,3 +18,4 @@ class Article:
         self.articleAuthor = articleAuthor
         self.articleDate = articleDate
         self.articleURL = articleURL
+        self.numUses = 0

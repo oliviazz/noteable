@@ -7,189 +7,383 @@
 from sqlite3 import connect
 from sys import stderr
 from os import path
-
-# from user import User
-# from article import Article
+from user import User
+from article import Article
 
 #-----------------------------------------------------------------------
 
 class Database:
-    
-    def __init__(self):
-        self._connection = None
-        self.numUsers = 0;
-        self.numArticles = 0;
 
+    def numUsers(self, cursor):
+        stmtStr = 'SELECT count(*) FROM users'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        countList = cursor.fetchone()
+        countNum = countList[0]
+        print countNum
+        return(countNum)
+
+    #-----------------------------------------------------------------------
+
+    def numArticles(self, cursor):
+        stmtStr = 'SELECT count(*) FROM articles'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        countList = cursor.fetchone()
+        countNum = countList[0]
+        print countNum
+        return(countNum)
+
+    #-----------------------------------------------------------------------
+
+    def oneTimeOnly(self):
+        try:
+            conn = connect("noteable.sqlite")
+        except Exception, e:
+            print(e)
+
+        self._connection = conn
+
+        cursor = conn.cursor()
+
+        stmtStr = 'CREATE TABLE users(firstName TEXT NOT NULL, lastName TEXT NOT NULL, userID TEXT NOT NULL UNIQUE, username TEXT NOT NULL, numArticles integer)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        stmtStr = 'CREATE TABLE articles(articleID TEXT NOT NULL UNIQUE, articleTitle TEXT NOT NULL, articleIcon TEXT, articleBlurb TEXT NOT NULL, articleAuthor TEXT , articleDate TEXT NOT NULL, articleURL TEXT NOT NULL, numUses integer)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        stmtStr = 'CREATE TABLE tags(tagName TEXT NOT NULL UNIQUE, numUses integer)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        stmtStr = 'CREATE TABLE user_article_tags(userID TEXT NOT NULL, articleID TEXT NOT NULL, tags TEXT, UNIQUE (userID, articleID))'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+ 
+        except Exception, e:
+            print >>stderr, e
+            return None
+
+        cursor.close()
+        self._connection.close()
+
+    #-----------------------------------------------------------------------
 
     def connect(self):      
-        DATABASE_NAME = 'noteable_database.sqlite'
+        DATABASE_NAME = 'noteable.sqlite'
         if not path.isfile(DATABASE_NAME):
             print >>stderr, "database: connection failed" 
         self._connection = connect(DATABASE_NAME)
+
+    #-----------------------------------------------------------------------
                     
     def disconnect(self):
         self._connection.close()
 
-    def getArticles(self, userid):
-        articles = []
-        print("getArticles database method")
-        # put it to plug by userid
-        cur = self._connection.cursor()
-        stmtStr = 'SELECT * FROM Articles'
-        cur.execute(stmtStr)
-        self._connection.commit()
+    #-----------------------------------------------------------------------
 
-        art = cur.fetchone()
-        print(art[0])
-        while art is not None:
-            print(art, " is ", " in!!")
-            articles.append(art)
-            art = cur.fetchone()
-        
-        return articles
-
-        
-        
-
-
-
-    # Adds user to the user table in database
-    def insertUser(self, firstName, lastName, username, password):
+    def allUsers(self):
         cursor = self._connection.cursor()
-        # SELF.? JUST NUMUSERS?
-        self.numUsers = self.numUsers + 1
-        userID = 'u' + str(self.numUsers)
-        user = User(firstName, lastName, userID, username, password)
-        # Assume the table already exists
-        stmtStr = "INSERT INTO user(firstName, lastName, userID, username, password) VALUES (?, ?, ?, ?, ?)"
+
+        stmtStr = "SELECT userID FROM users"
         
         try:
-            cursor.execute(stmtStr, [str(user)])
+            cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        allEntries = cursor.fetchall() 
+        for entry in allEntries:
+            print entry
+            
+        cursor.close()
+
+    #-----------------------------------------------------------------------
+
+    def allArticles(self):
+        cursor = self._connection.cursor()
+
+        stmtStr = "SELECT articleID FROM articles"
+        
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        allEntries = cursor.fetchall() 
+        for entry in allEntries:
+            print entry
+
+        cursor.close()
+
+    #-----------------------------------------------------------------------
+
+    def allUsersArticlesTags(self):
+        cursor = self._connection.cursor()
+
+        stmtStr = "SELECT userID FROM user_article_tags"
+        
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        allEntries = cursor.fetchall() 
+        for entry in allEntries:
+            print entry
+
+        cursor.close()
+
+    #-----------------------------------------------------------------------
+    
+    # Adds user to the user table in database
+    def insertUser(self, firstName, lastName, username):
+        cursor = self._connection.cursor()
+
+        num = self.numUsers(cursor)
+        # userID = 'u' + str(num + 1)
+        userID = str(num + 1)
+
+        print userID
+        user = User(firstName, lastName, userID, username)
+        stmtStr = "INSERT OR IGNORE INTO users(firstName, lastName, userID, username, numArticles) VALUES (?, ?, ?, ?, ?)"
+        
+        try:
+            cursor.execute(stmtStr, [str(user.firstName), str(user.lastName), str('u2018'), str(user.username), 0])
+            self._connection.commit()
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
         cursor.close()
-        self._connection.close()
+        return(True)
 
-    # # Deletes user from user table in database
+    #-----------------------------------------------------------------------
+
+    # # Deletes user from user table in databasez
     def deleteUser(self, userID):
         cursor = self._connection.cursor()
-        # SELF.? JUST NUMUSERS?
-        self.numUsers = self.numUsers + 1
-        userID = 'u' + str(self.numUsers)
-        user = User(firstName, lastName, userID, username, password)
-        # Assume the table already exists
-        stmtStr = "DELETE from user where userID = ?"
+
+        stmtStr = "DELETE FROM users WHERE userID = ?"
         
         try:
             cursor.execute(stmtStr, [str(userID)])
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = "DELETE FROM user_article_tags WHERE userID = ?"
+        
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
         cursor.close()
-        self._connection.close()
+        return(True)
 
-    def addArticle(self, article_url, article_title, article_descrip):
-        #stmtStr = "INSERT INTO A(articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL) VALUES (?, ?, ?, ?, ?)"
-        stmtStr = "INSERT INTO Articles(article_url, title, descrip) VALUES (?,?,?)"
-        vals = [article_url, article_title, article_descrip]
-        cur = self._connection.cursor()
-        cur.execute(stmtStr, vals)
-        self._connection.commit()
-        print(cur.lastrowid)
-        
-        row = cur.fetchone()
-        while row is not None:
-            print(row)
-        cur.close()
+    #-----------------------------------------------------------------------
 
+    def getUsesNumFromArticle(self, cursor, articleID, action):
+        stmtStr = "SELECT articles.numUses FROM articles WHERE articleID = (?) "
         
+        try:
+            cursor.execute(stmtStr, [str(articleID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        countList = cursor.fetchall() 
+        countNum = countList[0][0] + action
+
+        stmtStr = "UPDATE articles SET numUses = (?)"
         
+        try:
+            cursor.execute(stmtStr, [countNum])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        return countNum
+
+    #-----------------------------------------------------------------------
+
+    def getArticleNumFromUser(self, cursor, userID, action):
+        stmtStr = "SELECT users.numArticles FROM users WHERE userID = (?) "
+        
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        countList = cursor.fetchall()
+        countNum = countList[0][0] + action
+
+        stmtStr = "UPDATE users SET numArticles = ?"
+        
+        try:
+            cursor.execute(stmtStr, [countNum])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+        
+        return countNum
+
+    #-----------------------------------------------------------------------
+
     # Adds article to the article table in database    
-    def insertArticle(self, user, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
+    def insertArticle(self, userID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
+        cursor = self._connection.cursor()
+        # Unique articleIDs are the hash of the url
+        articleID = hash(articleURL)
+        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
+
+        stmtStr = "INSERT OR IGNORE INTO articles(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, numUses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        
+        try:
+            cursor.execute(stmtStr, [str(article.articleID), str(article.articleTitle), str(article.articleIcon), str(article.articleBlurb), str(article.articleAuthor), str(article.articleDate), str(article.articleURL), 0])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = "INSERT OR IGNORE INTO user_article_tags(userID, articleID, tags) VALUES (?, ?, ?) "
+        
+        try:
+            cursor.execute(stmtStr, [str(userID), str(articleID), str(tags)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        # updateTags(self, userID, articleID, tags)
+
+        self.getUsesNumFromArticle(cursor, articleID, 1)
+        self.getArticleNumFromUser(cursor, userID, 1)
+
+        cursor.close()
+        return (True)
+
+    #-----------------------------------------------------------------------
+
+    # Removes an article from a user's archive. If no user has this
+    # article saved, remove it from the article table.
+    def deleteArticle(self, userID, articleID):
+        cursor = self._connection.cursor()
+        stmtStr = "DELETE FROM user_article_tags WHERE articleID = ? AND userID = ?"
+        
+        try:
+            cursor.execute(stmtStr, [str(articleID), str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        self.getArticleNumFromUser(cursor, userID, -1)
+        countNum = self.getUsesNumFromArticle(cursor, articleID, -1)
+
+        if countNum == 0:
+            stmtStr = "DELETE FROM articles WHERE articleID = ?"
+            try:
+                cursor.execute(stmtStr, [str(articleID)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+        cursor.close()
+        return(True)
+
+    #-----------------------------------------------------------------------
+
+    def updateTags(self, user, article, tags):
         cursor = self._connection.cursor()
         self.numArticles = self.numArticles + 1
+
         # Unique articleIDs are the hash of the url
         articleID = hash(url)
         article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
-        # Assume the table already exists
-        stmtStr = "INSERT INTO article(articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL) VALUES (?, ?, ?, ?, ?)"
+
+        stmtStr = "UPDATE user_article_tags SET tags = ? WHERE user_article_tags.articleID = ? AND user_article_tags.userID = user"
         
+        # Ensure the execution is successful
         try:
-            cursor.execute(stmtStr, [str(article)])
+            cursor.execute(stmtStr, [str(tags), str(article), str(user)])
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
-        # Assume the table already exists
-        stmtStr = "INSERT INTO user_article_tags(userID, articleID, tags) VALUES user, articleID, tags"
-        
-        try:
-            # does this work below??? w/ one arg?
-            cursor.execute(stmtStr)
-            self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
-        # can I do this??? with self.numArticles? I just wanna increment
-        stmtStr = "UPDATE user(numArticles) VALUES self.numArticles"
-        
-        try:
-            cursor.execute(stmtStr)
-            self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
         cursor.close()
-        self._connection.close()
-    
-    # Removes an article from a user's archive. If no user has this
-    # article saved, remove it from the article table.
-    def deleteArticle(self, user, article):
-        user.removeArticle(article)
-        # SQL STATEMENT
+        return(True)
 
-    # Adds user to the user table in database
-    # def search(self, requirements):
-    
-
-    #-----------------------------------------------------------------3------
-        
-    def main(argv):
-
-        DATABASE_NAME = 'noteable_database.sqlite'
-        connect(DATABASE_NAME)
-
-        cursor = connection.cursor()
-
-        #do functions here
-        # if ()
-
-        
-
-        #print stuff
-
-        cursor.close()
-        disconnect(DATABASE_NAME)
-        
     #-----------------------------------------------------------------------
 
 if __name__ == '__main__':
-    main(argv)
+    # test user is 2018
+    c = Database()
+    c.connect()
+    # c.insertUser()
+    # c.insertUser("firstName", "lastName", "username")
+    c.insertArticle('u2018', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
+
+    # c.deleteUser("u4")
+    c.allArticles()
+    c.allUsers()
+    c.allUsersArticlesTags()
+    c.disconnect()
+
+
