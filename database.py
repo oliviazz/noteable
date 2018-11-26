@@ -18,8 +18,50 @@ class Database:
         self._connection = None
         self.numUsers = 0;
         self.numArticles = 0;
+        stmtStr = 'CREATE TABLE user(firstName TEXT, lastName TEXT, userID TEXT, username TEXT, numArticles TEXT)'
 
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = 'CREATE TABLE articles(articleID TEXT, articleTitle TEXT, articleIcon BLOB, articleBlurb TEXT, articleAuthor TEXT, articleDate TEXT, articleURL TEXT, numUses integer)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = 'CREATE TABLE tags(tagName TEXT, numUses integer)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = 'CREATE TABLE user_article_tags(userID TEXT, articleID TEXT, tags TEXT)'
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+        
     def connect(self):      
         DATABASE_NAME = 'database.sqlite'
         if not path.isfile(DATABASE_NAME):
@@ -37,7 +79,7 @@ class Database:
         userID = 'u' + str(self.numUsers)
         user = User(firstName, lastName, userID, username, password)
         # Assume the table already exists
-        stmtStr = "INSERT INTO user(firstName, lastName, userID, username, password) VALUES (?, ?, ?, ?, ?)"
+        stmtStr = "INSERT INTO user(firstName, lastName, userID, username) VALUES (?, ?, ?, ?, ?)"
         
         try:
             cursor.execute(stmtStr, [str(user)])
@@ -59,7 +101,7 @@ class Database:
         userID = 'u' + str(self.numUsers)
         user = User(firstName, lastName, userID, username, password)
         # Assume the table already exists
-        stmtStr = "DELETE from user where userID = ?"
+        stmtStr = "DELETE FROM user WHERE userID = ?"
         
         try:
             cursor.execute(stmtStr, [str(userID)])
@@ -81,39 +123,30 @@ class Database:
         # Unique articleIDs are the hash of the url
         articleID = hash(url)
         article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
-        # Assume the table already exists
-        stmtStr = "INSERT INTO article(articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL) VALUES (?, ?, ?, ?, ?)"
+
+        stmtStr = "INSERT OR IGNORE INTO article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL) VALUES (?, ?, ?, ?, ?, ?, ?)"
         
         try:
             cursor.execute(stmtStr, [str(article)])
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
-        # Assume the table already exists
-        stmtStr = "INSERT INTO user_article_tags(userID, articleID, tags) VALUES user, articleID, tags"
+        stmtStr = "INSERT OR IGNORE INTO user_article_tags(userID, articleID, tags) VALUES user, articleID, tags"
         
         try:
-            # does this work below??? w/ one arg?
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
-        # can I do this??? with self.numArticles? I just wanna increment
         stmtStr = "UPDATE user(numArticles) VALUES self.numArticles"
         
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
         except Exception, e:
             print >>stderr, e
             return (False, e)
@@ -124,12 +157,52 @@ class Database:
     # Removes an article from a user's archive. If no user has this
     # article saved, remove it from the article table.
     def deleteArticle(self, user, article):
-        user.removeArticle(article)
-        # SQL STATEMENT
+        articleID = hash(url)
+        stmtStr = "DELETE FROM user_article_tags WHERE article = ? AND userID = ?"
+        
+        try:
+            # can i do this???? w/ three args - ask olivia and zoe
+            cursor.execute(stmtStr, [str(articleID), str(user)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
 
-    # Adds user to the user table in database
-    def search(self, requirements):
-    
+        cursor = self._connection.cursor()
+        self.numArticles = self.numArticles - 1
+
+        if self.numArticles = 0:
+            stmtStr = "DELETE FROM articles WHERE article = ?"
+            try:
+                cursor.execute(stmtStr, [str(articleID)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+        cursor.close()
+        self._connection.close()
+
+    def updateTags(self, user, article, tags):
+        cursor = self._connection.cursor()
+        self.numArticles = self.numArticles + 1
+
+        # Unique articleIDs are the hash of the url
+        articleID = hash(url)
+        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
+
+        stmtStr = "UPDATE user_article_tags SET tags = ? WHERE user_article_tags.articleID = ? AND user_article_tags.userID = user"
+        
+        # Ensure the execution is successful
+        try:
+            cursor.execute(stmtStr, [str(tags), str(article), str(user)])
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        cursor.close()
+        self._connection.close()
 
     #-----------------------------------------------------------------3------
         
