@@ -15,50 +15,49 @@ from article import Article
 class Database:
     
     def __init__(self):
+        self.DATABASE_NAME = "noteable.sqlite"
         self._connection = None
         self.numUsers = 0;
         self.numArticles = 0;
 
-        stmtStr = 'CREATE TABLE user(firstName TEXT, lastName TEXT, userID TEXT, username TEXT, numArticles TEXT)'
+        cursor = self.DATABASE_NAME.cursor()
+
+        stmtStr = 'CREATE TABLE user(firstName TEXT NOT NULL, lastName TEXT NOT NULL, userID TEXT NOT NULL, username TEXT NOT NULL, numArticles TEXT)'
 
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
-        stmtStr = 'CREATE TABLE articles(articleID TEXT, articleTitle TEXT, articleIcon BLOB, articleBlurb TEXT, articleAuthor TEXT, articleDate TEXT, articleURL TEXT, numUses integer)'
+        stmtStr = 'CREATE TABLE articles(articleID TEXT NOT NULL, articleTitle TEXT NOT NULL, articleIcon TEXT, articleBlurb TEXT NOT NULL, articleAuthor TEXT , articleDate TEXT NOT NULL, articleURL TEXT NOT NULL, numUses integer)'
 
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
-        stmtStr = 'CREATE TABLE tags(tagName TEXT, numUses integer)'
+        stmtStr = 'CREATE TABLE tags(tagName TEXT NOT NULL, numUses integer)'
 
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
-        stmtStr = 'CREATE TABLE user_article_tags(userID TEXT, articleID TEXT, tags TEXT)'
+        stmtStr = 'CREATE TABLE user_article_tags(userID TEXT NOT NULL, articleID TEXT NOT NULL, tags TEXT)'
 
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
-
+ 
         except Exception, e:
             print >>stderr, e
             return (False, e)
@@ -66,7 +65,6 @@ class Database:
         cursor.close()
         self._connection.close()
 
-        
     def connect(self):      
         DATABASE_NAME = 'database.sqlite'
         if not path.isfile(DATABASE_NAME):
@@ -78,6 +76,7 @@ class Database:
     
     # Adds user to the user table in database
     def insertUser(self, firstName, lastName, username, password):
+
         cursor = self._connection.cursor()
         # SELF.? JUST NUMUSERS?
         self.numUsers = self.numUsers + 1
@@ -111,7 +110,6 @@ class Database:
         try:
             cursor.execute(stmtStr, [str(userID)])
             self._connection.commit()
-            #PUT ERROR CHECKING -- ALSO CHECK TO SEE IF THE ARTICLE ALREADY EXISTS
 
         except Exception, e:
             print >>stderr, e
@@ -212,17 +210,18 @@ class Database:
 
     # # Adds user to the user table in database
     # def search(self, requirements):
-        
-
 
     #-----------------------------------------------------------------3------
         
     def main(argv):
 
         DATABASE_NAME = 'database.sqlite'
+        Database
+
         connect(DATABASE_NAME)
 
         cursor = connection.cursor()
+
 
         #do functions here
         if ()
