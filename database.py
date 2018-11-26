@@ -210,6 +210,11 @@ class Database:
         cursor.close()
         self._connection.close()
 
+    # # Adds user to the user table in database
+    # def search(self, requirements):
+        
+
+
     #-----------------------------------------------------------------3------
         
     def main(argv):
