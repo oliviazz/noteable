@@ -197,8 +197,6 @@ class Database:
             for entry in entries:
                 hashList.append(entry)
 
-        print hashList
-
         for element in hashList:
             stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
             
