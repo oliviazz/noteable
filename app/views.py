@@ -60,7 +60,7 @@ def getarticle():
     database = Database()
     database.connect()
     #use dummy userId for now 
-    article_query_results = database.userArticles(userid='dummy')
+    article_query_results = database.userArticles('dummy')
     return jsonify(articles=article_query_results)
 
 def quickadd():
