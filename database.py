@@ -178,20 +178,38 @@ class Database:
 
     #-----------------------------------------------------------------------
 
-    def userArticles(self):
+    def userArticles(self, userID):
         cursor = self._connection.cursor()
+        hashList = []
+        urlList = []
 
-        stmtStr = "SELECT articleURL FROM articles"
+        stmtStr = "SELECT articleID FROM user_article_tags WHERE userID = ? "
         
         try:
-            cursor.execute(stmtStr)
+            cursor.execute(stmtStr, [str(userID)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
         allEntries = cursor.fetchall() 
-        return allEntries
+        for entries in allEntries:
+            for entry in entries:
+                hashList.append(entry)
+
+        for element in hashList:
+            stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
+            
+            try:
+                cursor.execute(stmtStr, [str(element)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+            entryData = cursor.fetchall()
+            urlList.append(entryData[0][0])
+        return urlList
 
     #-----------------------------------------------------------------------
     
@@ -446,7 +464,6 @@ if __name__ == '__main__':
     # # c.userArticles()
     # c.updateTags("u2018", "8834987638503293291", ["hello"])
     # c.allUsersArticlesTags()
-
     c.disconnect()
 
 
