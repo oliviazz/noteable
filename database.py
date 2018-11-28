@@ -177,9 +177,26 @@ class Database:
         cursor.close()
 
     #-----------------------------------------------------------------------
+
+    def userArticles(self):
+        cursor = self._connection.cursor()
+
+        stmtStr = "SELECT articleURL FROM articles"
+        
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        allEntries = cursor.fetchall() 
+        return allEntries
+
+    #-----------------------------------------------------------------------
     
     # Adds user to the user table in database
-    def insertUser(self, firstName, lastName, username):
+    def insertUser(self, firstName, lastName, username, userIDTest):
         cursor = self._connection.cursor()
 
         num = self.numUsers(cursor)
@@ -191,7 +208,7 @@ class Database:
         stmtStr = "INSERT OR IGNORE INTO users(firstName, lastName, userID, username, numArticles) VALUES (?, ?, ?, ?, ?)"
         
         try:
-            cursor.execute(stmtStr, [str(user.firstName), str(user.lastName), str('u2018'), str(user.username), 0])
+            cursor.execute(stmtStr, [str(user.firstName), str(user.lastName), str(userIDTest), str(user.username), 0])
             self._connection.commit()
 
         except Exception, e:
@@ -245,10 +262,10 @@ class Database:
         countList = cursor.fetchall() 
         countNum = countList[0][0] + action
 
-        stmtStr = "UPDATE articles SET numUses = (?)"
+        stmtStr = "UPDATE articles SET numUses = (?) WHERE articleID = (?)"
         
         try:
-            cursor.execute(stmtStr, [countNum])
+            cursor.execute(stmtStr, [countNum, str(articleID)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
@@ -271,14 +288,15 @@ class Database:
         countList = cursor.fetchall()
         countNum = countList[0][0] + action
 
-        stmtStr = "UPDATE users SET numArticles = ?"
+        stmtStr = "UPDATE users SET numArticles = (?) WHERE userID = (?) "
         
         try:
-            cursor.execute(stmtStr, [countNum])
+            cursor.execute(stmtStr, [countNum, str(userID)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
+        print countNum
         
         return countNum
 
@@ -336,7 +354,7 @@ class Database:
         countNum = self.getUsesNumFromArticle(cursor, articleID, -1)
 
         if countNum == 0:
-            stmtStr = "DELETE FROM articles WHERE articleID = ?"
+            stmtStr = "DELETE FROM articles WHERE articleID = ? "
             try:
                 cursor.execute(stmtStr, [str(articleID)])
                 self._connection.commit()
@@ -348,42 +366,58 @@ class Database:
 
     #-----------------------------------------------------------------------
 
-    def updateTags(self, user, article, tags):
+    def updateTags(self, userID, articleID, newTags):
         cursor = self._connection.cursor()
-        self.numArticles = self.numArticles + 1
+        stmtStr = "SELECT user_article_tags.tags FROM user_article_tags WHERE userID = (?) AND articleID = (?)"
+        allTags = []
 
-        # Unique articleIDs are the hash of the url
-        articleID = hash(url)
-        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
-
-        stmtStr = "UPDATE user_article_tags SET tags = ? WHERE user_article_tags.articleID = ? AND user_article_tags.userID = user"
-        
-        # Ensure the execution is successful
         try:
-            cursor.execute(stmtStr, [str(tags), str(article), str(user)])
+            cursor.execute(stmtStr, [str(userID), str(articleID)])
             self._connection.commit()
-
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
+        countList = cursor.fetchall()
+        for tagList in countList:
+            for tag in tagList:
+                if tag not in newTags:
+                    allTags.append(tag)
+                    print tag
+
+        for newTag in [newTags]:
+            if newTag not in allTags:
+                allTags.append(newTag)
+                print newTag
+
+        stmtStr = "UPDATE user_article_tags SET tags = (?) WHERE articleID = (?) AND userID = (?) "
+        
+        try:
+            cursor.execute(stmtStr, [str(newTags), str(userID), str(articleID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+        
         cursor.close()
         return(True)
 
     #-----------------------------------------------------------------------
 
 if __name__ == '__main__':
-    # test user is 2018
+    # # test user is 2018
     c = Database()
     c.connect()
-    # c.insertUser()
-    # c.insertUser("firstName", "lastName", "username")
+    # # c.insertUser()
+    # # c.insertUser("firstName", "lastName", "username")
     c.insertArticle('u2018', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
 
-    # c.deleteUser("u4")
+    # # c.deleteUser("u4")
     c.allArticles()
     c.allUsers()
-    c.allUsersArticlesTags()
+    # # c.userArticles()
+    # c.updateTags("u2018", "8834987638503293291", ["hello"])
+    # c.allUsersArticlesTags()
     c.disconnect()
 
 
