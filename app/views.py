@@ -43,8 +43,9 @@ def addarticle():
     database = Database()
     database.connect()
     print(article)
+
     try:
-        database.addArticle(article_url=article, article_title="Holder article!", article_descrip="Wow! It's a holder description!")
+        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, 'tags')
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except:
@@ -59,10 +60,8 @@ def getarticle():
     database = Database()
     database.connect()
     #use dummy userId for now 
-    article_query_results = database.getArticles(userid=000)
+    article_query_results = database.userArticles('dummy')
     return jsonify(articles=article_query_results)
-
-
 
 def quickadd():
     return jsonify(message="It's working!!!!"), 200
