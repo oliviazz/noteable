@@ -1,2 +1,13 @@
 venv
 *.pyc
+database.py
+run.py
+user 2.py
+user.py
+tag 2.py
+tag.py
+article.py
+database.sqlite
+make_init_table_python.py
+try.py
+
