@@ -178,20 +178,40 @@ class Database:
 
     #-----------------------------------------------------------------------
 
-    def userArticles(self):
+    def userArticles(self, userID):
         cursor = self._connection.cursor()
+        hashList = []
+        urlList = []
 
-        stmtStr = "SELECT articleURL FROM articles"
+        stmtStr = "SELECT articleID FROM user_article_tags WHERE userID = ? "
         
         try:
-            cursor.execute(stmtStr)
+            cursor.execute(stmtStr, [str(userID)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
 
         allEntries = cursor.fetchall() 
-        return allEntries
+        for entries in allEntries:
+            for entry in entries:
+                hashList.append(entry)
+
+        print hashList
+
+        for element in hashList:
+            stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
+            
+            try:
+                cursor.execute(stmtStr, [str(element)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+            entryData = cursor.fetchall()
+            urlList.append(entryData[0][0])
+        return urlList
 
     #-----------------------------------------------------------------------
     
@@ -408,16 +428,17 @@ if __name__ == '__main__':
     # # test user is 2018
     c = Database()
     c.connect()
-    # # c.insertUser()
-    # # c.insertUser("firstName", "lastName", "username")
-    c.insertArticle('u2018', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
+    # # # /# # c.insertUser()
+    # # # # # c.insertUser("firstName", "lastName", "username")
+    # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
 
-    # # c.deleteUser("u4")
-    c.allArticles()
-    c.allUsers()
-    # # c.userArticles()
-    # c.updateTags("u2018", "8834987638503293291", ["hello"])
-    # c.allUsersArticlesTags()
+    # # # # # c.deleteUser("u4")
+    # # c.insertUser("firstName", "lastName", "username", "dummy")
+    # # # c.allArticles()
+    # # c.allUsers()
+    c.userArticles('dummy')
+    # # # c.updateTags("u2018", "8834987638503293291", ["hello"])
+    # # # c.allUsersArticlesTags()
     c.disconnect()
 
 
