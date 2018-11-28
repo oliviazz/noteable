@@ -1,6 +1,5 @@
 venv
 *.pyc
-database.py
 run.py
 user 2.py
 user.py
@@ -10,4 +9,5 @@ article.py
 database.sqlite
 make_init_table_python.py
 try.py
+noteable.sqlite
 
