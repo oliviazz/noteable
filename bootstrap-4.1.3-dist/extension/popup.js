@@ -1,8 +1,8 @@
 // Copyright 2018 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
-import axios from 'axios'
-'use strict';
+
+require('axios');
 var cur_url = ""
     // let changeColor = document.getElementById('changeColor');
 
@@ -32,8 +32,21 @@ chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT
 
 document.addEventListener('DOMContentLoaded', function() {
     var link = document.getElementById('submitButton');
+    alert(cur_url);
     // onClick's logic below:
     link.addEventListener('click', function() {
-        alert(cur_url)
+        // snip
+        event.preventDefault()
+            alert('Submitted ' + cur_url);
+            var xhr = new XMLHttpRequest();
+
+			xhr.open("GET", "/api/addArticle", false);
+			xhr.send();
+
+			var result = xhr.responseText;
+			console.log(result, " RESULT")
+
+            this.props.history.push('/mypage')   
+
     });
 });
