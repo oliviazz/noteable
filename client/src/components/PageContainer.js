@@ -1,3 +1,10 @@
+// ---------------------------------------
+// Component rendered showing "My Page"
+// Written in react native.js 
+//
+// Team Noteable -  Olivia, Zoe, and Lyra
+//----------------------------------------
+
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
@@ -6,114 +13,169 @@ import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 
+
 class PageContainer extends React.Component{
+    // 
+    // Set some initial properties we want to 
+    // access across functions
+    // ---------------------------------------
+    constructor(props) {
+        super(props)
+        this.state = {
+            'cleaned_article_names': [],
+            'articles':[]
+        }
+        this._ismounted = true;
+        // Stores valid article URLs
+        this._article_urls = [];
+        // Stores metadata of all valid article URLs 
+        this._full_article_info = [];
+        // Stores the rendered Article components
+        this._ArticleComponents = [];
+  }
 
-    state = {
-        'cleaned_article_names': []
-    }
-    // constructor(){
-        
-    // }
-    // componentWillMount() {
-    //         // Trying with just one URL first 
-    //         var my_url = "https://techcrunch.com/2018/11/04/female-founders-have-brought-in-just-2-2-of-us-vc-this-year-yes-again"
-    // }
-
+    // Called right after component mounts
+    // ---------------------------------------
     componentDidMount(){
-
-         axios.get('/api/getarticle')
-                .then(res => {
-                    this.setState({
-                        data: res.data
-                    })
-                    try{
-                        var article_names = [];
-                        this.setState({'articles': this.state.data.articles})
-                        var results = this.state.articles
-
-                        for (var i = 0; i < results.length; i++) {
-                            article_names.push(results[i][1]);
-                        }
-
-                        this.setState({'cleaned_article_names': article_names});
-                        console.log("Cleaned article names extracted from database: ", this.state.cleaned_article_names);
-                    }
-                    catch(err) {
-                        console.log("Pause", err);
-                    }  
-                })
-    }
-     
-    render(){
         const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-        let article_names = this.state.cleaned_article_names
-        const temp_descrip = "This is a holder, to be replaced by actual descriptions that are ideally auto-generated!"
-        const title_1 = "Local hero saves wallaby"
 
-    //snip 
+        this._ismounted =  true; 
+        var article_names = [];
         const urlMetadata = require('url-metadata');
         const proxyurl = "https://cors-anywhere.herokuapp.com/";
+        var article_url = ""
+        let cleaned_article_names = []
+        let full_info = []
+        let comp = []
+    
+        // {API} Load the articles from the database by calling getarticle
+        axios.get('/api/getarticle')
+                .then(res => {
+                    if (this._ismounted && res.data){
+                        // Save the response through use of state variable
+                        this.setState({
+                            data: res.data
+                        })
+                    }
 
-        let articleItems = [];
-        
-        let targetUrl = '';
-        let cur_article_data_long = {}
-        let cur_article_data = {'url':'', 'title':'', 'img':'','descrip':'', 'sitename':'', 'author':''}
-        
+                    try{
+                        if (this._ismounted =  true && this.state.data && this.state.data.articles){
+                            
+                            this.setState({'articles': this.state.data.articles})
+                            console.log(this.state.articles, " Sanity check to see articles from database ");
+                            // Push just the valid urls and save in this._article_urls
+                            for (var i = 0; i < this.state.articles.length; i++) { 
+                                article_url = this.state.articles[i];
 
-        try {
-            for (var i = 0; i < article_names.length; i++) {
-                // articleItems.push(<Article title = {article_names[i]} preview = {temp_descrip}/>);
-                targetUrl = article_names[i];
-                let bad = ["hellozoe!.com", "lol.com2", "cos333.com", "itsanewwebsiteurl.com"]
-                if (bad.includes(targetUrl)){
-                    continue;
-                }
-                
-                urlMetadata(proxyurl+targetUrl).then(
-                    function (metadata) { // success handler
-                   
-                        cur_article_data['url'] = metadata.url;
-                        cur_article_data['image'] = metadata.image;
-                        cur_article_data['title'] = metadata.title;
-                        cur_article_data['descrip'] = metadata.description;
-                        cur_article_data['author'] = metadata.author;
-                        cur_article_data['sitename'] = metadata.site_name;
+                                let defunct_urls = ["hellozoe!.com", "lol.com2", "cos333.com", 
+                                                    "itsanewwebsiteurl.com", "dfafa.com", "articleURL", "articleURLs", "exampleartickeolivia.com"]
+                                if (defunct_urls.includes(article_url)){
+                                    continue;
+                                }
+                                this._article_urls.push(article_url);
+                                
+                                console.log(article_url)
+                                // Rtrieve the metadata for each article
+                                try{
+                                urlMetadata(proxyurl+article_url).then(
+                                    function (metadata) {
+                                        let i = 1;
+                                        console.log(metadata)
+                                        full_info.push(metadata)
+                                        // console.log(full_info, " DSFSAF")
+                                        // let temp_info = {
+                                        //     "url":metadata.url,
+                                        //     "image":metadata.image,
+                                        //     "description": metadata.description,
+                                        //     "title": metadata.title
 
-                        articleItems.push(<Article 
-                            title = {metadata.title}
-                            link= {metadata.url} 
-                            img = {metadata.image}
-                            descrip = {metadata.description}
-                            author = {metadata.author}
-                            sitename = {metadata.site_name}
-                            />);
+                                        // };
+                                        console.log(full_info, " T I ")
+                                        // console.log(this._full_article_info, " Fill article info")
 
-                        // articleItems.push(<Article 
-                        //     title = {cur_article_data['title']} 
-                        //     link={cur_article_data['url']}
-                        //     img = {cur_article_data['image']}
-                        //     descrip = {cur_article_data['descrip']}
-                        //     author = {cur_article_data['author']}
-                        //     sitename = {cur_article_data['sitename']} 
-                        //     />);
-                    },
-                    function (error) { // failure handler
-                        console.log("There was an error in trying to parse metadata");
-                        console.log(error);
-                    }) 
-            }
-        }
-        catch(e){
-            console.log("Error")
-            console.log(e)
-        }
-        
-        console.log({articleItems})
+                                        // let n = (<Article title = {metadata.title} 
+                                        //     link = {metadata.url}
+                                        //     author = {metadata.author} />);
+                                        // console.log( " hey")
+                                        // console.log(this._full_article_info)
+                                        // Think the problem
+                                        comp.push(<Article 
+                                            title = {metadata.title} 
+                                            link = {metadata.url}
+                                            author = {metadata.author}
+                                            key = {i++}
+                                            />);
+                                    },
+                                    function (error) { // failure handler
+                                        console.log("There was an error in trying to parse metadata");
+                                        console.log(error);
 
-        return(<div>{articleItems}</div>);
-    }
+                                    }) 
+                            }
+                            catch {
+                                console.log("invalid URL!")
+                            }
+                        }
+                        }
+                    }
+
+                    
+                    catch(err) {
+                        console.log("Error in loading articles from database", err);
+                    }  
+        })
+        this.setState({
+                        art: comp
+                    })
 }
+// Keep track internally of mounted state
+// to avoid erros
+// ---------------------------------------
+
+componentWillUnmount(){
+    this._ismounted =  false;
+    
+  }
+
+// Defines the HTML code atually returned and shown
+// in the component
+// ---------------------------------------    
+render(){
+        // Example article array to test rendering 
+        let hello = []
+        hello.push(<Article title="Wikapedia" link="wikapedia.org"  image= "https://cdn-images-1.medium.com/max/1200/1*kt9otqHk14BZIMNruiG0BA.png"/>)
+        hello.push(<Article title="Wikapedia" link="wikapedia.org"  image= "https://cdn-images-1.medium.com/max/1200/1*kt9otqHk14BZIMNruiG0BA.png"/>)
+        
+        // Now try with actual data
+        let hello2 = this.state.art;
+        console.log(this.state.art, " comp")
+
+
+     
+
+        if (hello2){
+            console.log('vaid')
+            return(
+            <div> 
+                {this.state.art.map(article => <div>{article} </div> )}
+            </div>
+            );
+        }
+
+        else {
+            console.log('invaid')
+            return(
+            <div> 
+                {hello.map(article => <div> {article} </div>)}
+            </div>
+            );
+        }
+ 
+        }
+}
+// --------------------------------------------------------------
+// --------------------------------------------------------------
+
 
 const mapStateToProps = state => ({
     loggedIn: state.loggedIn,
@@ -127,4 +189,7 @@ const mapDispatchToProps = dispatch => ({
     clearErrors: () => dispatch(setErrorMessage(''))
 })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PageContainer))
+// Make this component exportable to appear in other components
+export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
+
+
