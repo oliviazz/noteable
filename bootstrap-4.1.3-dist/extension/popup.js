@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-require('axios');
 var cur_url = ""
     // let changeColor = document.getElementById('changeColor');
 
@@ -31,22 +30,29 @@ chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT
 );
 
 document.addEventListener('DOMContentLoaded', function() {
-    var link = document.getElementById('submitButton');
     alert(cur_url);
+    var link = document.getElementById('submitButton');
+
     // onClick's logic below:
     link.addEventListener('click', function() {
         // snip
         event.preventDefault()
-            alert('Submitted ' + cur_url);
-            var xhr = new XMLHttpRequest();
+        var http = new XMLHttpRequest();
+        var url = 'http://localhost:3000/api/addarticle';
+        var params = 'article_url=' + cur_url;
+        http.open('POST', url, true);
 
-			xhr.open("GET", "/api/addArticle", false);
-			xhr.send();
+        //Send the proper header information along with the request
+        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
-			var result = xhr.responseText;
-			console.log(result, " RESULT")
+        http.onreadystatechange = function() { //Call a function when the state changes.
+            if (http.readyState == 4 && http.status == 200) {
+                alert(http.responseText);
+            }
+        }
+        http.send(params);
 
-            this.props.history.push('/mypage')   
+        this.props.history.push('/mypage')
 
     });
 });
