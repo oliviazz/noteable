@@ -18,24 +18,31 @@ class Article extends React.Component {
   
   render() {
     return (
-      <div>
-         <div className = "container">
+  
+         // <div className = "container">
 
-            <div className = "article_box">
-            <h1> {this.props.title} </h1>
-            <h2> {this.props.descrip} </h2> <h3>{this.props.key}</h3>
-            <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-              <span className ="link-spanner"></span>
-            </a>
+         //    <div className = "article_box">
+         //    <h1> {this.props.title} </h1>
+         //    <h2> {this.props.descrip} </h2> <h3>{this.props.key}</h3>
+         //    <a href={this.props.link} target="_blank" rel="noopener noreferrer">
+         //      <span className ="link-spanner"></span>
+         //    </a>
+
+            <div>
+            <a className ="divLink" href={this.props.link} target="_blank" rel="noopener noreferrer">
+            <div className = "container">
             
-            <h4> {this.props.sitename} </h4>
-            <div className="preview_img">
-              <img src={this.props.image} /> 
+            
+                    <h2>{this.props.title}</h2>
+                    <p>{this.props.descrip}</p>
+                    <h4> {this.props.sitename} </h4>
+                    <br></br><br></br>
+                    <img src={this.props.img}></img>
+           
             </div>
-            <h4> {this.props.author}</h4>
-            </div>
-        </div>
-      </div> 
+            </a>
+           
+            </div> 
     );
   }
 }

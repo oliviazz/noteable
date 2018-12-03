@@ -29,6 +29,8 @@ chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT
     }
 );
 
+// set proxy for chrome extension, re reoute to my backend
+
 document.addEventListener('DOMContentLoaded', function() {
     alert(cur_url);
     var link = document.getElementById('submitButton');
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // snip
         event.preventDefault()
         var http = new XMLHttpRequest();
-        var url = 'http://localhost:3000/api/addarticle';
+        var url = '/api/addarticle';
         var params = 'article_url=' + cur_url;
         http.open('POST', url, true);
 

@@ -3,6 +3,8 @@ from flask_login import login_required, login_user, current_user, logout_user
 from models import User
 from database import Database
 import requests
+from bs4 import BeautifulSoup
+import json
 
 
 
@@ -55,17 +57,37 @@ def addarticle():
 def quickadd():
     return jsonify(message="It's working!!!!"), 200
 
-@bp.route("/getarticle", methods=["GET"])
-def getarticle():
+@bp.route("/getarticles", methods=["GET"])
+def getarticles():
     database = Database()
     database.connect()
     #use dummy userId for now 
     article_query_results = database.userArticles('dummy')
     return jsonify(articles=article_query_results)
 
-def quickadd():
-    return jsonify(message="It's working!!!!"), 200
+@bp.route("/getarticlesinfo", methods=["POST"])
+def getarticlesinfo():
+    json_payload = request.get_json()
+    
+    articles = json.loads(json_payload['articles'])
+    print(articles, "HEY")
+    article_fullinfo = []
+    for article in articles:
+        print(article)
+        # const urlMetadata = require('url-metadata');
+        proxyurl = "https://cors-anywhere.herokuapp.com/";
+        # r = requests.get("http://example.com/foo/bar")
+        response = requests.get(proxyurl+article)
+        print(response, "responseee")
+        soup = BeautifulSoup(response.text)
 
+        metas = soup.find_all('meta')
+
+        print [ meta.attrs['content'] for meta in metas if 'name' in meta.attrs and meta.attrs['name'] == 'description' ]
+            
+    return jsonify(articles=article_fullinfo)
+
+def quickadd():
     return jsonify(message="It's working!!!!"), 200
 
 @bp.route("/quickaddpost", methods=["POST"])
