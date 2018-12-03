@@ -5,6 +5,10 @@ from database import Database
 import requests
 from bs4 import BeautifulSoup
 import json
+import metadata_parser
+import unicodedata
+
+
 
 
 
@@ -71,21 +75,37 @@ def getarticlesinfo():
     
     articles = json.loads(json_payload['articles'])
     print(articles, "HEY")
-    article_fullinfo = []
+    article_full_info = {}
     for article in articles:
-        print(article)
+        article = str(article)
+        my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
         # const urlMetadata = require('url-metadata');
         proxyurl = "https://cors-anywhere.herokuapp.com/";
-        # r = requests.get("http://example.com/foo/bar")
-        response = requests.get(proxyurl+article)
-        print(response, "responseee")
-        soup = BeautifulSoup(response.text)
+        headers = {'x-requested-with': 'XMLHttpRequest'}
+        response = requests.get(proxyurl+article, headers=headers)
+        soup = BeautifulSoup(response.text, "lxml")
+        
+        title = soup.find("meta",  property="og:title")
+        url = soup.find("meta",  property="og:url")
+        descrip = soup.find("meta", property="og:description")
+        image = soup.find("meta", property="og:image")
 
-        metas = soup.find_all('meta')
+        # print(title["content"] if title else "No meta title given")
+        # print(url["content"] if url else "No meta url given")
+        # print(image["content"] if image else "No meta image given")
+        # print(descrip["content"] if descrip else "No meta descrip given")
+        
+        if title: my_info['title'] = title['content']
+        if url: my_info['url'] = url['content']
+        if descrip: my_info['descrip'] = descrip['content']
+        if image: my_info['image'] = image['content']
 
-        print [ meta.attrs['content'] for meta in metas if 'name' in meta.attrs and meta.attrs['name'] == 'description' ]
-            
-    return jsonify(articles=article_fullinfo)
+        article_full_info[article] = my_info
+
+    #print(article_full_info)
+    return jsonify(all_article_info=article_full_info)
+     
+
 
 def quickadd():
     return jsonify(message="It's working!!!!"), 200

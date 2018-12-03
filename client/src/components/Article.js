@@ -17,6 +17,10 @@ import axios from 'axios';
 class Article extends React.Component {
   
   render() {
+      const style = {
+                  backgroundImage: "url("+this.props.image+")",
+                  backgroundSize: "100% 100%"
+          }
     return (
   
          // <div className = "container">
@@ -28,17 +32,18 @@ class Article extends React.Component {
          //      <span className ="link-spanner"></span>
          //    </a>
 
-            <div>
+              
+
+            <div style={style}>
             <a className ="divLink" href={this.props.link} target="_blank" rel="noopener noreferrer">
             <div className = "container">
             
             
                     <h2>{this.props.title}</h2>
-                    <p>{this.props.descrip}</p>
+                    <button> X </button>
                     <h4> {this.props.sitename} </h4>
-                    <br></br><br></br>
-                    <img src={this.props.img}></img>
-           
+                    
+                    
             </div>
             </a>
            

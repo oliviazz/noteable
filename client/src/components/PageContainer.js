@@ -24,7 +24,8 @@ class PageContainer extends React.Component {
             this.state = {
                 'cleaned_article_names': [],
                 'articles': [],
-                'full_article_info':[]
+                'full_article_info':[],
+                'article_components':[]
             }
 
             this._retrieved_articles = [];
@@ -48,8 +49,6 @@ class PageContainer extends React.Component {
 
                 this._ismounted = true;
                 var article_names = [];
-                const urlMetadata = require('url-metadata');
-                const proxyurl = "https://cors-anywhere.herokuapp.com/";
                 var article_url = ""
                 let cleaned_article_names = []
                 let full_info = []
@@ -69,7 +68,7 @@ class PageContainer extends React.Component {
                         try {
                             if (this._ismounted = true && this._retrieved_articles) {
 
-                                this._gotfulldata = false;
+                                // this._gotfulldata = false;
                                 for (var i = 0; i < this._retrieved_articles.length; i++) {
                                     article_url = this._retrieved_articles[i]
 
@@ -80,32 +79,31 @@ class PageContainer extends React.Component {
                                         continue;
                                     }
                                     this._article_urls.push(article_url);
-                                    // // Migrating this 
-                                    // try {
-                                    //     urlMetadata(proxyurl + article_url).then(
-                                    //         function(metadata) {
-                                    //             let i = 1;
-                                    //             console.log(metadata)
-                                                
-                                    //             this.state.full_article_info.push(metadata)
-                                    //             this._gotfulldata = true;
-                                    //         },
-                                    //         function(error) { // failure handler
-                                    //             console.log("There was an error in trying to parse metadata");
-                                    //         })
-                                    // } catch {
-                                    //     console.log("invalid URL!")
-                                    // }
+                                
                                 }
                                 this.setState({"articles":this._article_urls})
                                  console.log(this.state.articles, "sanity check")
+
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
-                                               console.log('yoo')
+                                               console.log(res.data.all_article_info)
+                                               this.setState({'full_article_info':res.data.all_article_info})
+                                           
+                                               for(var article in this.state.full_article_info){
+                                                    var article_info = this.state.full_article_info[article]
+                                                    comp.push(< Article title = { article }
+                                                        link = {article_info['url']}
+                                                        descrip = {article_info['descrip']}
+                                                        image = {article_info['image']}
+                                                        title = {article_info['title']}
+                                                        />);
+                                                }
+                                                this.setState({'article_components':comp})
+                                                console.log(comp, "COMPONENTS")
                                             }
                                         })
-                                console.log(this.state.full_article_info, " ok state rendered");
+                              
                                     
                             }
                         } catch (err) {
@@ -132,24 +130,10 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-                // Example article array to test rendering 
-                let hello = [];
-                let article_components = [];
-                
-                console.log(this.state.articles, " full article info first");
-                for (var i = 0; i < this.state.articles.length; i++){
-                    article_components.push(< Article title = { this.state.articles[i] }
-                                    link = {this.state.articles[i]}
-                                    author = "Author"
-                                    image = "Image"
-                                    />);
-                }
-                return(< div > {article_components.map(article => <div>{article}</div>)} </div >);
+                return(< div > {this.state.article_components.map(article => <div>{article}</div>)} </div >);
                 }
             }
-                    // --------------------------------------------------------------
-                    // --------------------------------------------------------------
-
+                   
 
             const mapStateToProps = state => ({
                 loggedIn: state.loggedIn,

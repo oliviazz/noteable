@@ -24,8 +24,8 @@ class Header extends React.Component {
              <Link to="/mypage">| My Page |</Link>
 
 
-         
-
+            
+            <input placeholder="Search" type="text"></input> <button>submit</button>
         <hr />
       </header>
     )
