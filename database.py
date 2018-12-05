@@ -197,26 +197,31 @@ class Database:
             for entry in entries:
                 hashList.append(entry)
 
-        for element in hashList:
-            stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
-            
-            try:
-                cursor.execute(stmtStr, [str(element)])
-                self._connection.commit()
-            except Exception, e:
-                print >>stderr, e
-                return (False, e)
+        # stmtStr = "SELECT * FROM articles WHERE articleID IN ("+",".join(["?"]*len(lst))+")"
+        # sqlite_bind_text(stmtStr, 1, "110, 130, 90", -1, SQLITE_STATIC);
 
-            entryData = cursor.fetchall()
-            urlList.append(entryData[0][0])
-        return urlList
+        # -- execute query here.
+
+        # stmtStr = "DECLARE @temp table userID TEXT INSERT into @temp select * from "
+
+        # for element in hashList:
+        #     stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
+            
+        #     try:
+        #         cursor.execute(stmtStr, [str(element)])
+        #         self._connection.commit()
+        #     except Exception, e:
+        #         print >>stderr, e
+        #         return (False, e)
+
+        #     entryData = cursor.fetchall()
+        #     urlList.append(entryData[0][0])
+        # return urlList
 
     #-----------------------------------------------------------------------
     
-
-    
     # Adds user to the user table in database
-    def insertUser(self, firstName, lastName, username):
+    def insertUser(self, firstName, lastName, username, userIDTest):
         cursor = self._connection.cursor()
 
         num = self.numUsers(cursor)
@@ -228,9 +233,7 @@ class Database:
         stmtStr = "INSERT OR IGNORE INTO users(firstName, lastName, userID, username, numArticles) VALUES (?, ?, ?, ?, ?)"
         
         try:
-
             cursor.execute(stmtStr, [str(user.firstName), str(user.lastName), str(userIDTest), str(user.username), 0])
-
             self._connection.commit()
 
         except Exception, e:
@@ -288,7 +291,6 @@ class Database:
         
         try:
             cursor.execute(stmtStr, [countNum, str(articleID)])
-
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
@@ -320,7 +322,6 @@ class Database:
             print >>stderr, e
             return (False, e)
         print countNum
-
         
         return countNum
 
@@ -379,7 +380,6 @@ class Database:
 
         if countNum == 0:
             stmtStr = "DELETE FROM articles WHERE articleID = ? "
-
             try:
                 cursor.execute(stmtStr, [str(articleID)])
                 self._connection.commit()
@@ -424,46 +424,27 @@ class Database:
             print >>stderr, e
             return (False, e)
         
-
-    def updateTags(self, user, article, tags):
-        cursor = self._connection.cursor()
-        self.numArticles = self.numArticles + 1
-
-        # Unique articleIDs are the hash of the url
-        articleID = hash(url)
-        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
-
-        stmtStr = "UPDATE user_article_tags SET tags = ? WHERE user_article_tags.articleID = ? AND user_article_tags.userID = user"
-        
-        # Ensure the execution is successful
-        try:
-            cursor.execute(stmtStr, [str(tags), str(article), str(user)])
-            self._connection.commit()
-
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
         cursor.close()
         return(True)
 
     #-----------------------------------------------------------------------
 
 if __name__ == '__main__':
-
     # # test user is 2018
     c = Database()
-    c.connect()
-    # # c.insertUser()
-    # # c.insertUser("firstName", "lastName", "username")
-    c.insertArticle('u2018', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
+    # c.connect()
+    # # # /# # c.insertUser()
+    # # # # # c.insertUser("firstName", "lastName", "username")
+    # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
 
-    # # c.deleteUser("u4")
-    c.allArticles()
-    c.allUsers()
-    # # c.userArticles()
-    # c.updateTags("u2018", "8834987638503293291", ["hello"])
-    # c.allUsersArticlesTags()
-    c.disconnect()
+    # # # # # c.deleteUser("u4")
+    # # c.insertUser("firstName", "lastName", "username", "dummy")
+    # # # c.allArticles()
+    # # c.allUsers()
+    # articles = c.userArticles('dummy')
+    # print articles
+    # # # c.updateTags("u2018", "8834987638503293291", ["hello"])
+    # # # c.allUsersArticlesTags()
+    # c.disconnect()
 
 
