@@ -9,19 +9,19 @@ class Header extends React.Component {
     return (
       <header>
             <h1>Noteable</h1>
-            <Link to="/">| Home |</Link>
+            <Link to="/" className="headerLink">| Home |</Link>
         
           {!loggedIn ? (
          
-              <Link to="/login">| Login |</Link>
+              <Link to="/login" className="headerLink">| Login |</Link>
         
           ) : (
           
-              <Link to="/logout">| Logout |</Link>
+              <Link to="/logout" className="headerLink">| Logout |</Link>
           
           )}
-            <Link to="/quickadd">| Add Article |</Link>
-             <Link to="/mypage">| My Page |</Link>
+            <Link to="/quickadd" className="headerLink">| Add Article |</Link>
+             <Link to="/mypage" className="headerLink">| My Page |</Link>
 
 
             

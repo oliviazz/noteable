@@ -41,7 +41,7 @@ class Article extends React.Component {
             
                     <h2>{this.props.title}</h2>
                     <button> X </button>
-                    <h4> {this.props.sitename} </h4>
+                    <h4> {this.props.sitename}</h4>
                     
                     
             </div>
