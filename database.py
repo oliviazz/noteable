@@ -178,13 +178,50 @@ class Database:
 
     #-----------------------------------------------------------------------
 
+    # def userFriends(self, userID):
+    #     cursor = self._connection.cursor()
+    #     hashList = []
+    #     urlList = []
+
+    #     stmtStr = "CREATE TEMPORARY TABLE allFriendsList AS SELECT friends FROM user WHERE userID = ?"
+
+    #     try:
+    #         cursor.execute(stmtStr, [str(userID)])
+    #         self._connection.commit()
+    #     except Exception, e:
+    #         print >>stderr, e
+    #         return (False, e)
+
+    #     stmtStr = "SELECT * FROM articleIDList"
+
+    #     try:
+    #         cursor.execute(stmtStr)
+    #         self._connection.commit()
+    #     except Exception, e:
+    #         print >>stderr, e
+    #         return (False, e)
+
+    #     print cursor.fetchall()
+
+    #     stmtStr = "SELECT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
+
+    #     try:
+    #         cursor.execute(stmtStr)
+    #         self._connection.commit()
+    #     except Exception, e:
+    #         print >>stderr, e
+    #         return (False, e)
+
+    #     return cursor.fetchall()
+    #-----------------------------------------------------------------------
+
     def userArticles(self, userID):
         cursor = self._connection.cursor()
         hashList = []
         urlList = []
 
-        stmtStr = "SELECT articleID FROM user_article_tags WHERE userID = ? "
-        
+        stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT articleID FROM user_article_tags WHERE userID = ?"
+
         try:
             cursor.execute(stmtStr, [str(userID)])
             self._connection.commit()
@@ -192,32 +229,17 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        allEntries = cursor.fetchall() 
-        for entries in allEntries:
-            for entry in entries:
-                hashList.append(entry)
+        stmtStr = "SELECT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
 
-        # stmtStr = "SELECT * FROM articles WHERE articleID IN ("+",".join(["?"]*len(lst))+")"
-        # sqlite_bind_text(stmtStr, 1, "110, 130, 90", -1, SQLITE_STATIC);
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
 
-        # -- execute query here.
-
-        # stmtStr = "DECLARE @temp table userID TEXT INSERT into @temp select * from "
-
-        # for element in hashList:
-        #     stmtStr = "SELECT articleURL FROM articles WHERE articleID = ? "
-            
-        #     try:
-        #         cursor.execute(stmtStr, [str(element)])
-        #         self._connection.commit()
-        #     except Exception, e:
-        #         print >>stderr, e
-        #         return (False, e)
-
-        #     entryData = cursor.fetchall()
-        #     urlList.append(entryData[0][0])
-        # return urlList
-
+        return cursor.fetchall()
+        
     #-----------------------------------------------------------------------
     
     # Adds user to the user table in database
@@ -390,6 +412,44 @@ class Database:
         return(True)
 
     #-----------------------------------------------------------------------
+     # def updateFriends(self, userID, newFriends):
+     #    cursor = self._connection.cursor()
+     #    stmtStr = "SELECT user.friends FROM users WHERE userID = (?)"
+     #    allFriends = []
+
+     #    try:
+     #        cursor.execute(stmtStr, [str(userID), str(articleID)])
+     #        self._connection.commit()
+     #    except Exception, e:
+     #        print >>stderr, e
+     #        return (False, e)
+
+     #    countList = cursor.fetchall()
+
+     #    for friendList in countList:
+     #        for friends in friendList:
+     #            if friend not in friends:
+     #                allFriends.append(friend)
+     #                print friend
+
+     #    for newFriend in [newFriends]:
+     #        if newFriend not in allFriends:
+     #            allFriends.append(newFriend)
+     #            print newFriend
+
+     #    stmtStr = "UPDATE users SET friends = (?) WHERE userID = (?)"
+        
+     #    try:
+     #        cursor.execute(stmtStr, [str(newTags), str(userID), str(articleID)])
+     #        self._connection.commit()
+     #    except Exception, e:
+     #        print >>stderr, e
+     #        return (False, e)
+        
+     #    cursor.close()
+     #    return(True)
+
+    #-----------------------------------------------------------------------
 
     def updateTags(self, userID, articleID, newTags):
         cursor = self._connection.cursor()
@@ -432,7 +492,9 @@ class Database:
 if __name__ == '__main__':
     # # test user is 2018
     c = Database()
-    # c.connect()
+    c.connect()
+    articles = c.userArticles("dummy")
+    print articles
     # # # /# # c.insertUser()
     # # # # # c.insertUser("firstName", "lastName", "username")
     # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
@@ -445,6 +507,6 @@ if __name__ == '__main__':
     # print articles
     # # # c.updateTags("u2018", "8834987638503293291", ["hello"])
     # # # c.allUsersArticlesTags()
-    # c.disconnect()
+    c.disconnect()
 
 
