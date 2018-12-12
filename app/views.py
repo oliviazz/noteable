@@ -57,16 +57,36 @@ def addarticle():
     except:
         return jsonify(message="Error in posting article!"), 400
 
+@bp.route("/deletearticle", methods=["POST"])
+def deletearticle():
+    json_payload = request.get_json()
+    article = json_payload['article_url']
+    #return jsonify(message=article), 200
+
+    database = Database()
+    database.connect()
+    print(article)
+
+    try:
+        article_id = hash(article)
+        database.deletearticle('dummy', article_id)
+        database.disconnect()
+        return jsonify(message="Deleted article: " + article), 200
+    except:
+        return jsonify(message="Error in deleting article article!"), 400
+
 @bp.route("/quickadd", methods=["GET"])
 def quickadd():
     return jsonify(message="It's working!!!!"), 200
 
 @bp.route("/getarticles", methods=["GET"])
 def getarticles():
+
     database = Database()
     database.connect()
     #use dummy userId for now 
     article_query_results = database.userArticles('dummy')
+    print(article_query_results, " ok")
     return jsonify(articles=article_query_results)
 
 @bp.route("/getarticlesinfo", methods=["POST"])

@@ -15,39 +15,42 @@ import axios from 'axios';
 
 
 class Article extends React.Component {
+
+  constructor() {
+    super()
+}
+  //   this.handleDelete = (event) => {
+  //     alert('hey! ' + this.props.url);
+  //     this.serverRequest = axios.post('/api/deletearticle', { article_url: this.props.url })
+  //         .then(res => {
+  //             if(res.data){
+  //                console.log(res.data)
+  //              }
+  //         });
+      
+  // }}
   
   render() {
-      const style = {
-                  backgroundImage: "url("+this.props.image+")",
-                  backgroundSize: "100% 100%"
-          }
     return (
-  
-         // <div className = "container">
-
-         //    <div className = "article_box">
-         //    <h1> {this.props.title} </h1>
-         //    <h2> {this.props.descrip} </h2> <h3>{this.props.key}</h3>
-         //    <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-         //      <span className ="link-spanner"></span>
-         //    </a>
-
-              
-
-            <div style={style}>
-            <a className ="divLink" href={this.props.link} target="_blank" rel="noopener noreferrer">
-            <div className = "container">
-            
-            
-                    <h2>{this.props.title}</h2>
-                    <button> X </button>
-                    <h4> {this.props.sitename}</h4>
-                    
-                    
-            </div>
+      <div>
+         <div className = "container">
+            <div className = "article_box">
+            <h1> {this.props.title} </h1>
+            <h2> {this.props.descrip} </h2>
+            <a href={this.props.link} target="_blank" rel="noopener noreferrer">
+              <span className ="link-spanner"></span>
             </a>
-           
-            </div> 
+            
+            <h4> {this.props.sitename} </h4>
+            <div className="preview_img">
+              <img src={this.props.image} /> 
+            </div>
+
+            <button onClick={this.handleDelete}>X</button>
+            <h4> {this.props.author}</h4>
+            </div>
+        </div>
+      </div> 
     );
   }
 }

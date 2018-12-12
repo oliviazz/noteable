@@ -30,7 +30,7 @@ div.box:hover {
     opacity: .9;
 }
 
-.container {
+/*.container {
 	border-color: blue;
 	border-style: dotted;
 	background-color: white;
@@ -41,7 +41,7 @@ div.box:hover {
 	align-items: center;
 	height: 200px;
 }
-
+*/
 
 a.divLink {
     position: relative;

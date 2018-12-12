@@ -29,10 +29,11 @@ class App extends React.Component {
 
     return (
       <Router>
+
         <div>
           {!loadingAuth && (
             <div>
-              <Header />
+              <Header/>
               <Route exact path="/" component={LoginContainer} />
               <Route path="/login" component={LoginContainer} />
               <Route path="/mypage" component={PageContainer} />

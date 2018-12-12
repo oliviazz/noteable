@@ -9,9 +9,19 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
+
 import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
+
+import Button from 'react-bootstrap/lib/Button';
+import Row from 'react-bootstrap/lib/Row';
+import Grid from 'react-bootstrap/lib/Grid';
+import Col from 'react-bootstrap/lib/Col';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import Nav from 'react-bootstrap/lib/Nav';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+
 
 
 class PageContainer extends React.Component {
@@ -53,20 +63,23 @@ class PageContainer extends React.Component {
                 let cleaned_article_names = []
                 let full_info = []
                 let comp = []
-
+                console.log(this._ismounted)
                 // {API} Load the articles from the database by calling getarticle
                 if (typeof this._source != typeof undefined) {
                     this._source.cancel('Operation canceled due to new request.')
                 }
                 this._source = axios.CancelToken.source();
+
                 this.serverRequest = axios.get('/api/getarticles', { cancelToken: this._source.token })
                     .then(res => {
                         if (this._ismounted && res.data) {
+                            console.log("made it!")
                             this._retrieved_articles = res.data.articles
+                            console.log(res.data ," hey!")
                         }
 
                         try {
-                            if (this._ismounted = true && this._retrieved_articles) {
+                            if (this._ismounted && this._retrieved_articles) {
 
                                 // this._gotfulldata = false;
                                 for (var i = 0; i < this._retrieved_articles.length; i++) {
@@ -82,11 +95,12 @@ class PageContainer extends React.Component {
                                 
                                 }
                                 this.setState({"articles":this._article_urls})
-                                 console.log(this.state.articles, "sanity check")
+                                console.log(this.state.articles, "sanity check")
 
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
+
                                                console.log(res.data.all_article_info)
                                                this.setState({'full_article_info':res.data.all_article_info})
                                            
@@ -130,7 +144,59 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-                return(< div > {this.state.article_components.map(article => <div>{article}</div>)} </div >);
+                return(<div> 
+                    <Grid>
+     <Row>
+     <Col xs={4} md={3}>
+        <p>Tags</p>
+        <Nav  stacked>
+            
+                  <NavItem eventKey={2} href="#">
+                    Food
+                      <Glyphicon glyph="star" /> 
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                    Photography
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                    Travel
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                    Funny
+                  </NavItem>
+                
+        </Nav>
+        <p>Time</p>
+        <Nav  stacked>
+            
+                  <NavItem eventKey={2} href="#">
+                    All Time
+                    
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                   Last Month
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                   Last Week
+                  </NavItem>
+                   <NavItem eventKey={2} href="#">
+                    Today
+                  </NavItem>
+                
+        </Nav>
+    </Col>
+    <Col xs={6} md={4}>
+        {this.state.article_components.map(article => <div>{article}</div>)} 
+    </Col>
+
+
+    </Row>
+</Grid>;
+                  
+                    
+                    </div >);
+                    
+
                 }
             }
                    
