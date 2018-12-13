@@ -59,7 +59,7 @@ class PageContainer extends React.Component {
 
                 this._ismounted = true;
                 var article_names = [];
-                var article_url = ""
+                var article = ""
                 let cleaned_article_names = []
                 let full_info = []
                 let comp = []
@@ -73,35 +73,27 @@ class PageContainer extends React.Component {
                 this.serverRequest = axios.get('/api/getarticles', { cancelToken: this._source.token })
                     .then(res => {
                         if (this._ismounted && res.data) {
-                            console.log("made it!")
                             this._retrieved_articles = res.data.articles
-                            console.log(res.data ," hey!")
                         }
-
                         try {
                             if (this._ismounted && this._retrieved_articles) {
 
-                                // this._gotfulldata = false;
                                 for (var i = 0; i < this._retrieved_articles.length; i++) {
-                                    article_url = this._retrieved_articles[i]
-
+                                    article = this._retrieved_articles[i]
                                     let defunct_urls = ["hellozoe!.com", "lol.com2", "cos333.com",
                                         "itsanewwebsiteurl.com", "dfafa.com", "articleURL", "articleURLs", "exampleartickeolivia.com"
                                     ]
-                                    if (defunct_urls.includes(article_url)) {
+                                    if (defunct_urls.includes(article[6])) {
                                         continue;
                                     }
-                                    this._article_urls.push(article_url);
+                                    this._article_urls.push(article[6]);
                                 
                                 }
                                 this.setState({"articles":this._article_urls})
-                                console.log(this.state.articles, "sanity check")
 
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
-
-                                               console.log(res.data.all_article_info)
                                                this.setState({'full_article_info':res.data.all_article_info})
                                            
                                                for(var article in this.state.full_article_info){
@@ -114,7 +106,7 @@ class PageContainer extends React.Component {
                                                         />);
                                                 }
                                                 this.setState({'article_components':comp})
-                                                console.log(comp, "COMPONENTS")
+                                                document.getElementById("loader").remove();
                                             }
                                         })
                               
@@ -186,6 +178,7 @@ class PageContainer extends React.Component {
         </Nav>
     </Col>
     <Col xs={6} md={4}>
+        <img id = "loader" src="loading.gif" ></img>
         {this.state.article_components.map(article => <div>{article}</div>)} 
     </Col>
 

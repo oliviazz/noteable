@@ -389,6 +389,7 @@ class Database:
     def deleteArticle(self, userID, articleID):
         cursor = self._connection.cursor()
         stmtStr = "DELETE FROM user_article_tags WHERE articleID = ? AND userID = ?"
+       
         
         try:
             cursor.execute(stmtStr, [str(articleID), str(userID)])
@@ -415,7 +416,7 @@ class Database:
      # def updateFriends(self, userID, newFriends):
      #    cursor = self._connection.cursor()
      #    stmtStr = "SELECT user.friends FROM users WHERE userID = (?)"
-     #    allFriends = []
+     #    allFriends = []r
 
      #    try:
      #        cursor.execute(stmtStr, [str(userID), str(articleID)])

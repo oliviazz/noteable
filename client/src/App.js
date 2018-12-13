@@ -31,6 +31,7 @@ class App extends React.Component {
       <Router>
 
         <div>
+        <div class="loader"></div>
           {!loadingAuth && (
             <div>
               <Header/>

@@ -60,19 +60,23 @@ def addarticle():
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
     json_payload = request.get_json()
-    article = json_payload['article_url']
+    article = str(json_payload['article_url'])
     #return jsonify(message=article), 200
 
     database = Database()
     database.connect()
-    print(article)
+    print(article, "hey!!!!")
 
     try:
         article_id = hash(article)
-        database.deletearticle('dummy', article_id)
+      
+        database.deleteArticle(userID='dummy', articleID=article_id)
+ 
         database.disconnect()
+
         return jsonify(message="Deleted article: " + article), 200
-    except:
+    except Exception, err:
+        print('Error in deleting article: ', str(err))
         return jsonify(message="Error in deleting article article!"), 400
 
 @bp.route("/quickadd", methods=["GET"])
