@@ -49,6 +49,8 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
+            this._user = 'dummy'
+
 
         }
 
@@ -70,9 +72,10 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.get('/api/getarticles', { cancelToken: this._source.token })
+                this.serverRequest = axios.get('/api/getarticles', { 'cancelToken':  this._source.token})
                     .then(res => {
                         if (this._ismounted && res.data) {
+
                             this._retrieved_articles = res.data.articles
                         }
                         try {
@@ -86,18 +89,22 @@ class PageContainer extends React.Component {
                                     if (defunct_urls.includes(article[6])) {
                                         continue;
                                     }
-                                    this._article_urls.push(article[6]);
+                                    // Store the full article information
+                                    //this._article_urls.push(article);
+                                    this._full_article_info.push(article)
                                 
                                 }
-                                this.setState({"articles":this._article_urls})
+                                /// This.state.articles has the FULL article info
+                                this.setState({"articles":this._full_article_info})
+                                console.log('Just checkin its everthing,', this.state.articles)
 
-                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
+                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
-                                               this.setState({'full_article_info':res.data.all_article_info})
+                                               this.setState({'articles_post_request':res.data.all_article_info})
                                            
-                                               for(var article in this.state.full_article_info){
-                                                    var article_info = this.state.full_article_info[article]
+                                               for(var article in this.state.articles_post_request){
+                                                    var article_info = this.state.articles_post_request[article]
                                                     comp.push(< Article title = { article }
                                                         link = {article_info['url']}
                                                         descrip = {article_info['descrip']}
@@ -139,7 +146,7 @@ class PageContainer extends React.Component {
                 return(<div> 
                     <Grid>
      <Row>
-     <Col xs={4} md={3}>
+     <Col xs={3} md={2}>
         <p>Tags</p>
         <Nav  stacked>
             
@@ -177,14 +184,15 @@ class PageContainer extends React.Component {
                 
         </Nav>
     </Col>
-    <Col xs={6} md={4}>
+    <Col xs={5} md={4}>
+        <h2>{this._user}'s Articles</h2><br></br><br></br>
         <img id = "loader" src="loading.gif" ></img>
         {this.state.article_components.map(article => <div>{article}</div>)} 
     </Col>
 
 
     </Row>
-</Grid>;
+</Grid>
                   
                     
                     </div >);

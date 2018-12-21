@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!-- saved from url=(0028)http://localhost:3000/mypage -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="http://localhost:3000/manifest.json">
+    <link rel="shortcut icon" href="http://localhost:3000/favicon.ico">
+    <!--
+      Notice the use of  in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+      Unlike "/favicon.ico" or "favicon.ico", "/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+      <title>React App</title>
+   <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="./React App_files/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <style type="text/css">  #sidebar {
+            padding-left: 10px;
+        }
+        #btn {
+            padding: 0px;
+            margin-right: 10px;
+        }
+        .main {
+            margin: 0px;
+            padding: 0px;
+        }
+        .row {
+            width: 100%;
+            padding-top: 10px;
+        }
+        .articles {
+            padding: 10px;
+        }
+        .sidebar-head {
+            margin-top: 20px;
+        }</style><style type="text/css">.App {
+  text-align: center;
+}
+
+.App-logo {
+  -webkit-animation: App-logo-spin infinite 20s linear;
+          animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@-webkit-keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+@keyframes App-logo-spin {
+  from { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  to { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+</style><style type="text/css">/*#!/usr/bin/env python
+// #-----------------------------------------------------------------------
+// # index.css
+// # Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
+// #-----------------------------------------------------------------------
+*/
+ #sidebar {
+            padding-left: 10px;
+        }
+#btn {
+    padding: 0px;
+    margin-right: 10px;
+}
+.main {
+    margin: 0px;
+    padding: 0px;
+}
+.row {
+    width: 100%;
+    padding-top: 10px;
+}
+.articles {
+    padding: 10px;
+}
+.sidebar-head {
+    margin-top: 20px;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+a{
+	display: block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+a.headerLink{
+	display: inline;
+    
+}
+
+div.box:hover {
+    cursor: hand;
+    cursor: pointer;
+    opacity: .9;
+}
+/*
+.container {
+	border-color: blue;
+	border-style: dotted;
+	background-color: white;
+	opacity: .7;
+	color: #323299;
+	align-self: center;
+	align-content: center;
+	align-items: center;
+	height: 350px;
+}
+*/
+
+a.divLink {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-decoration: none;
+    /* Makes sure the link doesn't get underlined */
+    z-index: 10;
+    /* raises anchor tag above everything else in div */
+    background-color: white;
+    /*workaround to make clickable in IE */
+    opacity: 0;
+    /*workaround to make clickable in IE */
+    filter: alpha(opacity=0);
+    /*workaround to make clickable in IE */
+}
+
+/**/
+
+
+
+	/*width:500px;
+}
+*/
+/*.container{
+    width:200px;
+    height:200px;
+    background-color:black;
+    color:white;
+    /*Important:
+    position:relative;
+}*/
+
+/*Important:*/
+/*.link-spanner{
+  position:absolute; 
+  width:100%;
+  top:0;
+  left: 0;
+  z-index: 1;
+  height:100px;
+   edit: fixes overlap error in IE7/8, 
+     make sure you have an empty gif 
+  background-image: url('empty.gif');
+}   */
+
+/*.app_container {
+	
+	text-align: center;
+	align-self: center;
+	background-color: #CCCCFF;
+	height:100%;
+}*/
+
+.preview_img{
+	height:50px;
+	width:400px;
+	align-self: right;
+}
+
+img{
+	height:250px;
+	width:250px;
+	align-items: center;
+	align-self: center;
+
+	position:relative; 
+	left:-50px;
+	top:-50px;
+
+
+}
+
+.article_input {
+	height:100px;
+	width:50%;
+	font-size:16px;
+}
+
+input[type=button] {
+	height:30px;
+	width:10%;
+	font-size:12px;
+	background-color: #FFC0CB;
+}
+
+input[type=submit] {
+	height:30px;
+	width:10%;
+	font-size:16px;
+	background-color: white;
+}
+
+
+header {
+	align-content: center;
+	text-align: center;
+	align-self: center;
+	color: #0B3861;
+	font-size:24px;
+	background-color: white;
+	height:200px;
+}
+
+</style><style>@-webkit-keyframes mixmaxSpring{0%{transform:scale(1)}30%{transform:scale(1.05)}100%{transform:scale(1)}}@keyframes mixmaxSpring{0%{transform:scale(1)}30%{transform:scale(1.05)}100%{transform:scale(1)}}@-webkit-keyframes mixmaxFadeIn{0%{opacity:0}100%{opacity:1}}@keyframes mixmaxFadeIn{0%{opacity:0}100%{opacity:1}}.mixmax-m{margin:8px!important}.mixmax-mt{margin-top:8px!important}.mixmax-mr{margin-right:8px!important}.mixmax-mb{margin-bottom:8px!important}.mixmax-ml{margin-left:8px!important}.mixmax-mh{margin-right:8px!important;margin-left:8px!important}.mixmax-mv{margin-top:8px!important;margin-bottom:8px!important}.mixmax-m--{margin:2px!important}.mixmax-mt--{margin-top:2px!important}.mixmax-mr--{margin-right:2px!important}.mixmax-mb--{margin-bottom:2px!important}.mixmax-ml--{margin-left:2px!important}.mixmax-mh--{margin-right:2px!important;margin-left:2px!important}.mixmax-mv--{margin-top:2px!important;margin-bottom:2px!important}.mixmax-m-{margin:4px!important}.mixmax-mt-{margin-top:4px!important}.mixmax-mr-{margin-right:4px!important}.mixmax-mb-{margin-bottom:4px!important}.mixmax-ml-{margin-left:4px!important}.mixmax-mh-{margin-right:4px!important;margin-left:4px!important}.mixmax-mv-{margin-top:4px!important;margin-bottom:4px!important}.mixmax-m\+{margin:16px!important}.mixmax-mt\+{margin-top:16px!important}.mixmax-mr\+{margin-right:16px!important}.mixmax-mb\+{margin-bottom:16px!important}.mixmax-ml\+{margin-left:16px!important}.mixmax-mh\+{margin-right:16px!important;margin-left:16px!important}.mixmax-mv\+{margin-top:16px!important;margin-bottom:16px!important}.mixmax-m\+\+{margin:32px!important}.mixmax-mt\+\+{margin-top:32px!important}.mixmax-mr\+\+{margin-right:32px!important}.mixmax-mb\+\+{margin-bottom:32px!important}.mixmax-ml\+\+{margin-left:32px!important}.mixmax-mh\+\+{margin-right:32px!important;margin-left:32px!important}.mixmax-mv\+\+{margin-top:32px!important;margin-bottom:32px!important}.mixmax-m0{margin:0!important}.mixmax-mt0{margin-top:0!important}.mixmax-mr0{margin-right:0!important}.mixmax-mb0{margin-bottom:0!important}.mixmax-ml0{margin-left:0!important}.mixmax-mh0{margin-right:0!important;margin-left:0!important}.mixmax-mv0{margin-top:0!important;margin-bottom:0!important}.mixmax--m{margin:-8px!important}.mixmax--mt{margin-top:-8px!important}.mixmax--mr{margin-right:-8px!important}.mixmax--mb{margin-bottom:-8px!important}.mixmax--ml{margin-left:-8px!important}.mixmax--mh{margin-right:-8px!important;margin-left:-8px!important}.mixmax--mv{margin-top:-8px!important;margin-bottom:-8px!important}.mixmax--m--{margin:-2px!important}.mixmax--mt--{margin-top:-2px!important}.mixmax--mr--{margin-right:-2px!important}.mixmax--mb--{margin-bottom:-2px!important}.mixmax--ml--{margin-left:-2px!important}.mixmax--mh--{margin-right:-2px!important;margin-left:-2px!important}.mixmax--mv--{margin-top:-2px!important;margin-bottom:-2px!important}.mixmax--m-{margin:-4px!important}.mixmax--mt-{margin-top:-4px!important}.mixmax--mr-{margin-right:-4px!important}.mixmax--mb-{margin-bottom:-4px!important}.mixmax--ml-{margin-left:-4px!important}.mixmax--mh-{margin-right:-4px!important;margin-left:-4px!important}.mixmax--mv-{margin-top:-4px!important;margin-bottom:-4px!important}.mixmax--m\+{margin:-16px!important}.mixmax--mt\+{margin-top:-16px!important}.mixmax--mr\+{margin-right:-16px!important}.mixmax--mb\+{margin-bottom:-16px!important}.mixmax--ml\+{margin-left:-16px!important}.mixmax--mh\+{margin-right:-16px!important;margin-left:-16px!important}.mixmax--mv\+{margin-top:-16px!important;margin-bottom:-16px!important}.mixmax--m\+\+{margin:-32px!important}.mixmax--mt\+\+{margin-top:-32px!important}.mixmax--mr\+\+{margin-right:-32px!important}.mixmax--mb\+\+{margin-bottom:-32px!important}.mixmax--ml\+\+{margin-left:-32px!important}.mixmax--mh\+\+{margin-right:-32px!important;margin-left:-32px!important}.mixmax--mv\+\+{margin-top:-32px!important;margin-bottom:-32px!important}.mixmax-p{padding:8px!important}.mixmax-pt{padding-top:8px!important}.mixmax-pr{padding-right:8px!important}.mixmax-pb{padding-bottom:8px!important}.mixmax-pl{padding-left:8px!important}.mixmax-ph{padding-right:8px!important;padding-left:8px!important}.mixmax-pv{padding-top:8px!important;padding-bottom:8px!important}.mixmax-p--{padding:2px!important}.mixmax-pt--{padding-top:2px!important}.mixmax-pr--{padding-right:2px!important}.mixmax-pb--{padding-bottom:2px!important}.mixmax-pl--{padding-left:2px!important}.mixmax-ph--{padding-right:2px!important;padding-left:2px!important}.mixmax-pv--{padding-top:2px!important;padding-bottom:2px!important}.mixmax-p-{padding:4px!important}.mixmax-pt-{padding-top:4px!important}.mixmax-pr-{padding-right:4px!important}.mixmax-pb-{padding-bottom:4px!important}.mixmax-pl-{padding-left:4px!important}.mixmax-ph-{padding-right:4px!important;padding-left:4px!important}.mixmax-pv-{padding-top:4px!important;padding-bottom:4px!important}.mixmax-p\+{padding:16px!important}.mixmax-pt\+{padding-top:16px!important}.mixmax-pr\+{padding-right:16px!important}.mixmax-pb\+{padding-bottom:16px!important}.mixmax-pl\+{padding-left:16px!important}.mixmax-ph\+{padding-right:16px!important;padding-left:16px!important}.mixmax-pv\+{padding-top:16px!important;padding-bottom:16px!important}.mixmax-p\+\+{padding:32px!important}.mixmax-pt\+\+{padding-top:32px!important}.mixmax-pr\+\+{padding-right:32px!important}.mixmax-pb\+\+{padding-bottom:32px!important}.mixmax-pl\+\+{padding-left:32px!important}.mixmax-ph\+\+{padding-right:32px!important;padding-left:32px!important}.mixmax-pv\+\+{padding-top:32px!important;padding-bottom:32px!important}.mixmax-p0{padding:0!important}.mixmax-pt0{padding-top:0!important}.mixmax-pr0{padding-right:0!important}.mixmax-pb0{padding-bottom:0!important}.mixmax-pl0{padding-left:0!important}.mixmax-ph0{padding-right:0!important;padding-left:0!important}.mixmax-pv0{padding-top:0!important;padding-bottom:0!important}.mixmax-hint-modal{display:flex;position:fixed;top:0;left:0;width:100%;height:100%;z-index:167772710000;text-align:center;background-color:rgba(10,15,20,.65);perspective:1300px;backface-visibility:hidden;-webkit-animation:mixmaxFadeIn 200ms 1;animation:mixmaxFadeIn 200ms 1}.mixmax-hint-modal__inner{font-family:Roboto;border-radius:3px;margin:auto;max-width:400px;max-height:420px;overflow:hidden;box-shadow:0 0 20px rgba(10,15,20,.4);position:relative;-webkit-animation:flip-in 350ms 1;animation:flip-in 350ms 1;background:#3c7de6;color:#fff}.mixmax-hint-modal__inner h3{font-weight:500;margin:0;padding:0;font-size:21px;font-family:Roboto}.mixmax-hint-modal__inner p.mixmax-milli{line-height:1.5em;margin-bottom:0}.mixmax-hint-modal__inner .mixmax-separator-horizontal{margin-top:12px!important;margin-bottom:12px!important}.mixmax-hint-modal__inner .mixmax-icon--remove{position:absolute;background-color:rgba(10,15,20,.15);color:rgba(255,255,255,.5);right:10px;top:10px;width:18px;height:18px;line-height:18px;font-size:15px;border-radius:999px;font-style:normal;text-align:center}.mixmax-hint-modal__inner .mixmax-icon--remove:hover{background-color:#0a0f14;color:#fff}.mixmax-hint-modal__inner .mixmax-icon--remove:before{content:'\00d7';position:relative;left:.5px}.mixmax-hint-modal__ft{background-color:#fff}.mixmax-hint-modal__command{display:inline-block;background-color:rgba(10,15,20,.5);border-radius:5px;margin-top:16px;padding:12px 16px}.mixmax-hint-modal__btn{cursor:pointer;color:rgba(10,15,20,.8)}.mixmax-hint-modal__btn:hover{background-color:rgba(60,125,230,.17)}.mixmax-hint-modal__btn--primary{font-weight:500;margin-right:-1px;color:#1b62d4}.mixmax-hint-modal-message{word-wrap:break-word}.mixmax-hint-modal-textarea{display:block;width:100%;background:rgba(0,0,0,.1);border:1px solid rgba(0,0,0,.1);padding:8px 12px;height:96px;border-radius:2px;box-sizing:border-box;color:#fff;line-height:1.5}.mixmax-hint-modal-textarea:focus{outline:0}@keyframes flip-in{0%{opacity:0;transform:rotateX(70deg)}100%{opacity:1;transform:rotateX(0)}}.mixmax-sidebar-anywhere-wrapper,.mixmax-tasks{position:fixed;top:0;bottom:0;right:0;border:0;box-shadow:-4px 0 15px rgba(10,20,30,.25);background:#fff}.mixmax-sidebar-anywhere-wrapper{z-index:16777279998}.mixmax-tasks{z-index:16777279999;width:520px;height:100%}.mixmax-loading-spinner{background:url(assets/img/spinner-1x.gif) center center/18px 18px no-repeat #fff;transition:all 150ms ease-in-out}@media only screen and (-webkit-min-device-pixel-ratio:2),only screen and (min-device-pixel-ratio:2),only screen and (min-resolution:192dpi),only screen and (min-resolution:2dppx){.mixmax-loading-spinner{background-image:url(assets/img/spinner-2x.gif)}}</style></head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"><div data-reactroot="" class="app_container"><div><div></div><div><header><nav class="navbar navbar-default"><div class="container"><div class="navbar-header"><a href="http://localhost:3000/mypage#home" class="navbar-brand">Noteable</a><button type="button" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div><ul class="nav navbar-nav"><li role="presentation" class=""><a href="http://localhost:3000/quickadd">Add Article</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Groups</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage">My Page</a></li><div class="navbar-form navbar-right"><div class="form-group"><input type="text" placeholder="Search" name="searchTerm" class="form-control"></div><!-- react-text: 85 --> <!-- /react-text --><button type="submit" class="btn btn-default">Submit</button></div></ul></div></nav><!-- react-text: 87 -->;<!-- /react-text --></header><!-- react-empty: 88 --><!-- react-empty: 89 --><div><div class="container"><div class="row"><div class="col-md-3 col-xs-4"><p>Tags</p><ul class="nav nav-stacked"><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button"><!-- react-text: 98 -->Food<!-- /react-text --><span class="glyphicon glyphicon-star"></span></a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Photography</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Travel</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Funny</a></li></ul><p>Time</p><ul class="nav nav-stacked"><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">All Time</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Last Month</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Last Week</a></li><li role="presentation" class=""><a href="http://localhost:3000/mypage#" role="button">Today</a></li></ul></div><div class="col-md-4 col-xs-6"><div><div><div class="container"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><!-- react-text: 129 -->11 Things We’d Really Like to Know<!-- /react-text --><button>X</button></h3></div><a href="https://www.nytimes.com/interactive/2018/11/19/science/40th-anniversary-science-times.html" target="_blank" rel="noopener noreferrer"><div class="panel-body"><span class="link-spanner"></span><!-- react-text: 134 -->And a few we’d rather not discuss<!-- /react-text --><h4><!-- react-text: 136 --> <!-- /react-text --><!-- react-text: 137 --> <!-- /react-text --></h4><br><br><br><img src="./React App_files/20SCI-QUESTIONS-INTERSTELLAR-facebookJumbo.jpg" class="img-responsive center-block"><button type="button" class="btn btn-default">food</button><button type="button" class="btn btn-default">sports</button><button type="button" class="btn btn-default">funny</button></div></a></div></div></div></div><div><div><div class="container"><div class="panel panel-default"><div class="panel-heading"><h3 class="panel-title"><!-- react-text: 151 -->Quantum Computing Needs You to Help Solve Its Core Mystery<!-- /react-text --><button>X</button></h3></div><a href="https://www.wired.com/story/quantum-computing-needs-you-to-help-solve-its-core-mystery/" target="_blank" rel="noopener noreferrer"><div class="panel-body"><span class="link-spanner"></span><!-- react-text: 156 -->Come get your qubits! The builders of quantum computers want more coders to use their machines and figure out what they're actually good for.<!-- /react-text --><h4><!-- react-text: 158 --> <!-- /react-text --><!-- react-text: 159 --> <!-- /react-text --></h4><br><br><br><img src="./React App_files/Bristlecone_mix-perspective_ErikLucero.jpg" class="img-responsive center-block"><button type="button" class="btn btn-default">food</button><button type="button" class="btn btn-default">sports</button><button type="button" class="btn btn-default">funny</button></div></a></div></div></div></div></div></div></div><!-- react-text: 118 -->;<!-- /react-text --></div><!-- react-empty: 119 --><!-- react-empty: 120 --><!-- react-empty: 121 --></div><!-- react-empty: 122 --></div></div></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+    
+    <script src="./React App_files/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    
+    <script src="./React App_files/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    
+    <script src="./React App_files/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    
+  <script src="./React App_files/bundle.js"></script><script src="./React App_files/1.chunk.js"></script><script src="./React App_files/main.chunk.js"></script><script src="./React App_files/main.e699dc288778d611ac4c.hot-update.js"></script>
+  </body></html>

@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom'
 import { changeForm } from 'actions/appActions'
 import axios from 'axios';
 import Panel from 'react-bootstrap/lib/Panel';
+import Button from 'react-bootstrap/lib/Button';
 import { Redirect } from 'react-router-dom'
 
 import { withRouter } from "react-router-dom";
@@ -46,10 +47,19 @@ class Article extends React.Component {
         console.log('dsafa')
         return
       }
+      
+  }
+
+  const updateTag = (event) => {
+      alert('tag added')
      
 
       
   }
+  let Tag_1 = "food"
+  let Tag_2 = "sports"
+  let Tag_3 = "funny"
+
     return (
       <div>
          <div className = "container">
@@ -58,7 +68,7 @@ class Article extends React.Component {
             <Panel.Heading>
 
               <Panel.Title componentClass="h3">{this.props.title}
-               <button onClick={handleDelete}>X</button></Panel.Title>
+               <Button onClick={handleDelete}>X</Button></Panel.Title>
              
             </Panel.Heading>
             <a href={this.props.link} target="_blank" rel="noopener noreferrer">
@@ -72,7 +82,7 @@ class Article extends React.Component {
               <br></br>
               <img src={this.props.image} className="img-responsive center-block"/>   
 
-             
+              <Button >{Tag_1}</Button><Button >{Tag_2}</Button><Button>{Tag_3}</Button>
               </Panel.Body>
                </a>
 

@@ -32,29 +32,56 @@ chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT
 // set proxy for chrome extension, re reoute to my backend
 
 document.addEventListener('DOMContentLoaded', function() {
-    alert(cur_url);
+    
     var link = document.getElementById('submitButton');
+    var input = document.getElementById('entered_url')
+    input.value = cur_url;
 
     // onClick's logic below:
     link.addEventListener('click', function() {
+        alert('different message')
         // snip
         event.preventDefault()
-        var http = new XMLHttpRequest();
-        var url = '/api/addarticle';
-        var params = 'article_url=' + cur_url;
-        http.open('POST', url, true);
+        var entered_url = document.getElementById('entered_url').value
 
+        alert(entered_url)
+        proxyurl = "https://cors-anywhere.herokuapp.com/";
+        headers = {'x-requested-with': 'XMLHttpRequest', 'Access-Control-Allow-Origin':'*'}
+
+        var url =  'http://127.0.0.1:5000/api/addarticle';
+       
+        // var params = 'article_url=' + cur_url;
+
+        var http = new XMLHttpRequest();
         //Send the proper header information along with the request
-        http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        http.open('POST', url, true)
+        http.setRequestHeader('Content-type', 'application/json');
+        http.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+        http.setRequestHeader('Access-Control-Allow-Origin', '*');
+       
+        var jsonfile = JSON.stringify({'article_url':entered_url});
+        params = 'article_url='+entered_url
+        console.log(jsonfile);
+ 
+        // console.log(url+params, "url and params")
+        http.send(jsonfile);
+        // try{
+            
+
+        // }
+        // catch(e){
+        //     console.log('Error: ', e)
+        // }
 
         http.onreadystatechange = function() { //Call a function when the state changes.
             if (http.readyState == 4 && http.status == 200) {
-                alert(http.responseText);
+                console.log('response!')
+                console.log(http.responseText);
             }
         }
-        http.send(params);
+       
 
-        this.props.history.push('/mypage')
+        //this.props.history.push('/mypage')
 
     });
 });
