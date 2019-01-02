@@ -5,10 +5,9 @@
 #-----------------------------------------------------------------------
 from flask import Flask
 from flask_login import LoginManager
-
+from views import bp
 from models import User
 from database import Database
-from views import bp
 
 app = Flask(__name__)
 app.secret_key = 'super secret string'  # Change this!
