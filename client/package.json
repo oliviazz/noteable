@@ -43,8 +43,8 @@
     ]
   },
   "engines": {
-    "node": "~6.10.3",
-    "npm": "~5.6.0"
+    "node": "10.2.0",
+    "npm": "6.4.1"
   },
   "proxy": "http://localhost:5000",
   "browserslist": [
