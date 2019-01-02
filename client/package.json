@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "acorn": "^6.0.5",
     "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
+    "eslint-plugin-react": "^7.12.1",
     "got": "^9.3.2",
     "react": "^15.6.2",
     "react-bootstrap": "^0.32.4",
@@ -16,15 +18,28 @@
     "url-metadata": "^2.1.7"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
     "prettier": "1.9.2",
-    "react-scripts": "^2.1.1"
+    "react-scripts": "^2.1.1",
+    "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack -p --progress --config webpack.config.js",
+    "dev-build": "webpack --progress -d --config webpack.config.js",
     "test": "react-scripts test --env=jsdom",
+    "watch": "webpack --progress -d --config webpack.config.js --watch",
+    "start": "react-scripts start",
     "eject": "react-scripts eject",
     "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\""
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "react"
+    ]
   },
   "proxy": "http://localhost:5000",
   "browserslist": [
