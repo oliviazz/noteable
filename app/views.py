@@ -125,38 +125,34 @@ def getarticlesinfo():
         article = [str(i) for i in article]
         print(article, " question mark")
         # scrape info only if article doesn't have database already
-        if (article_needs_info(article)):
-            print(article, " needs information")
-            article_url = article[6]
-            my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
-            # const urlMetadata = require('url-metadata');
-            proxyurl = "https://cors-anywhere.herokuapp.com/";
-            headers = {'x-requested-with': 'XMLHttpRequest'}
-            response = requests.get(proxyurl+article_url, headers=headers)
-            
-            #### these are what we find
-            soup = BeautifulSoup(response.text, "lxml")
-            title = soup.find("meta",  property="og:title")
-            url = soup.find("meta",  property="og:url")
-            descrip = soup.find("meta", property="og:description")
-            image = soup.find("meta", property="og:image")
+        # if (article_needs_info(article)):
+        print(article, " needs information")
+        article_url = article[6]
+        my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
+        # const urlMetadata = require('url-metadata');
+        proxyurl = "https://cors-anywhere.herokuapp.com/";
+        headers = {'x-requested-with': 'XMLHttpRequest'}
+        response = requests.get(proxyurl+article_url, headers=headers)
+        
+        #### these are what we find
+        soup = BeautifulSoup(response.text, "lxml")
+        title = soup.find("meta",  property="og:title")
+        url = soup.find("meta",  property="og:url")
+        descrip = soup.find("meta", property="og:description")
+        image = soup.find("meta", property="og:image")
 
         # Replace -------------
-            user = 'dummy'
-            article_id = hash(url)
-            database.deleteArticle(user, article_id )
-            database.insertArticle(self, user, title, image, descrip, articleAuthor, articleDate, url, tags)
-            print('HOW BOUT NOW ', article_needs_info(article))
+        # article_id = hash(url)
+        # database.deleteArticle('dummy', article_id )
+        # database.insertArticle(self, 'dummy', title, image, descrip, articleAuthor, articleDate, url, tags)
         # Replace ------------- 
 
-            if title: my_info['title'] = title['content']
-            if url: my_info['url'] = url['content']
-            if descrip: my_info['descrip'] = descrip['content']
-            if image: my_info['image'] = image['content']
-            #json to be returned 
-            article_full_info[article_url] = my_info
-      
+        if title: my_info['title'] = title['content']
+        if url: my_info['url'] = url['content']
+        if descrip: my_info['descrip'] = descrip['content']
+        if image: my_info['image'] = image['content']
 
+        article_full_info[article_url] = my_info
         
         # else:
         #     database.userArticles('dummy2')
