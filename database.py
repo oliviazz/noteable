@@ -336,9 +336,12 @@ class Database:
 
         countList = cursor.fetchall()
         print(countList, 'countList')
+        
+        try:
+            countNum = countList[0][0] + action
+        except:
+            countNum = 0
         print(countNum, "countNum")
-        countNum = countList[0][0] + action
-
 
         stmtStr = "UPDATE users SET numArticles = (?) WHERE userID = (?) "
         

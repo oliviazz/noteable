@@ -15,19 +15,35 @@ import Panel from 'react-bootstrap/lib/Panel';
 import Button from 'react-bootstrap/lib/Button';
 import { Redirect } from 'react-router-dom'
 
+
 import { withRouter } from "react-router-dom";
+
+
+const options = [
+  { value: 'food', label: 'Food' },
+  { value: 'travel', label: 'Travel' },
+  { value: 'tech', label: 'Tech' },
+  { value: 'beauty', label: 'Beauty' },
+  { value: 'football', label: 'Football' },
+  { value: 'lol', label: 'Lol' },
+  { value: 'read_later', label: 'Read Later' },
+  { value: 'how_to', label: 'How To' }
+];
 
 
 
 class Article extends React.Component {
 
-  constructor() {
-    super()
-    
-  
+  state = {
+    selectedOption: null,
   }
+  // handleChange = (selectedOption) => {
+  //   this.setState({ selectedOption });
+  //   console.log(`Option selected:`, selectedOption);
+  // }
   
   render() {
+    // const { selectedOption } = this.state;
     const handleDelete = (event) => {
       event.preventDefault()
       var r = window.confirm('Are you sure you want to delete this article from your page?')
@@ -83,6 +99,7 @@ class Article extends React.Component {
               <img src={this.props.image} className="img-responsive center-block"/>   
 
               <Button >{Tag_1}</Button><Button >{Tag_2}</Button><Button>{Tag_3}</Button>
+             
               </Panel.Body>
                </a>
 

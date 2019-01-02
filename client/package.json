@@ -5,10 +5,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
+    "create-react-class": "^15.6.3",
     "got": "^9.3.2",
     "react": "^15.6.2",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^15.6.2",
+    "react-input-autosize": "^2.2.1",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
     "redux": "^3.7.2",
