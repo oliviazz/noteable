@@ -33,13 +33,18 @@
     "watch": "webpack --progress -d --config webpack.config.js --watch",
     "start": "react-scripts start",
     "eject": "react-scripts eject",
-    "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\""
+    "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\"",
+    "postinstall": "react-scripts build"
   },
   "babel": {
     "presets": [
       "es2015",
       "react"
     ]
+  },
+  "engines": {
+    "node": "~6.10.3",
+    "npm": "~5.6.0"
   },
   "proxy": "http://localhost:5000",
   "browserslist": [
