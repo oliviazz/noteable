@@ -14,25 +14,8 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import './mypage.css';
 
 class Header extends React.Component {
-
-   handleChange(e) {
-    alert(e.target.name)
-    alert(e.target.value)
-        this.setState({
-            [e.target.name]: e.target.value
-        })
-    }
-
   render() {
     const { loggedIn } = this.props
-
-    const searchUser = event => {
-            event.preventDefault()
-            
-            alert(this.state.searchTerm);
-       
-
-        }
 
     return (
       <header>
@@ -55,12 +38,12 @@ class Header extends React.Component {
       </NavItem>
       <Navbar.Form pullRight>
       <FormGroup>
-        <FormControl type="text" placeholder="Search" name="searchTerm" />
+        <FormControl type="text" placeholder="Search" />
       </FormGroup>{' '}
-      <Button type="submit" onClick={(e) => this.handleChange(e)}>Submit</Button>
+      <Button type="submit">Submit</Button>
     </Navbar.Form>
   </Nav>
-</Navbar>
+</Navbar>;
 </header>
     // <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
     //   <MenuItem eventKey={3.1}>Action</MenuItem>

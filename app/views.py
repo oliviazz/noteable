@@ -42,18 +42,16 @@ def protected():
 
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
-
     json_payload = request.get_json()
-    print(json_payload, "JSON PAYLOAD!!!!")
     article = json_payload['article_url']
     #return jsonify(message=article), 200
 
     database = Database()
     database.connect()
-    print(article, " article")
+    print(article)
 
     try:
-        database.insertArticle('dummy2', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, 'tags')
+        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, 'tags')
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except:
@@ -72,8 +70,8 @@ def deletearticle():
     try:
         article_id = hash(article)
       
-        database.deleteArticle(userID='dummy2', articleID=article_id)
-       
+        database.deleteArticle(userID='dummy', articleID=article_id)
+ 
         database.disconnect()
 
         return jsonify(message="Deleted article: " + article), 200
@@ -90,97 +88,45 @@ def getarticles():
 
     database = Database()
     database.connect()
-
-    # json_payload = request.get_json()
-    
-    # user = json.loads(json_payload['my_user'])
-    user='dummy2'
-
     #use dummy userId for now 
-    article_query_results = database.userArticles(user)
+    article_query_results = database.userArticles('dummy')
     print(article_query_results, " ok")
     return jsonify(articles=article_query_results)
 
-def article_needs_info(article):
-    # IF some threshold of fields is blank
-   
-    # if Both fields are blank
-    if (article[1] == 'articleTitle' and article[2] == 'articleIcon'):
-        return True
-    else:
-        return False
-
 @bp.route("/getarticlesinfo", methods=["POST"])
 def getarticlesinfo():
-    print('hey!!')
     json_payload = request.get_json()
     
     articles = json.loads(json_payload['articles'])
-    #print(articles, "HEY")
+    print(articles, "HEY")
     article_full_info = {}
-    database = Database()
-    database.connect()
-
     for article in articles:
-        article = [str(i) for i in article]
-        print(article, " question mark")
-        # scrape info only if article doesn't have database already
-        # if (article_needs_info(article)):
-        print(article, " needs information")
-        article_url = article[6]
+        article = str(article)
         my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
         # const urlMetadata = require('url-metadata');
         proxyurl = "https://cors-anywhere.herokuapp.com/";
         headers = {'x-requested-with': 'XMLHttpRequest'}
-        response = requests.get(proxyurl+article_url, headers=headers)
-        
-        #### these are what we find
+        response = requests.get(proxyurl+article, headers=headers)
         soup = BeautifulSoup(response.text, "lxml")
+        
         title = soup.find("meta",  property="og:title")
         url = soup.find("meta",  property="og:url")
         descrip = soup.find("meta", property="og:description")
         image = soup.find("meta", property="og:image")
 
-        # Replace -------------
-        # article_id = hash(url)
-        # database.deleteArticle('dummy', article_id )
-        # database.insertArticle(self, 'dummy', title, image, descrip, articleAuthor, articleDate, url, tags)
-        # Replace ------------- 
-
+        # print(title["content"] if title else "No meta title given")
+        # print(url["content"] if url else "No meta url given")
+        # print(image["content"] if image else "No meta image given")
+        # print(descrip["content"] if descrip else "No meta descrip given")
+        
         if title: my_info['title'] = title['content']
         if url: my_info['url'] = url['content']
         if descrip: my_info['descrip'] = descrip['content']
         if image: my_info['image'] = image['content']
 
-        article_full_info[article_url] = my_info
-        
-        # else:
-        #     database.userArticles('dummy2')
-        #     # package database result into a dictionary 
-        #     my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
-        #     my_info['image'] = 
+        article_full_info[article] = my_info
 
-
-    # article_query_results = database.userArticles('dummy2')
-    # print(article_query_results, " ok")
-    # for article in article_query_results:
-    #     article = [str(i) for i in article]
-        
-    #     my_info['url'] = article[6]
-    #     my_info['image'] = article[5]
-    #     my_info['title'] = article[2]
-    #     my_info['descrip'] = article[3]
-    #     my_info['author'] = article[4]
-    #     my_info['date']= article[5]
-
-    #     url = article[6]
-    #     article_full_info[url] = my_info
-
-    
-
-
-    print(type(article_full_info))
-
+    #print(article_full_info)
     return jsonify(all_article_info=article_full_info)
      
 

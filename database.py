@@ -307,8 +307,6 @@ class Database:
             return (False, e)
 
         countList = cursor.fetchall() 
-        
-        print(countList, 'countlist')
         countNum = countList[0][0] + action
 
         stmtStr = "UPDATE articles SET numUses = (?) WHERE articleID = (?)"
@@ -335,10 +333,7 @@ class Database:
             return (False, e)
 
         countList = cursor.fetchall()
-        print(countList, 'countList')
-        print(countNum, "countNum")
         countNum = countList[0][0] + action
-
 
         stmtStr = "UPDATE users SET numArticles = (?) WHERE userID = (?) "
         
@@ -394,7 +389,7 @@ class Database:
     def deleteArticle(self, userID, articleID):
         cursor = self._connection.cursor()
         stmtStr = "DELETE FROM user_article_tags WHERE articleID = ? AND userID = ?"
-
+       
         
         try:
             cursor.execute(stmtStr, [str(articleID), str(userID)])
@@ -418,7 +413,6 @@ class Database:
         return(True)
 
     #-----------------------------------------------------------------------
-     #-----------------------------------------------------------------------
      # def updateFriends(self, userID, newFriends):
      #    cursor = self._connection.cursor()
      #    stmtStr = "SELECT user.friends FROM users WHERE userID = (?)"
