@@ -44,14 +44,21 @@ def protected():
 def addarticle():
     json_payload = request.get_json()
     article = json_payload['article_url']
+    tags = json_payload['tags']
     #return jsonify(message=article), 200
 
     database = Database()
     database.connect()
     print(article)
+    tag_val = []
+    if (tags):
+        for tag in tags:
+            tag_val.append(str(tag['value']))
+
+    print(tag_val, " TAG VLAUE")
 
     try:
-        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, 'tags')
+        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tag_val)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except:

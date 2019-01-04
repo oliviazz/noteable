@@ -16,17 +16,46 @@ import { Redirect } from 'react-router-dom'
 
 import { withRouter } from "react-router-dom";
 
+import Select from 'react-select';
+
+const options = [
+      { value: 'food', label: 'Food' },
+      { value: 'tech', label: 'Tech' },
+      { value: 'science', label: 'Science' },
+      {value: 'politics', label: 'Politics'},
+      {value: 'funny', label: 'Funny'},
+      {value: 'health', label: 'Health'},
+      {value: 'beauty', label: 'Beauty'},
+      {value: 'fashion', label: 'Fashion'},
+      {value: 'sports', label: 'Sports'},
+      {value: 'long_read', label: 'Long Read'},
+      {value: 'short_read', label: 'Short Read'},
+      {value: 'family', label: 'Family'}
+    ];
 
 
 class Article extends React.Component {
 
   constructor() {
     super()
+    this.my_selectedOption = ""
     
   
   }
+
+  state = {
+    selectedOption: null,
+  }
+
+  handleChange = (selectedOption) => {
+    this.my_selectedOption = selectedOption;
+    console.log(`Option selected:`, selectedOption);
+  }
+
   
   render() {
+    const { selectedOption } = this.my_selectedOption;
+    const true_holder = true;
     const handleDelete = (event) => {
       event.preventDefault()
       var r = window.confirm('Are you sure you want to delete this article from your page?')
@@ -71,10 +100,17 @@ class Article extends React.Component {
               <br></br>
               <br></br>
               <img src={this.props.image} className="img-responsive center-block"/>   
-
+              
              
               </Panel.Body>
                </a>
+
+               <Select
+                value={selectedOption}
+                onChange={this.handleChange}
+                options={options}
+                isMulti={true_holder}
+              />
 
             </Panel>
           
