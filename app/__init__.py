@@ -6,7 +6,7 @@
 from flask import Flask
 from flask_login import LoginManager
 
-from models import User
+
 from database import Database
 from views import bp
 
