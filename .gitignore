@@ -11,3 +11,4 @@ make_init_table_python.py
 try.py
 noteable.sqlite
 
+node_modules
