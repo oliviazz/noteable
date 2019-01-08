@@ -24,7 +24,9 @@
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "build": "webpack -p --progress --config webpack.config.js",
+    // "build": "webpack -p --progress --config webpack.config.js",
+    "dev": "webpack --env.ENVIRONMENT=development --config webpack.config.dev.js",
+    "build": "webpack --env.ENVIRONMENT=production --config webpack.config.build.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",
     "test": "react-scripts test --env=jsdom",
     "watch": "webpack --progress -d --config webpack.config.js --watch",
@@ -32,6 +34,7 @@
     "eject": "react-scripts eject",
     "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\"",
     "postinstall": "react-scripts build"
+    
   },
   "babel": {
     "presets": [
