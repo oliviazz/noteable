@@ -6,6 +6,7 @@
     "acorn": "^6.0.5",
     "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
+    "dotenv": "^6.2.0",
     "eslint-plugin-react": "^7.12.1",
     "got": "^9.3.2",
     "react": "^15.6.2",
