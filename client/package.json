@@ -33,7 +33,7 @@
     "start": "react-scripts start",
     "eject": "react-scripts eject",
     "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\"",
-    "postinstall": "react-scripts build"
+    "postinstall": "react-scripts build client"
     
   },
   "babel": {
