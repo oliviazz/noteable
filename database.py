@@ -13,6 +13,7 @@ from article import Article
 #-----------------------------------------------------------------------
 
 class Database:
+
     #-----------------------------------------------------------------------
     #
     # NUMBERS GAME
@@ -64,7 +65,7 @@ class Database:
         numList = cursor.fetchall()
         if len(numList) > 0:
             if len(numList[0]) > 0:
-                print numList[0][0]
+                print "Numlist[0][0], 68: " + str(numList[0][0])
                 return numList[0][0]
             else: return 0
         else: return 0
@@ -83,7 +84,7 @@ class Database:
         numList = cursor.fetchall()
         if len(numList) > 0:
             if len(numList[0]) > 0:
-                print numList[0][0]
+                print "Numlist[0][0], 87: " + str(numList[0][0])
                 return numList[0][0]
             else: return 0
         else: return 0
@@ -259,38 +260,6 @@ class Database:
 
         cursor.close()
         return allEntries
-
-    #-----------------------------------------------------------------------
-    #
-    #  USER FEATURES
-    #
-    #-----------------------------------------------------------------------
-    # find all the articles for a certain user
-
-    def userArticles(self, userID):
-        cursor = self._connection.cursor()
-        hashList = []
-        urlList = []
-
-        stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID FROM user_article_tags WHERE userID = ?"
-
-        try:
-            cursor.execute(stmtStr, [str(userID)])
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
-        stmtStr = "SELECT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
-
-        try:
-            cursor.execute(stmtStr)
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
-        return cursor.fetchall()
     
     #-----------------------------------------------------------------------
     # Adds user to the user table in database
@@ -473,26 +442,29 @@ class Database:
 
     # Adds article to the article table in database    
     def insertArticle(self, userID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
-        cursor = self._connection.cursor()
-        # Unique articleIDs are the hash of the url
-        articleID = hash(articleURL)
-        article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
+        if (self.checkUser(userID) == True):
+            cursor = self._connection.cursor()
+            # Unique articleIDs are the hash of the url
+            articleID = hash(articleURL)
+            article = Article(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL)
 
-        stmtStr = "INSERT OR IGNORE INTO articles(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, numUses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
-        
-        try:
-            cursor.execute(stmtStr, [str(article.articleID), str(article.articleTitle), str(article.articleIcon), str(article.articleBlurb), str(article.articleAuthor), str(article.articleDate), str(article.articleURL), 0])
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
+            stmtStr = "INSERT OR IGNORE INTO articles(articleID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, numUses) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            
+            try:
+                cursor.execute(stmtStr, [str(article.articleID), str(article.articleTitle), str(article.articleIcon), str(article.articleBlurb), str(article.articleAuthor), str(article.articleDate), str(article.articleURL), 0])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
 
-        self.updateTags(userID, articleID, tags)
-        self.getUsesNumFromArticle(cursor, articleID, 1)
-        self.getArticleNumFromUser(cursor, userID, 1)
+            self.updateTags(userID, articleID, tags)
+            self.getUsesNumFromArticle(cursor, articleID, 1)
+            self.getArticleNumFromUser(cursor, userID, 1)
 
-        cursor.close()
-        return (True)
+            cursor.close()
+            return (True)
+        else:
+            return (False, 'This user does not exist')
 
     #-----------------------------------------------------------------------
 
@@ -555,8 +527,8 @@ class Database:
        
         friendList2 = cursor.fetchall()
 
-        print friendList1
-        print friendList2
+        print "FriendList1, 530: " + friendList1
+        print "FriendList2, 531: " + friendList2
 
         cursor.close()
         return(True)
@@ -656,17 +628,22 @@ class Database:
                 cursor.execute(stmtStr, [str(userID1), str(userID2)])
                 self._connection.commit()
             except Exception, e:
-                print >>stderr, e
-                return (False, e)
+                print type(e)
+                if (e == 'UNIQUE constraint failed: friends.userID1, friends.userID2'):
+                    print '633, You are already friends with this user'
+                    return (False, e)
+                else:
+                    print >>stderr, e
+                    return (False, e)
            
             cursor.close()
             return(True)
 
         else:
             if (check1 == 0):
-                print 'user1 does not exist'
+                print '644, user1 does not exist'
             elif (check2 == 0):
-                print 'user2 does not exist'
+                print '646, user2 does not exist'
 
     #-----------------------------------------------------------------------
     def deleteFriend(self, userID1, userID2):
@@ -696,7 +673,7 @@ class Database:
 
     #-----------------------------------------------------------------------
     #
-    #  FRIEND FEATURES 
+    #  TAG FEATURES 
     #
     #-----------------------------------------------------------------------  
 
@@ -735,27 +712,112 @@ class Database:
         cursor.close()
         return(True)
 
+    def allTags(self):
+        tagList = ['News', 'Politics', 'Food', 'Business', 'Reading', 'Technology', 'Blogs', 'Money', 'Productivity', 'Games',
+        'School', 'Environment', 'Media', 'Travel', 'Sports', 'Religion', 'Health', 'Weather', 'Celebrity', 'Science', 
+        'Design', 'Art', 'Comedy', 'Film', 'Music', 'Fashion', 'Race', 'World', 'Economy', 'Later', 'Popular', 'College',
+        'History', 'Entrepreneurship', 'Animals', 'Architecture', 'Holidays', 'Kids', 'Entertainment', 'Baking', 'Cooking', 'AI', 
+        'Journalism', 'Advice', 'Creative', 'Lists', 'Real Estate', 'World', 'USA', 'NYC']
+        return tagList
+
+    def deleteTags(self, tags):
+        taglist = self.allTags()
+        splittags = tags.split(' ')
+        for tag in splittags:
+            if tag in taglist:
+                taglist.remove(tag)
+        return taglist
+
+    #-----------------------------------------------------------------------
+    #
+    #  SEARCH FEATURES
+    #
+    #-----------------------------------------------------------------------
+    
+    # all of a user's articles
+    def userArticles(self, userID, tags):
+        cursor = self._connection.cursor()
+
+        stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID FROM user_article_tags WHERE userID = ?"
+
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = "SELECT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
+
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        return cursor.fetchall()
+
+    # search by any amount of tags
+    def userTagArticles(self, userID, tags):
+        deleteTags = self.deleteTags(tags)
+        cursor = self._connection.cursor()
+
+        taglist = tags.split(' ')
+        if len(taglist) == 0:
+            allArticles = self.userArticles(userID, tags)
+            cursor.close()
+            return allArticles
+        else:
+            stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID, tag FROM user_article_tags WHERE userID = ?"
+
+            try:
+                cursor.execute(stmtStr, [str(userID)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+            for tag in deleteTags:
+                stmtStr = "DELETE FROM temp.articleIDList WHERE tag = ? "
+                try:
+                    cursor.execute(stmtStr, [str(tag)])
+                    self._connection.commit()
+                except Exception, e:
+                    print >>stderr, e
+                    return (False, e)
+
+            stmtStr = "SELECT DISTINCT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
+            try:
+                cursor.execute(stmtStr)
+                print  "yo"
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+            allArticles = cursor.fetchall()
+
+            cursor.close()
+            return allArticles
+
+    #     # all of a user's articles
+    # def userFeed(self, userID, tags):
+    #     allArticles = []
+        
+
     #-----------------------------------------------------------------------
 
 if __name__ == '__main__':
     # # test user is 2018
     c = Database()
     c.connect()
-    # c.oneTimeOnly()
-    # c.deleteFriend("dummy3", "dummy4")
-    # c.addFriend("dummy3", "dummy5")
-    # c.addFriend("dummy3", "dummy6")
-    # c.addFriend("dummy3", "dummy4")
-
-    # c.addFriend("dummy4", "dummy3")
-    # c.allFriendsofUser("dummy3")
-    # c.addToGroups("dummy3", "smarties")
-    # print c.displayPending('dummy3')
-    # c.insertUser('firstName', 'lastName', 'username', 'dummy3')
-    # c.insertUser('firstName', 'lastName', 'username', 'dummy4')
-    # c.insertUser('firstName', 'lastName', 'username', 'dummy5')
-    # c.insertUser('firstName', 'lastName', 'username', 'dummy7')
-    # print c.allFriendPairings()
+    # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Food Economy Politics')
+    print c.userTagArticles('dummy3', 'Food')
+    # print c.userTagArticles('dummy3', 'Economy Politics')
+    c.disconnect()
+    c.connect()
+    print c.userTagArticles('dummy3', 'Economy Politics')
     c.disconnect()
 
 
