@@ -13,7 +13,11 @@ from article import Article
 #-----------------------------------------------------------------------
 
 class Database:
-
+    #-----------------------------------------------------------------------
+    #
+    # NUMBERS GAME
+    #
+    #-----------------------------------------------------------------------
     def numUsers(self, cursor):
         stmtStr = 'SELECT count(*) FROM users'
 
@@ -47,6 +51,48 @@ class Database:
         print "CountNum 48:" + countNum
         return(countNum)
 
+    #-----------------------------------------------------------------------
+    def getUsesNumFromArticle(self, cursor, userID, action):
+        stmtStr = "SELECT count(DISTINCT userID) FROM user_article_tags WHERE articleID = (?)"
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        numList = cursor.fetchall()
+        if len(numList) > 0:
+            if len(numList[0]) > 0:
+                print numList[0][0]
+                return numList[0][0]
+            else: return 0
+        else: return 0
+
+    #-----------------------------------------------------------------------
+
+    def getArticleNumFromUser(self, cursor, userID, action):
+        stmtStr = "SELECT count(DISTINCT articleID) FROM user_article_tags WHERE userID = (?)"
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        numList = cursor.fetchall()
+        if len(numList) > 0:
+            if len(numList[0]) > 0:
+                print numList[0][0]
+                return numList[0][0]
+            else: return 0
+        else: return 0
+
+
+    #-----------------------------------------------------------------------
+    #
+    # SETUP AND BREAKDOWN
+    #
     #-----------------------------------------------------------------------
 
     def oneTimeOnly(self):
@@ -100,7 +146,7 @@ class Database:
             print >>stderr, e
             return None
 
-        stmtStr = 'CREATE TABLE groups(groupName TEXT NOT NULL, groupID TEXT NOT NULL, UNIQUE (groupName, groupID))'
+        stmtStr = 'CREATE TABLE groups(groupName TEXT NOT NULL, groupID TEXT NOT NULL, userID TEXT, UNIQUE (groupName, groupID, userID))'
 
         try:
             cursor.execute(stmtStr)
@@ -137,6 +183,27 @@ class Database:
         self._connection.close()
 
     #-----------------------------------------------------------------------
+    #
+    # DISPLAY ALL
+    #
+    #-----------------------------------------------------------------------
+
+    def allFriendPairings(self):
+        cursor = self._connection.cursor()
+
+        stmtStr = "SELECT userID1, userID2 FROM friends"
+        
+        try:
+            cursor.execute(stmtStr)
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        allEntries = cursor.fetchall() 
+
+        cursor.close()
+        return allEntries
 
     def allUsers(self):
         cursor = self._connection.cursor()
@@ -194,6 +261,12 @@ class Database:
         return allEntries
 
     #-----------------------------------------------------------------------
+    #
+    #  USER FEATURES
+    #
+    #-----------------------------------------------------------------------
+    # find all the articles for a certain user
+
     def userArticles(self, userID):
         cursor = self._connection.cursor()
         hashList = []
@@ -220,7 +293,6 @@ class Database:
         return cursor.fetchall()
     
     #-----------------------------------------------------------------------
-    
     # Adds user to the user table in database
     def insertUser(self, firstName, lastName, username, userIDTest):
         cursor = self._connection.cursor()
@@ -243,8 +315,59 @@ class Database:
         cursor.close()
         return(True)
 
+    # Deletes user from user table in databasez
+    def deleteUser(self, userID):
+        cursor = self._connection.cursor()
+
+        stmtStr = "DELETE FROM users WHERE userID = ?"
+        
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        stmtStr = "DELETE FROM user_article_tags WHERE userID = ?"
+        
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+
+        cursor.close()
+        return(True)
+
+    # Deletes user from user table in databasez
+    def checkUser(self, userID):
+        cursor = self._connection.cursor()
+
+        friendList = []
+        cursor = self._connection.cursor()
+
+        stmtStr = "SELECT EXISTS(SELECT 1 FROM users WHERE userID = (?))"
+
+        try:
+            cursor.execute(stmtStr, [str(userID)])
+            self._connection.commit()
+        except Exception, e:
+            print >>stderr, e
+            return (False, e)
+       
+        return cursor.fetchall()[0][0]
+
+        cursor.close()
+
     #-----------------------------------------------------------------------
-    
+    #
+    #  GROUP FEATURES 
+    #
+    #-----------------------------------------------------------------------  
+
     # Adds user to the user table in database
     def getArticlesFromGroup(self, groupname):
         cursor = self._connection.cursor()
@@ -276,7 +399,6 @@ class Database:
         return(True)
 
     #-----------------------------------------------------------------------
-    
     def insertGroup(self, groupname):
         cursor = self._connection.cursor()
         stmtStr = "SELECT groupID FROM groups WHERE groupName = ?"
@@ -312,72 +434,42 @@ class Database:
         return cursor.fetchall()
 
     #-----------------------------------------------------------------------
-
-    # # Deletes user from user table in databasez
-    def deleteUser(self, userID):
+    def addToGroups(self, userID, groupName):
         cursor = self._connection.cursor()
 
-        stmtStr = "DELETE FROM users WHERE userID = ?"
-        
-        try:
-            cursor.execute(stmtStr, [str(userID)])
-            self._connection.commit()
+        stmtStr = "INSERT INTO groups(groupName, userID) VALUES (?, ?)"
 
+        try:
+            cursor.execute(stmtStr, [str(groupName), str(userID)])
+            self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
-
-        stmtStr = "DELETE FROM user_article_tags WHERE userID = ?"
-        
-        try:
-            cursor.execute(stmtStr, [str(userID)])
-            self._connection.commit()
-
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
+       
         cursor.close()
         return(True)
 
     #-----------------------------------------------------------------------
-    def getUsesNumFromArticle(self, cursor, userID, action):
-        stmtStr = "SELECT count(DISTINCT userID) FROM user_article_tags WHERE articleID = (?)"
+    def allUsersInGroup(self, userID, groupName):
+        cursor = self._connection.cursor()
+
+        stmtStr = "INSERT INTO groups(groupName, userID) VALUES (?, ?)"
+
         try:
-            cursor.execute(stmtStr, [str(userID)])
+            cursor.execute(stmtStr, [str(groupName), str(userID)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
-
-        numList = cursor.fetchall()
-        if len(numList) > 0:
-            if len(numList[0]) > 0:
-                print numList[0][0]
-                return numList[0][0]
-            else: return 0
-        else: return 0
+       
+        cursor.close()
+        return(True)
 
     #-----------------------------------------------------------------------
-
-    def getArticleNumFromUser(self, cursor, userID, action):
-        stmtStr = "SELECT count(DISTINCT articleID) FROM user_article_tags WHERE userID = (?)"
-        try:
-            cursor.execute(stmtStr, [str(userID)])
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-
-        numList = cursor.fetchall()
-        if len(numList) > 0:
-            if len(numList[0]) > 0:
-                print numList[0][0]
-                return numList[0][0]
-            else: return 0
-        else: return 0
-
-    #-----------------------------------------------------------------------
+    #
+    #  ARTICLE FEATURES 
+    #
+    #-----------------------------------------------------------------------   
 
     # Adds article to the article table in database    
     def insertArticle(self, userID, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
@@ -432,6 +524,11 @@ class Database:
         return(True)
 
     #-----------------------------------------------------------------------
+    #
+    #  FRIEND FEATURES 
+    #
+    #-----------------------------------------------------------------------  
+
     def allFriendsofUser(self, userID):
         friendList = []
         cursor = self._connection.cursor()
@@ -465,36 +562,49 @@ class Database:
         return(True)
 
     #-----------------------------------------------------------------------
-    def addToGroups(self, userID, groupName):
+    def displayPending(self, userID1):
         cursor = self._connection.cursor()
+        pending = self.checkPending(userID1)
 
-        stmtStr = "INSERT INTO groups(groupName, userID) VALUES (?, ?)"
+        for friend in pending:
+            stmtStr = "SELECT username, firstname, lastname FROM users WHERE userID = (?)"
+            try:
+                cursor.execute(stmtStr, [str(friend)])
+                self._connection.commit()
 
-        try:
-            cursor.execute(stmtStr, [str(groupName), str(userID)])
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-       
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+        allnewfriends = cursor.fetchall()
         cursor.close()
-        return(True)
+        return(allnewfriends)
 
     #-----------------------------------------------------------------------
-    def allUsersInGroup(self, userID, groupName):
+    def checkPending(self, userID1):
+        friendList = []
         cursor = self._connection.cursor()
 
-        stmtStr = "INSERT INTO groups(groupName, userID) VALUES (?, ?)"
+        stmtStr = "SELECT userID1 FROM friends WHERE userID2 = (?)"
 
         try:
-            cursor.execute(stmtStr, [str(groupName), str(userID)])
+            cursor.execute(stmtStr, [str(userID1)])
             self._connection.commit()
         except Exception, e:
             print >>stderr, e
             return (False, e)
-       
+
+        allpendingIDs = []
+
+        friendList1 = cursor.fetchall()
+        for friend in friendList1:
+            checked = self.checkFriends(userID1, friend[0])
+            if (checked != True):
+                allpendingIDs.append(friend[0])
+
         cursor.close()
-        return(True)
+
+        return allpendingIDs
 
     #-----------------------------------------------------------------------
     def checkFriends(self, userID1, userID2):
@@ -534,24 +644,35 @@ class Database:
 
     #-----------------------------------------------------------------------
     def addFriend(self, userID1, userID2):
-        cursor = self._connection.cursor()
+        check1 = self.checkUser(userID1)
+        check2 = self.checkUser(userID2)
 
-        stmtStr = "INSERT INTO friends(userID1, userID2) VALUES (?, ?)"
+        if check1 == 1 and check2 == 1:
+            cursor = self._connection.cursor()
 
-        try:
-            cursor.execute(stmtStr, [str(userID1), str(userID2)])
-            self._connection.commit()
-        except Exception, e:
-            print >>stderr, e
-            return (False, e)
-       
-        cursor.close()
-        return(True)
+            stmtStr = "INSERT INTO friends(userID1, userID2) VALUES (?, ?)"
+
+            try:
+                cursor.execute(stmtStr, [str(userID1), str(userID2)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+           
+            cursor.close()
+            return(True)
+
+        else:
+            if (check1 == 0):
+                print 'user1 does not exist'
+            elif (check2 == 0):
+                print 'user2 does not exist'
 
     #-----------------------------------------------------------------------
     def deleteFriend(self, userID1, userID2):
         cursor = self._connection.cursor()
         # this is so you only add a friend in one direction to avoid duplicates
+
         if userID1 <= userID2:
             smaller = userID1
             bigger = userID2
@@ -572,7 +693,12 @@ class Database:
        
         cursor.close()
         return(True)
+
     #-----------------------------------------------------------------------
+    #
+    #  FRIEND FEATURES 
+    #
+    #-----------------------------------------------------------------------  
 
     def updateTags(self, userID, articleID, newTags):
         cursor = self._connection.cursor()
@@ -616,14 +742,20 @@ if __name__ == '__main__':
     c = Database()
     c.connect()
     # c.oneTimeOnly()
-    c.insertArticle('userIDTest', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
-    c.deleteFriend("dummy3", "dummy4")
-    c.addFriend("dummy3", "dummy4")
-    c.addFriend("dummy4", "dummy3")
-    c.allFriendsofUser("dummy3")
-    c.addToGroups("dummy3", "smarties")
-    print c.checkFriends("dummy4", "dummy3")
-    c.insertGroup("hey!")
+    # c.deleteFriend("dummy3", "dummy4")
+    # c.addFriend("dummy3", "dummy5")
+    # c.addFriend("dummy3", "dummy6")
+    # c.addFriend("dummy3", "dummy4")
+
+    # c.addFriend("dummy4", "dummy3")
+    # c.allFriendsofUser("dummy3")
+    # c.addToGroups("dummy3", "smarties")
+    # print c.displayPending('dummy3')
+    # c.insertUser('firstName', 'lastName', 'username', 'dummy3')
+    # c.insertUser('firstName', 'lastName', 'username', 'dummy4')
+    # c.insertUser('firstName', 'lastName', 'username', 'dummy5')
+    # c.insertUser('firstName', 'lastName', 'username', 'dummy7')
+    # print c.allFriendPairings()
     c.disconnect()
 
 
