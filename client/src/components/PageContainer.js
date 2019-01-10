@@ -49,7 +49,7 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this._user = 'dummy'
+            this._user = 'Olivia'
 
 
         }
@@ -96,7 +96,6 @@ class PageContainer extends React.Component {
                                 }
                                 /// This.state.articles has the FULL article info
                                 this.setState({"articles":this._full_article_info})
-                                console.log('Just checkin its everthing,', this.state.articles)
 
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
                                         .then(res => {

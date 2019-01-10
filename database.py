@@ -335,8 +335,7 @@ class Database:
             return (False, e)
 
         countList = cursor.fetchall()
-        print(countList, 'countList')
-        print(countNum, "countNum")
+       
         countNum = countList[0][0] + action
 
 
@@ -501,7 +500,7 @@ if __name__ == '__main__':
     c = Database()
     c.connect()
     articles = c.userArticles("dummy")
-    print articles
+   
     # # # /# # c.insertUser()
     # # # # # c.insertUser("firstName", "lastName", "username")
     # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
