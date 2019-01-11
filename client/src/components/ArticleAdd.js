@@ -41,29 +41,50 @@ const options = [
 
 class ArticleAdd extends React.Component {
 
+
   constructor() {
     super()
     this.my_selectedOption = ""
     
   
   }
-  handleChange_url(e) {
+  handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         })
   }
 
+    state = {
+      selectedOption: null,
+    }
 
-  state = {
-    selectedOption: null,
-  }
+    handleChange_tag = (selectedOption) => {
+      this.my_selectedOption = selectedOption;
+      console.log(selectedOption, "logging selected tags \n")
+      
+    }
 
-  handleChange = (selectedOption) => {
-    this.my_selectedOption = selectedOption;
-    console.log(selectedOption, "hey")
-    console.log(`Tags selected:`, selectedOption[0]);
-  }
 
+    tag_article(tag_name) {
+        alert(tag_name);
+    }
+    render() {
+        const { selectedOption } = this.my_selectedOption;
+        const status = 'Enter Article URL';
+        const labelname1 = "Eats";
+        const labelname2 = "Tech";
+        const labelname3 = "Wow";
+        const true_holder = true;
+       
+
+        const submitArticle = event => {
+            event.preventDefault()
+            alert('Submitted ' + this.state.article_url);
+            axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption })
+                .then(res => {
+                    console.log("Received response: ", res.data);
+                })
+            this.props.history.push('/mypage')   
 
   tag_article(tag_name) {
       alert(tag_name);
@@ -125,15 +146,19 @@ class ArticleAdd extends React.Component {
             <h1> Noteable </h1> 
             <div className = "status" > { status } < /div>
             <form onSubmit = { submitArticle } >
-            <input className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange_url(e)}></input> 
+
+            <input class="form-control input-lg" className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
             <br></br>
-               <Select
+
+            <ButtonToolbar>
+            <Select
                 value={selectedOption}
-                onChange={this.handleChange}
+                onChange={this.handleChange_tag}
                 options={options}
                 isMulti={true_holder}
-              />
-              <input type="submit" value="Submit" />
+            />
+            <Button type="submit"> Submit</Button>
+            </ButtonToolbar>
             </form> 
         </Row>
         </Grid>

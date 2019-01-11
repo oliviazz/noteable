@@ -49,6 +49,9 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
+            this._user = 'Olivia'
+
+
 
         }
 
@@ -89,9 +92,13 @@ class PageContainer extends React.Component {
                                     this._article_urls.push(article[6]);
                                 
                                 }
+
                                 this.setState({"articles":this._article_urls})
 
-                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
+                                /// This.state.articles has the FULL article info
+                                // this.setState({"articles":this._full_article_info})
+
+                                axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
                                                this.setState({'full_article_info':res.data.all_article_info})
