@@ -147,6 +147,10 @@ a.divLink {
   border-color:#E7E7E7;
 }
 
+.navButton:focus {
+  background-color: #74819F;
+}
+
 img{
 	height:250px;
 	width:250px;
@@ -162,8 +166,8 @@ img{
 
 .article_input {
 	height:50px;
-  width:70%;
-	font-size:24px;
+  width:100%;
+	font-size:14px;
 }
 
 input[type=button] {

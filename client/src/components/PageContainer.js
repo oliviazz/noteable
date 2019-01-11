@@ -41,9 +41,6 @@ class PageContainer extends React.Component {
                 'article_components':[]
             }
 
-            this.handleChange = this.handleChange.bind(this);
-
-
             this._retrieved_articles = [];
 
             this._ismounted = true;
@@ -57,16 +54,8 @@ class PageContainer extends React.Component {
             this._gotfulldata = false;
 
             this._user = 'olivia'
-        }
 
-
-
-
-
-        handleChange(e) {
-            
-            console.log('hey! tag!');
-
+            this._active_tag_filters = ''
         }
 
         // Called right after component mounts
@@ -87,10 +76,7 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-
-                this.serverRequest = axios.get('/api/getarticles', 
-                    { 'cancelToken':  this._source.token, 
-                      'user': this._user})
+                this.serverRequest = axios.get('/api/getarticles', {'user': JSON.stringify(this._user)})
                     .then(res => {
                         if (this._ismounted && res.data) {
                             this._retrieved_articles = res.data.articles
@@ -107,7 +93,6 @@ class PageContainer extends React.Component {
                                         continue;
                                     }
                                     this._article_urls.push(article[6]);
-                                
                                 }
 
                                 this.setState({"articles":this._article_urls})
@@ -116,7 +101,7 @@ class PageContainer extends React.Component {
                                 // this.setState({"articles":this._full_article_info})
 
 
-                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
+                                axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
                                                this.setState({'full_article_info':res.data.all_article_info})
@@ -133,9 +118,7 @@ class PageContainer extends React.Component {
                                                 this.setState({'article_components':comp})
                                                 document.getElementById("loader").remove();
                                             }
-                                        })
-                              
-                                    
+                                        })    
                             }
                         } catch (err) {
                             console.log("Error in loading articles from database", err);
@@ -144,8 +127,6 @@ class PageContainer extends React.Component {
                 this.setState({
                     art: comp
                 })
-
-            
 
             }
             // Keep track internally of mounted state
@@ -157,10 +138,31 @@ class PageContainer extends React.Component {
 
         }
 
+        handleChange = (selected) => {
+            console.log('selected', selected);
+            this.setState({selected})
+        }
+
+
+        load_page_results = (selected) => {
+            console.log('reloading this!!!')
+            
+
+            // make a http request 
+
+        }
+
+        // { }
+        // extract on tags 
+        // save from everything 
+
+
         // Defines the HTML code atually returned and shown
         // in the component
         // ---------------------------------------    
         render() {
+
+         
             const tag_1 = 'food'
             const tag_2 = 'tech'
             const tag_3 = 'business'
@@ -176,19 +178,19 @@ class PageContainer extends React.Component {
                         <h3>tags</h3>
                         <ButtonToolbar>
                             <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
-                              <ToggleButton className = "navButton" value={tag_1}>{tag_1}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_2}>{tag_2}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_3}>{tag_3}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_4}>{tag_4}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_5}>{tag_5}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_1} onChange={this.handleChange}>{tag_1}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_2} onChange={this.handleChange}>{tag_2}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_3} onChange={this.handleChange}>{tag_3}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_4} onChange={this.handleChange}>{tag_4}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_5} onChange={this.handleChange}>{tag_5}</ToggleButton><br></br>
                               <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_7}>{tag_7}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_7} onChange={this.handleChange}>{tag_7}</ToggleButton><br></br>
                             </ToggleButtonGroup>
                         </ButtonToolbar>
                         <br></br>
                         <h3>time</h3>
                         <ButtonToolbar>
-                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
+                            <ToggleButtonGroup type="radio" name = "time_range" value={1} onChange={this.handleChange}>
                               <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
                               <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
                               <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
@@ -196,8 +198,7 @@ class PageContainer extends React.Component {
                             </ToggleButtonGroup>
                         </ButtonToolbar>
                     </Col>
-
-                    <Col xs={5} md={4}>
+                    <Col xs={4} md={4}>
                         <h2>{this._user}'s Noteable</h2><br></br><br></br>
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 

@@ -23,6 +23,9 @@ import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Select from 'react-select';
+import ToggleButton from 'react-bootstrap/lib/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
+
 
 const options = [
       { value: 'food', label: 'Food' },
@@ -39,13 +42,20 @@ const options = [
       {value: 'family', label: 'Family'}
     ];
 
+const tag_1 = 'food'
+const tag_2 = 'tech'
+const tag_3 = 'business'
+const tag_4 = 'funny'
+const tag_5 = 'politics'
+const tag_6 = 'health'
+const tag_7 = 'music'
 class ArticleAdd extends React.Component {
 
 
   constructor() {
     super()
     this.my_selectedOption = ""
-    this.user = "olivia"
+    this.user = "bob"
     
   
   }
@@ -59,23 +69,23 @@ class ArticleAdd extends React.Component {
       selectedOption: null,
     }
 
+    handleChange_searchtag = (selectedOption) => {
+
+      
+    }
+
     handleChange_tag = (selectedOption) => {
       var tag_string = ""
       console.log(selectedOption, "selected option")
       for (var item in selectedOption){
-        console.log(selectedOption[item]['value'], 'hey')
-        tag_string += selectedOption[item]['value'] + "."
+        console.log(selectedOption[item]['value'], 'selected')
+        tag_string += selectedOption[item]['value'] + " "
       }
-
-      tag_string = tag_string.replace("/./g", " ");
-
-      
+      tag_string = tag_string.substring(0, tag_string.length - 1);
       this.my_selectedOption = tag_string
     }
 
-  tag_article(tag_name) {
-      alert(tag_name);
-  }
+
   render() {
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;
@@ -85,7 +95,7 @@ class ArticleAdd extends React.Component {
           event.preventDefault()
           alert('Submitted ' + this.state.article_url + "for user " + this.user);
           alert('Tags: ', this.my_selectedOption);
-          axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption, user:this.user})
+          axios.post('/api/addarticle', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), user: JSON.stringify(this.user)})
               .then(res => {
                   console.log("Received response: ", res.data);
               })
@@ -97,57 +107,52 @@ class ArticleAdd extends React.Component {
             <Grid>
             <Row>
  
-            <Col xs={4} md={3}>
-            <p>Tags</p>
-            <Nav  stacked>
-                  <NavItem eventKey={2} href="#">
-                    Food
-                      <Glyphicon glyph="star" /> 
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Photography
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Travel
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Funny
-                  </NavItem>
-            </Nav>
-            <p>Time</p>
-            <Nav  stacked>
-                  <NavItem eventKey={2} href="#">
-                    All Time
-                    
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Month
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Week
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Today
-                  </NavItem>  
-        </Nav>
-    </Col>
-            <h1> Noteable </h1> 
-            <div className = "status" > { status } < /div>
-            <form onSubmit = { submitArticle } >
+            <Col xs={5} md={2}>
+                        <h3>tags</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup  onChange={this.handleChange_searchtag} type="checkbox" value={1}>
+                              <ToggleButton className = "navButton" value={tag_1}>{tag_1}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_2}>{tag_2}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_3}>{tag_3}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_4}>{tag_4}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_5}>{tag_5}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_7}>{tag_7}</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                        <br></br>
+                        <h3>time</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup onChange={this.handleChange_searchtag} type="checkbox" value={1}>
+                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                    </Col>
+                    <Col xs={2} md={2}>
+                
+                    </Col>
+                    <Col xs={5} md={4}>
+                        <h1> Noteable </h1> 
+                        <div className = "status" > { status } < /div>
+                        <form onSubmit = { submitArticle } >
 
-            <input class="form-control input-lg" className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
-            <br></br>
+                        <input class="form-control input-lg" className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
+                        <br></br>
 
-            <ButtonToolbar>
-            <Select
-                value={selectedOption}
-                onChange={this.handleChange_tag}
-                options={options}
-                isMulti={true_holder}
-            />
-            <Button type="submit"> Submit</Button>
-            </ButtonToolbar>
-            </form> 
+                        <ButtonToolbar>
+                        <Select
+                            value={selectedOption}
+                            onChange={this.handleChange_tag}
+                            options={options}
+                            isMulti={true_holder}
+                        />
+                        <Button type="submit"> Submit</Button>
+                        </ButtonToolbar>
+                        </form> 
+                    </Col>
         </Row>
         </Grid>
             </div> 

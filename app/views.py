@@ -42,21 +42,22 @@ def addarticle():
     json_payload = request.get_json()
     print(json_payload)
     article = json_payload['article_url']
-    tags = json_payload['tags']
+    tags = str(json_payload['tags'])
     #return jsonify(message=article), 200
 
     database = Database()
     database.connect()
     print(article)
     
-    print(tags, " TAGS VLAUE")
+    print(tags, " TAGS\n")
 
     try:
-        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tag_val)
+        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except Exception as e:
-        return jsonify(message=e), 400
+        print(e)
+        return jsonify(message='Error!'), 400
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
@@ -80,9 +81,7 @@ def deletearticle():
         print('Error in deleting article: ', str(err))
         return jsonify(message="Error in deleting article article!"), 400
 
-@bp.route("/quickadd", methods=["GET"])
-def quickadd():
-    return jsonify(message="It's working!!!!"), 200
+
 
 @bp.route("/getarticles", methods=["GET"])
 def getarticles():
@@ -90,15 +89,17 @@ def getarticles():
     database = Database()
     database.connect()
 
-    print('hello we reached the function')
+    
     json_payload = request.get_json()
-    print(json_payload)
-    user = json_payload['user']
-    print(user)
+    print(json_payload, "json payload!!!!!!!!!!")
+    # user = json.loads(json_payload['user'])
+    # print(user)
     
 
-    #use dummy userId for now 
-    article_query_results = database.userArticles(user)
+    # #use dummy userId for now 
+    user = "olivia"
+    tags = ""
+    article_query_results = database.userTagArticles(user, tags)
     print(article_query_results, user, " what the")
 
     return jsonify(articles=article_query_results)
@@ -108,9 +109,12 @@ def getarticlesinfo():
     json_payload = request.get_json()
     
     articles = json.loads(json_payload['articles'])
+    # check if article url has an entry
     print(articles, "HEY")
     article_full_info = {}
     for article in articles:
+        if (has_info(article)):
+            continue
         article = str(article)
         my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
         # const urlMetadata = require('url-metadata');
@@ -139,7 +143,7 @@ def getarticlesinfo():
     #print(article_full_info)
     return jsonify(all_article_info=article_full_info)
      
-
+# def has_info(article):
 
 def quickadd():
     return jsonify(message="It's working!!!!"), 200

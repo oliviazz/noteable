@@ -329,8 +329,6 @@ class Database:
        
         return cursor.fetchall()[0][0]
 
-        countList = cursor.fetchall() 
-        countNum = countList[0][0] + action
         cursor.close()
 
     #-----------------------------------------------------------------------
@@ -384,9 +382,7 @@ class Database:
         num = cursor.fetchall()
         groupID = num
 
-        countList = cursor.fetchall()
-        countNum = countList[0][0] + action
-
+        stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID FROM user_article_tags WHERE userID = ?"
 
         try:
             cursor.execute(stmtStr, [str(groupID)])
@@ -396,7 +392,6 @@ class Database:
             return (False, e)
 
         stmtStr = "SELECT * FROM articles, temp.articleIDList WHERE articles.articleID = articleIDList.articleID"
-
 
         try:
             cursor.execute(stmtStr)
@@ -478,6 +473,7 @@ class Database:
     def deleteArticle(self, userID, articleID):
         cursor = self._connection.cursor()
         stmtStr = "DELETE FROM user_article_tags WHERE articleID = ? AND userID = ?"
+
         try:
             cursor.execute(stmtStr, [str(articleID), str(userID)])
             self._connection.commit()
@@ -739,7 +735,7 @@ class Database:
     #-----------------------------------------------------------------------
     
     # all of a user's articles
-    def userArticles(self, userID, tags):
+    def userArticles(self, userID, tags=""):
         cursor = self._connection.cursor()
 
         stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID FROM user_article_tags WHERE userID = ?"
@@ -816,29 +812,12 @@ if __name__ == '__main__':
     # # test user is 2018
     c = Database()
     c.connect()
-<<<<<<< HEAD
     # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Food Economy Politics')
     print c.userTagArticles('dummy3', 'Food')
     # print c.userTagArticles('dummy3', 'Economy Politics')
     c.disconnect()
     c.connect()
     print c.userTagArticles('dummy3', 'Economy Politics')
-=======
-    articles = c.userArticles("dummy")
-   
-    # # # /# # c.insertUser()
-    # # # # # c.insertUser("firstName", "lastName", "username")
-    # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
-
-    # # # # # c.deleteUser("u4")
-    # # c.insertUser("firstName", "lastName", "username", "dummy")
-    # # # c.allArticles()
-    # # c.allUsers()
-    # articles = c.userArticles('dummy')
-    # print articles
-    # # # c.updateTags("u2018", "8834987638503293291", ["hello"])
-    # # # c.allUsersArticlesTags()
->>>>>>> master
     c.disconnect()
 
 
