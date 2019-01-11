@@ -9,9 +9,8 @@
 class User:
     # Users have a first and last name, a username and password, as well
     # as a userID and list of friends
-    def __init__(self, firstName, lastName, userID, username):
+    def __init__(self, firstName, lastName, userID):
         self.firstName = firstName
         self.lastName = lastName
         self.userID = userID
-        self.username = username
         self.numArticles = 0
