@@ -40,6 +40,7 @@ def protected():
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
     json_payload = request.get_json()
+    print(json_payload)
     article = json_payload['article_url']
     tags = json_payload['tags']
     #return jsonify(message=article), 200
@@ -47,19 +48,15 @@ def addarticle():
     database = Database()
     database.connect()
     print(article)
-    tag_val = []
-    if (tags):
-        for tag in tags:
-            tag_val.append(str(tag['value']))
-
-    print(tag_val, " TAG VLAUE")
+    
+    print(tags, " TAGS VLAUE")
 
     try:
         database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tag_val)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
-    except:
-        return jsonify(message="Error in posting article!"), 400
+    except Exception as e:
+        return jsonify(message=e), 400
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
@@ -96,7 +93,8 @@ def getarticles():
     print('hello we reached the function')
     json_payload = request.get_json()
     print(json_payload)
-    user = json.loads(json_payload['user'])
+    user = json_payload['user']
+    print(user)
     
 
     #use dummy userId for now 

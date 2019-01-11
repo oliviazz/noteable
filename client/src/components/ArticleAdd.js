@@ -45,6 +45,7 @@ class ArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
+    this.user = "olivia"
     
   
   }
@@ -59,9 +60,17 @@ class ArticleAdd extends React.Component {
     }
 
     handleChange_tag = (selectedOption) => {
-      this.my_selectedOption = selectedOption;
-      console.log(selectedOption, "logging selected tags \n")
+      var tag_string = ""
+      console.log(selectedOption, "selected option")
+      for (var item in selectedOption){
+        console.log(selectedOption[item]['value'], 'hey')
+        tag_string += selectedOption[item]['value'] + "."
+      }
+
+      tag_string = tag_string.replace("/./g", " ");
+
       
+      this.my_selectedOption = tag_string
     }
 
   tag_article(tag_name) {
@@ -74,8 +83,9 @@ class ArticleAdd extends React.Component {
 
       const submitArticle = event => {
           event.preventDefault()
-          alert('Submitted ' + this.state.article_url);
-          axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption })
+          alert('Submitted ' + this.state.article_url + "for user " + this.user);
+          alert('Tags: ', this.my_selectedOption);
+          axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption, user:this.user})
               .then(res => {
                   console.log("Received response: ", res.data);
               })
