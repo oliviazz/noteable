@@ -1,6 +1,4 @@
 {
-<<<<<<< HEAD
-=======
   "name": "client",
   "version": "0.1.0",
   "private": true,
@@ -54,8 +52,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-
->>>>>>> master
   "dependencies": {
     "react-select": "^2.2.0"
   }

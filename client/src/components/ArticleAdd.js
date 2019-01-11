@@ -64,28 +64,6 @@ class ArticleAdd extends React.Component {
       
     }
 
-
-    tag_article(tag_name) {
-        alert(tag_name);
-    }
-    render() {
-        const { selectedOption } = this.my_selectedOption;
-        const status = 'Enter Article URL';
-        const labelname1 = "Eats";
-        const labelname2 = "Tech";
-        const labelname3 = "Wow";
-        const true_holder = true;
-       
-
-        const submitArticle = event => {
-            event.preventDefault()
-            alert('Submitted ' + this.state.article_url);
-            axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption })
-                .then(res => {
-                    console.log("Received response: ", res.data);
-                })
-            this.props.history.push('/mypage')   
-
   tag_article(tag_name) {
       alert(tag_name);
   }
