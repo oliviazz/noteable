@@ -61,13 +61,12 @@ class PageContainer extends React.Component {
 
 
 
-<<<<<<< HEAD
-=======
+
 
         handleChange(e) {
             
             console.log('hey! tag!');
->>>>>>> database
+
         }
 
         // Called right after component mounts
@@ -88,13 +87,10 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-<<<<<<< HEAD
-                this.serverRequest = axios.get('/api/getarticles', { cancelToken: this._source.token })
-=======
+
                 this.serverRequest = axios.get('/api/getarticles', 
                     { 'cancelToken':  this._source.token, 
                       'user': this._user})
->>>>>>> database
                     .then(res => {
                         if (this._ismounted && res.data) {
                             this._retrieved_articles = res.data.articles
@@ -119,12 +115,8 @@ class PageContainer extends React.Component {
                                 /// This.state.articles has the FULL article info
                                 // this.setState({"articles":this._full_article_info})
 
-<<<<<<< HEAD
-                                axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles)})
-=======
 
-                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
->>>>>>> database
+                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
                                                this.setState({'full_article_info':res.data.all_article_info})
@@ -169,63 +161,6 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-<<<<<<< HEAD
-                return(<div> 
-                    <Grid>
-     <Row>
-     <Col xs={4} md={3}>
-        <p>Tags</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    Food
-                      <Glyphicon glyph="star" /> 
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Photography
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Travel
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Funny
-                  </NavItem>
-                
-        </Nav>
-        <p>Time</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    All Time
-                    
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Month
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Week
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Today
-                  </NavItem>
-                
-        </Nav>
-    </Col>
-    <Col xs={6} md={4}>
-        <img id = "loader" src="loading.gif" ></img>
-        {this.state.article_components.map(article => <div>{article}</div>)} 
-    </Col>
-
-
-    </Row>
-</Grid>;
-                  
-                    
-                    </div >);
-                    
-
-                }
-=======
             const tag_1 = 'food'
             const tag_2 = 'tech'
             const tag_3 = 'business'
@@ -272,7 +207,6 @@ class PageContainer extends React.Component {
                     </Row>
                 </Grid>      
             </div >);
->>>>>>> database
             }
         }
 
