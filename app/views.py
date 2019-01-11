@@ -46,8 +46,6 @@ def addarticle():
     json_payload = request.get_json()
     print(json_payload, "JSON PAYLOAD!!!!")
     article = json_payload['article_url']
-    # user = json_payload['user']
-    # print(user, " currently this is the user")
     #return jsonify(message=article), 200
 
     database = Database()
@@ -93,10 +91,10 @@ def getarticles():
     database = Database()
     database.connect()
 
-    # json_payload = request.get_json()
+    json_payload = request.get_json()
     
-    # user = json.loads(json_payload['my_user'])
-    user='dummy2'
+    user = json.loads(json_payload['user'])
+    print(json_payload, "json payload")
 
     #use dummy userId for now 
     article_query_results = database.userArticles(user)

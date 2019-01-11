@@ -97,7 +97,7 @@ class PageContainer extends React.Component {
                                 /// This.state.articles has the FULL article info
                                 this.setState({"articles":this._full_article_info})
 
-                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
+                                    axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
                                         .then(res => {
                                             if (this._ismounted && res.data) {
                                                this.setState({'articles_post_request':res.data.all_article_info})
