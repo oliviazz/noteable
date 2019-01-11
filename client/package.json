@@ -6,12 +6,15 @@
     "acorn": "^6.0.5",
     "axios": "^0.18.0",
     "babel-standalone": "^6.26.0",
+    "create-react-class": "^15.6.3",
     "got": "^9.3.2",
     "react": "^15.6.2",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^15.6.2",
+    "react-input-autosize": "^1.1.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.1.2",
+    "react-select": "^2.2.0",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0"
   },
@@ -32,12 +35,7 @@
     "start": "react-scripts start",
     "eject": "react-scripts eject",
     "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\"",
-<<<<<<< HEAD
-    "postinstall": "react-scripts build client"
-=======
     "postinstall": "react-scripts build"
-    
->>>>>>> parent of cc20589f... try to change postinstall -- redirect ot client locaiton?
   },
   "babel": {
     "presets": [

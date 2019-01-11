@@ -46,6 +46,8 @@ def addarticle():
     json_payload = request.get_json()
     print(json_payload, "JSON PAYLOAD!!!!")
     article = json_payload['article_url']
+    # user = json_payload['user']
+    # print(user, " currently this is the user")
     #return jsonify(message=article), 200
 
     database = Database()
