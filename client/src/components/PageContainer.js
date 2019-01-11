@@ -21,6 +21,9 @@ import Col from 'react-bootstrap/lib/Col';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Nav from 'react-bootstrap/lib/Nav';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import ToggleButton from 'react-bootstrap/lib/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
 
 
@@ -38,7 +41,11 @@ class PageContainer extends React.Component {
                 'article_components':[]
             }
 
+            this.handleChange = this.handleChange.bind(this);
+
+
             this._retrieved_articles = [];
+
             this._ismounted = true;
             // Stores valid article URLs
             this._article_urls = [];
@@ -49,9 +56,12 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this._user = 'dummy'
+            this._user = 'olivia'
+        }
 
-
+        handleChange(e) {
+            
+            console.log('hey! tag!');
         }
 
         // Called right after component mounts
@@ -96,7 +106,7 @@ class PageContainer extends React.Component {
                                 }
                                 /// This.state.articles has the FULL article info
                                 this.setState({"articles":this._full_article_info})
-                                console.log('Just checkin its everthing,', this.state.articles)
+                                
 
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
                                         .then(res => {
@@ -143,76 +153,66 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-                return(<div> 
-                    <Grid>
-     <Row>
-     <Col xs={3} md={2}>
-        <p>Tags</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    Food
-                      <Glyphicon glyph="star" /> 
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Photography
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Travel
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Funny
-                  </NavItem>
-                
-        </Nav>
-        <p>Time</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    All Time
-                    
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Month
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Week
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Today
-                  </NavItem>
-                
-        </Nav>
-    </Col>
-    <Col xs={5} md={4}>
-        <h2>{this._user}'s Articles</h2><br></br><br></br>
-        <img id = "loader" src="loading.gif" ></img>
-        {this.state.article_components.map(article => <div>{article}</div>)} 
-    </Col>
+            const tag_1 = 'food'
+            const tag_2 = 'tech'
+            const tag_3 = 'business'
+            const tag_4 = 'funny'
+            const tag_5 = 'politics'
+            const tag_6 = 'health'
+            const tag_7 = 'music'
+            return(
+                <div> 
+                <Grid>
+                     <Row>
+                     <Col xs={3} md={2}>
+                        <h3>tags</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
+                              <ToggleButton className = "navButton" value={tag_1}>{tag_1}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_2}>{tag_2}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_3}>{tag_3}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_4}>{tag_4}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_5}>{tag_5}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_7}>{tag_7}</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                        <br></br>
+                        <h3>time</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
+                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                    </Col>
+
+                    <Col xs={5} md={4}>
+                        <h2>{this._user}'s Noteable</h2><br></br><br></br>
+                        <img id = "loader" src="loading.gif" ></img>
+                        {this.state.article_components.map(article => <div>{article}</div>)} 
+                    </Col>
 
 
-    </Row>
-</Grid>
-                  
-                    
-                    </div >);
-                    
-
-                }
+                    </Row>
+                </Grid>      
+            </div >);
             }
-                   
+        }
 
-            const mapStateToProps = state => ({
-                loggedIn: state.loggedIn,
-                currentlySending: state.currentlySending,
-                formState: state.formState,
-                errorMessage: state.errorMessage
-            })
+        const mapStateToProps = state => ({
+            loggedIn: state.loggedIn,
+            currentlySending: state.currentlySending,
+            formState: state.formState,
+            errorMessage: state.errorMessage
+        })
 
-            const mapDispatchToProps = dispatch => ({
-                handleSubmit: (username, password) => dispatch(login(username, password)),
-                clearErrors: () => dispatch(setErrorMessage(''))
-            })
+        const mapDispatchToProps = dispatch => ({
+            handleSubmit: (username, password) => dispatch(login(username, password)),
+            clearErrors: () => dispatch(setErrorMessage(''))
+        })
 
             // Make this component exportable to appear in other components
-            export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
+        export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
