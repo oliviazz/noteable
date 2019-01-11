@@ -382,7 +382,13 @@ class Database:
         num = cursor.fetchall()
         groupID = num
 
+<<<<<<< HEAD
         stmtStr = "CREATE TEMPORARY TABLE articleIDList AS SELECT DISTINCT articleID FROM user_article_tags WHERE userID = ?"
+=======
+        countList = cursor.fetchall()
+       
+        countNum = countList[0][0] + action
+>>>>>>> master
 
         try:
             cursor.execute(stmtStr, [str(groupID)])
@@ -812,12 +818,29 @@ if __name__ == '__main__':
     # # test user is 2018
     c = Database()
     c.connect()
+<<<<<<< HEAD
     # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Food Economy Politics')
     print c.userTagArticles('dummy3', 'Food')
     # print c.userTagArticles('dummy3', 'Economy Politics')
     c.disconnect()
     c.connect()
     print c.userTagArticles('dummy3', 'Economy Politics')
+=======
+    articles = c.userArticles("dummy")
+   
+    # # # /# # c.insertUser()
+    # # # # # c.insertUser("firstName", "lastName", "username")
+    # c.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'tags')
+
+    # # # # # c.deleteUser("u4")
+    # # c.insertUser("firstName", "lastName", "username", "dummy")
+    # # # c.allArticles()
+    # # c.allUsers()
+    # articles = c.userArticles('dummy')
+    # print articles
+    # # # c.updateTags("u2018", "8834987638503293291", ["hello"])
+    # # # c.allUsersArticlesTags()
+>>>>>>> master
     c.disconnect()
 
 

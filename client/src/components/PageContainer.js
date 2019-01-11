@@ -59,6 +59,9 @@ class PageContainer extends React.Component {
             this._user = 'olivia'
         }
 
+
+
+
         handleChange(e) {
             
             console.log('hey! tag!');
@@ -82,7 +85,9 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.get('/api/getarticles', { 'cancelToken':  this._source.token})
+                this.serverRequest = axios.get('/api/getarticles', 
+                    { 'cancelToken':  this._source.token, 
+                      'user': this._user})
                     .then(res => {
                         if (this._ismounted && res.data) {
 
@@ -106,7 +111,7 @@ class PageContainer extends React.Component {
                                 }
                                 /// This.state.articles has the FULL article info
                                 this.setState({"articles":this._full_article_info})
-                                
+
 
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'my_user': JSON.stringify(this._user)})
                                         .then(res => {

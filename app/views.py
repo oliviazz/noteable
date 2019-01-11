@@ -9,9 +9,6 @@ import metadata_parser
 import unicodedata
 
 
-
-
-
 bp = Blueprint('blueprint', __name__, template_folder='templates')
 
 
@@ -90,15 +87,15 @@ def getarticles():
 
     database = Database()
     database.connect()
-
-    # json_payload = request.get_json()
+    print('hello we reached the function')
+    json_payload = request.get_json()
+    print(json_payload)
+    user = json.loads(json_payload['user'])
     
-    # user = json.loads(json_payload['my_user'])
-    user='dummy2'
 
     #use dummy userId for now 
     article_query_results = database.userArticles(user)
-    print(article_query_results, " ok")
+    print(article_query_results, user, " what the")
     return jsonify(articles=article_query_results)
 
 def article_needs_info(article):

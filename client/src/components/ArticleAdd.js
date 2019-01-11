@@ -22,9 +22,30 @@ import Col from 'react-bootstrap/lib/Col';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import Select from 'react-select';
+
+const options = [
+      { value: 'food', label: 'Food' },
+      { value: 'tech', label: 'Tech' },
+      { value: 'science', label: 'Science' },
+      {value: 'politics', label: 'Politics'},
+      {value: 'funny', label: 'Funny'},
+      {value: 'health', label: 'Health'},
+      {value: 'beauty', label: 'Beauty'},
+      {value: 'fashion', label: 'Fashion'},
+      {value: 'sports', label: 'Sports'},
+      {value: 'long_read', label: 'Long Read'},
+      {value: 'short_read', label: 'Short Read'},
+      {value: 'family', label: 'Family'}
+    ];
 
 class ArticleAdd extends React.Component {
 
+    constructor() {
+      super()
+      this.my_selectedOption = ""      
+  
+    }
 
     handleChange(e) {
         this.setState({
@@ -32,19 +53,33 @@ class ArticleAdd extends React.Component {
         })
     }
 
+    state = {
+      selectedOption: null,
+    }
+
+    handleChange_tag = (selectedOption) => {
+      this.my_selectedOption = selectedOption;
+      console.log(selectedOption, "logging selected tags \n")
+      
+    }
+
+
     tag_article(tag_name) {
         alert(tag_name);
     }
     render() {
+        const { selectedOption } = this.my_selectedOption;
         const status = 'Enter Article URL';
         const labelname1 = "Eats";
         const labelname2 = "Tech";
         const labelname3 = "Wow";
+        const true_holder = true;
+       
 
         const submitArticle = event => {
             event.preventDefault()
             alert('Submitted ' + this.state.article_url);
-            axios.post('/api/addarticle', { article_url: this.state.article_url })
+            axios.post('/api/addarticle', { article_url: this.state.article_url, tags:this.my_selectedOption })
                 .then(res => {
                     console.log("Received response: ", res.data);
                 })
@@ -97,13 +132,16 @@ class ArticleAdd extends React.Component {
             <h1> Noteable </h1> 
             <div className = "status" > { status } < /div>
             <form onSubmit = { submitArticle } >
-            <input className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
+            <input class="form-control input-lg" className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
             <br></br>
 
             <ButtonToolbar>
-            <Button bsStyle="info"> {labelname1 }</Button>
-            <Button bsStyle="info"> {labelname2 }</Button>
-            <Button bsStyle="info"> {labelname3 }</Button>
+            <Select
+                value={selectedOption}
+                onChange={this.handleChange_tag}
+                options={options}
+                isMulti={true_holder}
+            />
             <Button type="submit"> Submit</Button>
             </ButtonToolbar>
             </form> 
