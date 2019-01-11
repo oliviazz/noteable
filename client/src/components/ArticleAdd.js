@@ -55,7 +55,7 @@ class ArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this.user = "bob"
+    this.user = "olivia"
     
   
   }
@@ -94,7 +94,7 @@ class ArticleAdd extends React.Component {
       const submitArticle = event => {
           event.preventDefault()
           alert('Submitted ' + this.state.article_url + "for user " + this.user);
-          alert('Tags: ', this.my_selectedOption);
+          alert('Tags: ', JSON.stringify(this.my_selectedOption));
           axios.post('/api/addarticle', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), user: JSON.stringify(this.user)})
               .then(res => {
                   console.log("Received response: ", res.data);

@@ -996,17 +996,21 @@ if __name__ == '__main__':
     c.connect()
 
     #------------------- olivia playbox
-    article_query_results = c.userTagArticles("olivia", "")
-    print(article_query_results, "olivia", " what the")
+    # article_query_results = c.userTagArticles("olivia", "")
+    # print(article_query_results, "olivia", " what the")
 
     #------------------- olivia playbox
-    # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Food Economy Politics Design')
-    # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Food Economy Politics')
-
+    print(c.allUsers())
+    c.insertArticle('olivia', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'google.com', 'Food Economy Politics Design')
+    c.insertArticle('olivia', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'yahoo.com', 'Food Economy Politics')
+    print('inserted')
     # print c.userTagArticles('dummy3', 'Food')
     # print c.userTagArticles('dummy3', 'Economy Politics')
     # c.displayPending('dummy3')
     # c.displayPending('dummy3')
+    article_query_results = c.userTagArticles("olivia", "")
+    print(article_query_results)
+    #'"olivia"', '"https://www.newyorker.com/culture/on-television/tidying-up-with-marie-kondo-reviewed-the-organizational-consultant-as-freelance-exorcist"', '"tech"'
 
     # c.displayPending('dummy6')
     # print c.allTags()

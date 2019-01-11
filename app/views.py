@@ -39,20 +39,19 @@ def protected():
 
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
+    
     json_payload = request.get_json()
-    print(json_payload)
-    article = json_payload['article_url']
+    print(json_payload, " addarticle json payload")
+    user = str(json_payload['user'])
+    article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
-    #return jsonify(message=article), 200
-
+  
+    print(user, article, tags)
     database = Database()
     database.connect()
-    print(article)
-    
-    print(tags, " TAGS\n")
 
     try:
-        database.insertArticle('dummy', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
+        database.insertArticle('olivia', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except Exception as e:
@@ -91,7 +90,7 @@ def getarticles():
 
     
     json_payload = request.get_json()
-    print(json_payload, "json payload!!!!!!!!!!")
+    
     # user = json.loads(json_payload['user'])
     # print(user)
     
