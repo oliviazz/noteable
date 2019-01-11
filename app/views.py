@@ -97,9 +97,10 @@ def getarticles():
     
 
     # #use dummy userId for now 
+    # hardcoding rn
     user = "olivia"
     tags = ""
-    article_query_results = database.userTagArticles(user, tags)
+    article_query_results = database.userTagArticles("olivia", "")
     print(article_query_results, user, " what the")
 
     return jsonify(articles=article_query_results)

@@ -994,6 +994,12 @@ if __name__ == '__main__':
     # # test user is 2018
     c = Database()
     c.connect()
+
+    #------------------- olivia playbox
+    article_query_results = c.userTagArticles("olivia", "")
+    print(article_query_results, "olivia", " what the")
+
+    #------------------- olivia playbox
     # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Food Economy Politics Design')
     # c.insertArticle('dummy3', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Food Economy Politics')
 

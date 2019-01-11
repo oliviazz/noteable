@@ -9,6 +9,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
+import UserBox from 'components/UserBox'
 
 import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
@@ -173,6 +174,7 @@ class PageContainer extends React.Component {
             return(
                 <div> 
                 <Grid>
+                    <UserBox firstname="olivia"></UserBox>
                      <Row>
                      <Col xs={3} md={2}>
                         <h3>tags</h3>
