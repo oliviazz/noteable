@@ -42,16 +42,19 @@ def addarticle():
     
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
-    user = str(json_payload['user'])
+    userId = str(json_payload['userId'])
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
   
-    print(user, article, tags)
+    print(userId, article, tags)
     database = Database()
     database.connect()
 
+    userId = '12345'
+
+
     try:
-        database.insertArticle('olivia', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
+        database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
     except Exception as e:
@@ -71,7 +74,7 @@ def deletearticle():
     try:
         article_id = hash(article)
       
-        database.deleteArticle(userID='dummy', articleID=article_id)
+        database.deleteArticle(userID='12345', articleID=article_id)
  
         database.disconnect()
 
@@ -96,12 +99,15 @@ def getarticles():
     
 
     # #use dummy userId for now 
+    userId = "12345"
+    database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
+    
     # hardcoding rn
-    user = "olivia"
+    
     tags = ""
-    article_query_results = database.userTagArticles("olivia", "")
-    print(article_query_results, user, " what the")
-
+    article_query_results = database.userTagArticles(userId, "")
+    
+    print(article_query_results, " these are the results")
     return jsonify(articles=article_query_results)
 
 @bp.route("/getarticlesinfo", methods=["POST"])
@@ -113,8 +119,8 @@ def getarticlesinfo():
     print(articles, "HEY")
     article_full_info = {}
     for article in articles:
-        if (has_info(article)):
-            continue
+        # if (has_info(article)):
+        #     continue
         article = str(article)
         my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
         # const urlMetadata = require('url-metadata');
