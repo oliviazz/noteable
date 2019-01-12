@@ -52,9 +52,14 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this._userId = '54321'
+            //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
+            // calculate the Id frm the username
+            this._userId = ''
+            this._displayUserId = ''
+
 
             this._active_tag_filters = ''
+
         }
 
         // Called right after component mounts
@@ -132,8 +137,17 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
+            var passed_state =  this.props.location.state
+            if (passed_state){
+        
+                this._userId = passed_state['userId']
+                this._displayUserId = passed_state['displayUserId']
+                console.log('Passed user Id, now set: ', this._userId, ' as viewing and ', this._displayUserId, ' as the page ot be viewed')
+            }
+            else{
+                console.log(passed_state, " no passed variables found")
 
-         
+            }
             const tag_1 = 'food'
             const tag_2 = 'tech'
             const tag_3 = 'business'
@@ -144,7 +158,7 @@ class PageContainer extends React.Component {
             return(
                 <div> 
                 <Grid>
-                    <UserBox firstname="olivia"></UserBox>
+                   
                      <Row>
                      <Col xs={3} md={2}>
                         <h3>tags</h3>
@@ -174,7 +188,10 @@ class PageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                        <h2>{this._user}'s Noteable</h2><br></br><br></br>
+                         {this._displayUserId == this._userId ? <h1>your noteable</h1>: <h1>{this._displayUserId}'s moteable </h1>}
+                         <br></br><br></br>
+                        <br></br>
+                       
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 
                     </Col>

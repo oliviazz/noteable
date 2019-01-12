@@ -98,7 +98,17 @@ class ArticleAdd extends React.Component {
               .then(res => {
                   console.log("Received response: ", res.data);
               })
-          this.props.history.push('/mypage')   
+          this.props.history.push({
+            pathname: '/mypage',
+            state: {userId: this._userId, displayUserId: this._userId} // your data array of objects
+          }) 
+          // this.props.router.push({
+          //   pathname: '/other-page',
+          //   state: {
+          //     id: 7,
+          //     color: 'green'
+          //   }
+          // }) 
 
       }
         return (

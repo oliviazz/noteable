@@ -68,6 +68,9 @@ class UserBox extends React.Component {
                         })
 
                     })
+    var userId = this.props.userId
+    var userViewing = this.props.userViewing 
+    console.log(userId, userViewing)
     return (
       <div>
          <div className = "container">
@@ -79,10 +82,15 @@ class UserBox extends React.Component {
             
               <Panel.Body>
               <h4>{this.props.username}</h4>
-          
+              <h5>{this.props.userId}</h5>
+
               {this.state.isfriend ?  <Button bsStyle="success" disabled>You are Friends!</Button> : <Button onClick={sendRequest}> 'Friend'</Button>} 
                 <br></br>
-    
+              <Link to={{
+                pathname: '/mypage',
+                state: {displayUserId: {userId}, userId: userViewing}
+
+              }}> View {this.props.username}'s Noteable' </Link>
               </Panel.Body>
      
             </Panel>

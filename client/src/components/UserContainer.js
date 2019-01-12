@@ -50,7 +50,7 @@ class UserContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this._userId = '54321'
+            this._userViewingId = '54321'
 
             this._user = 'livz'
 
@@ -123,9 +123,14 @@ class UserContainer extends React.Component {
 
         render() {
 
-            for (var i = 0; i < 10; i++) { 
-              this.state.user_components.push(<UserBox username = {'Person ' + (i)} /> )
-            }
+            this.state.user_components.push(<UserBox username = {'Person 1'} userId = '12345' userViewing = {this._userViewingId} /> )
+            
+            this.state.user_components.push(<UserBox username = {'Person 2'} userId = '54321' userViewing = {this._userViewingId} /> )
+            
+
+            // for (var i = 0; i < 10; i++) { 
+            //   this.state.user_components.push(<UserBox username = {'Person ' + (i)} userId = '54321' userViewing = {this._userViewingId} /> )
+            // }
 
             const loadPage = (event) => {
                 console.log('hey')
@@ -154,7 +159,7 @@ class UserContainer extends React.Component {
 
                         
                     <Col xs={8} md={8}>
-                        <h2>{this._user}'s Noteable</h2> 
+                        <h2>User Results</h2> 
                         {this.state.user_components.map(user => <div>{user}</div>)} 
                     </Col>
 
