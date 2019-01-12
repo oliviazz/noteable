@@ -62,7 +62,6 @@ def addarticle():
     database = Database()
     database.connect()
 
-    userId = '12345'
 
     my_info = {'title': '', 'url':'', 'descrip':'', 'image':'', 'author':''}
 
@@ -99,6 +98,9 @@ def addarticle():
         database.insertArticle(userID=userId, articleTitle=my_info['title'], articleIcon=my_info['image'], 
                                 articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
                                 articleURL=my_info['url'], tags=tags)
+
+        print(database.userTagArticles(userId, ""))
+        print('above are my tags')
     except Exception as e:
         print(e, "adding error!")
 
@@ -108,18 +110,22 @@ def addarticle():
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
+
     json_payload = request.get_json()
     article = str(json_payload['article_url'])
+    userId = json_payload['userId']
+    print(article, userId)
+    #userId = 12345
     #return jsonify(message=article), 200
 
     database = Database()
     database.connect()
-    print(article, "hey!!!!")
+    print(article, "hey!!!! hashes")
 
     try:
-        article_id = hash(article)
+        articleId = hash(article)
       
-        database.deleteArticle(userID='12345', articleID=article_id)
+        database.deleteArticle(userID=userId, articleID=articleId)
  
         database.disconnect()
 
@@ -130,28 +136,29 @@ def deletearticle():
 
 
 
-@bp.route("/getarticles", methods=["GET"])
+@bp.route("/getarticles", methods=["POST"])
 def getarticles():
 
     database = Database()
     database.connect()
     json_payload = request.get_json()
+    print(json_payload, "payload in get articles")
+    userId = json_payload['userId']
+    print(userId)
+    # userId = "54321"
     
-    #user = json.loads(json_payload['user'])
-    userId = "12345"
-    print(json_payload, "json payload")
 
-    # database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
+    database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
     
     # hardcoding rn
     
     tags = ""
     article_query_results = database.userTagArticles(userId, tags)
+
     
-    #print(article_query_results, " these are the results")
+    print(article_query_results, " these are the results")
     formatted_results = {}
     for i in range(0, len(article_query_results)):
-        print(article_query_results[i])
 
         # 0: article
         # 1: tag (individual, lol)
@@ -173,8 +180,12 @@ def getarticles():
             'icon': article_query_results[i][4], 
             'blurb': article_query_results[i][5],
             'author': article_query_results[i][6],
-            'url': article_url
+            'url': article_url,
+            'date': article_query_results[i][7]
         }
+
+        #ormatted_results = sorted(formatted_results, key=formatted_results['date'])
+        print(formatted_results, "FORMATTED???")
 
     print('all done')
     return jsonify(results=formatted_results)

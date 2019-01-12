@@ -26,10 +26,8 @@
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "build": "webpack -p --progress --config webpack.config.js",
-    "dev-build": "webpack --progress -d --config webpack.config.js",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "watch": "webpack --progress -d --config webpack.config.js --watch",
     "start": "react-scripts start",
     "eject": "react-scripts eject",
     "prettier": "./node_modules/.bin/prettier --print-width 120 --single-quote --no-semi --write \"src/**/*.js\"",

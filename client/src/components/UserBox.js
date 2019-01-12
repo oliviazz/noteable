@@ -15,17 +15,20 @@ import { Redirect } from 'react-router-dom'
 import { withRouter } from "react-router-dom";
 
 import Select from 'react-select';
-
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import Button from 'react-bootstrap/lib/Button';
 
 class UserBox extends React.Component {
 
   constructor() {
     super()
     
+    
   }
 
   state = {
     selectedOption: null,
+    isfriend:false
   }
 
   handleChange = (selectedOption) => {
@@ -36,25 +39,35 @@ class UserBox extends React.Component {
   render() {
     const { selectedOption } = ''
     const true_holder = true;
+
+    const sendRequest = event =>{
+      alert('added')
+      this.setState({isfriend: true})
+      // axios.post('api/addFriend', {'userId': this._myuserId, 'viewing_username': this._username})
+      //               .then(res => {
+      //                   var friend_status = res.data.friends
+
+                  
+      //                   this.setState({
+      //                     isfriend:friend_status
+                                
+      //                   })
+
+      //               })
+
+    }
     
-    const handleDelete = (event) => {
-      event.preventDefault()
-      var r = window.confirm('Are you sure you want to delete this article from your page?')
-      if (r==true){
-         this.serverRequest = axios.post('/api/deletearticle', { article_url: this.props.link })
-          .then(res => {
-              if(res.data){
-                 console.log(res.data)
-                 console.log('delete successful')
-               }
-          })
-          window.location.reload();    
-      }
-      else{
-        console.log('dsafa')
-        return
-      }
-  }
+    this.serverRequest = axios.post('api/checkfriends', {'userId': this._myuserId, 'viewing_username': this._username})
+                    .then(res => {
+                        var friend_status = res.data.friends
+
+                  
+                        this.setState({
+                          isfriend:friend_status
+                                
+                        })
+
+                    })
     return (
       <div>
          <div className = "container">
@@ -65,7 +78,9 @@ class UserBox extends React.Component {
               </Panel.Heading>
             
               <Panel.Body>
-                <img src={this.props.image} className="img-responsive center-block"/> 
+              <h4>{this.props.username}</h4>
+          
+              {this.state.isfriend ?  <Button bsStyle="success" disabled>You are Friends!</Button> : <Button onClick={sendRequest}> 'Friend'</Button>} 
                 <br></br>
     
               </Panel.Body>

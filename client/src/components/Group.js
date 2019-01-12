@@ -19,34 +19,21 @@ import { withRouter } from "react-router-dom";
 import Select from 'react-select';
 import Button from 'react-bootstrap/lib/Button';
 
-const options = [
-      { value: 'food', label: 'Food' },
-      { value: 'tech', label: 'Tech' },
-      { value: 'science', label: 'Science' },
-      {value: 'politics', label: 'Politics'},
-      {value: 'funny', label: 'Funny'},
-      {value: 'health', label: 'Health'},
-      {value: 'beauty', label: 'Beauty'},
-      {value: 'fashion', label: 'Fashion'},
-      {value: 'sports', label: 'Sports'},
-      {value: 'long_read', label: 'Long Read'},
-      {value: 'short_read', label: 'Short Read'},
-      {value: 'family', label: 'Family'}
-    ];
 
-
-class Article extends React.Component {
+class Group extends React.Component {
 
   constructor() {
     super()
     this.my_selectedOption = ""
     this._userId = '54321'
+
     
   
   }
 
   state = {
     selectedOption: null,
+    isMember: true
   }
 
   handleChange = (selectedOption) => {
@@ -75,12 +62,15 @@ class Article extends React.Component {
         else{ return }
     }
 
-    const editTag = (event) => {
+    const leaveGroup = (event) => {
+      alert('haha')
+    }
+
+    const joinGroup = (event) => {
           event.preventDefault()
-          var r = window.confirm('Delete target?')
+      
+          this.setState({isMember: true})
           
-          if (r == true){
-            alert('wait for implementation!')
              // this.serverRequest = axios.post('/api/', { article_url: this.props.link })
              //  .then(res => {
              //      if(res.data){
@@ -89,8 +79,7 @@ class Article extends React.Component {
              //       }
              //  })
              //  window.location.reload();  
-          }
-          else{ return }
+         
     }
     return (
       <div>
@@ -98,8 +87,9 @@ class Article extends React.Component {
             <Panel>
             <Panel.Heading>
 
-              <Panel.Title componentClass="h3">{this.props.title}
-               <button onClick={handleDelete}>X</button></Panel.Title>
+              <Panel.Title componentClass="h3">{this.props.groupName}</Panel.Title>
+            
+               <Button bsStyle="info" href = {this.props.groupPage} > View Group </Button>
              
             </Panel.Heading>
             <a href={this.props.link} target="_blank" rel="noopener noreferrer">
@@ -111,22 +101,12 @@ class Article extends React.Component {
               <br></br>
               <br></br>
               <br></br>
-              <img src={this.props.image} className="img-responsive center-block"/>   
+              <img src={this.props.image} className="img-responsive center-block"/>  
+               {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
+              {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+               
               </Panel.Body>
                </a>
-
-
-
-               <Select
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={options}
-                isMulti={true_holder}
-              />
-              <a onClick = {editTag}><h5>{this.props.tag} </h5></a>
-          
-
-
 
             </Panel>
           
@@ -145,4 +125,4 @@ const mapDispatchToProps = dispatch => ({
   handleChange: values => dispatch(changeForm(values))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article)
+export default connect(mapStateToProps, mapDispatchToProps)(Group)

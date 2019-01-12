@@ -25,7 +25,7 @@ class Header extends React.Component {
   }
 
   render() {
-    const { loggedIn } = this.props
+    // const { loggedIn } = this.props
 
     const onChange = event => {
       this.setState({value: event.target.value});
@@ -33,7 +33,15 @@ class Header extends React.Component {
 
     const onSubmit = event => {   
       alert(this.state.value);
-  }
+      console.log(this.props)
+      try {
+        this.props.history.push('/users')
+        
+      }
+      catch(error) {
+          console.log(error)
+      }
+    }
     
 
     return (
@@ -52,7 +60,7 @@ class Header extends React.Component {
                 <NavItem eventKey={1} href="/quickadd">
                     Add Article
                 </NavItem>
-                <NavItem eventKey={2} href="#">
+                <NavItem eventKey={2} href="/groups">
                     Groups
                 </NavItem>
                 <NavItem eventKey={3} href="/mypage">
@@ -61,7 +69,7 @@ class Header extends React.Component {
 
                 <Navbar.Form pullRight>
                     <FormGroup>
-                        <FormControl type="text" placeholder="Search" name="searchTerm" value={this.state.value} onChange = {onChange}/>
+                        <FormControl type="text" placeholder="Search Users" name="searchTerm" value={this.state.value} onChange = {onChange}/>
                     </FormGroup>{' '}
                     <Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
                 </Navbar.Form>
@@ -73,7 +81,8 @@ class Header extends React.Component {
   }
 }
 const mapStateToProps = state => ({
-  loggedIn: state.loggedIn
+  loggedIn: state.loggedIn,
+
 })
 
 export default connect(mapStateToProps)(Header)

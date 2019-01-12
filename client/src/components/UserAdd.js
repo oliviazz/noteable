@@ -87,7 +87,7 @@ class UserAdd extends React.Component {
               first_name:'Liv', 
               last_name:'Z', 
               username :'livz', 
-              userId: '54321'
+              userId: 54321
           }
 
           axios.post('/api/createuser', {data: user_data})

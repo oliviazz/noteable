@@ -1222,9 +1222,9 @@ class Database:
 if __name__ == '__main__':
     # # test user is 2018
     c = Database()
-    #c.oneTimeOnly()
+    c.oneTimeOnly()
 
-    c.connect()
+    # c.connect()
 
     # # Initialize Tags Setup
     # # c.insertTags()
@@ -1241,7 +1241,7 @@ if __name__ == '__main__':
     # # c.insertUser('firstName', 'lastName', 'username9', 'userID9')
     # # c.insertUser('firstName', 'lastName', 'username10', 'userID10')
 
-    print c.allUsers()
+    # print c.allUsers()
     # # c.deleteUser('userID1')
     # # print c.allUsers()
     # # c.insertUser('firstName', 'lastName', 'username1', 'userID1')
@@ -1258,9 +1258,9 @@ if __name__ == '__main__':
     # print len(c.allUsersArticlesTags())
     # c.deleteArticle('uuserID1', '8834987638503293226')
     # print len(c.allUsersArticlesTags())
-    c.insertArticle('12345', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'www.com', 'Design Baking Lists')
+    # c.insertArticle('12345', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'www.com', 'Design Baking Lists')
    
-    print(c.userTagArticles('12345', ''))
+    # print(c.userTagArticles('12345', ''))
     # c.disconnect()
 
 

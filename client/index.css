@@ -10,6 +10,10 @@ body {
   font-family: sans-serif;
 }
 
+input{
+	width:30%;
+}
+
 
 .container {
 	border-color: black;
@@ -92,6 +96,12 @@ input[type=submit] {
 	background-color: white;
 }
 
+#group_search{
+	font-size:20px;
+	background-color: white;
+	width:30%;
+
+}
 
 header {
 	align-content: center;

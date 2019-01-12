@@ -8,7 +8,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
-import Article from 'components/Article'
+import Group from 'components/Group'
 import UserBox from 'components/UserBox'
 
 import LoginForm from 'components/Login/LoginForm'
@@ -28,7 +28,7 @@ import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
 
 
-class PageContainer extends React.Component {
+class GroupContainer extends React.Component {
         // 
         // Set some initial properties we want to 
         // access across functions
@@ -37,7 +37,7 @@ class PageContainer extends React.Component {
             super(props)
             this.state = {
                 'full_article_info':[],
-                'article_components':[]
+                'group_components':[]
             }
 
             this._retrieved_articles = [];
@@ -54,6 +54,8 @@ class PageContainer extends React.Component {
 
             this._userId = '54321'
 
+            this._user = 'livz'
+
             this._active_tag_filters = ''
         }
 
@@ -65,9 +67,9 @@ class PageContainer extends React.Component {
                 this._ismounted = true;
                 var article_names = [];
                 var article = ""
+                let cleaned_article_names = []
+                let full_info = []
                 let components = []
-                var loader = document.getElementById('loader')
-                loader.setAttribute('style', 'display:visible')
             
                 // {API} Load the articles from the database by calling getarticle
                 if (typeof this._source != typeof undefined) {
@@ -75,28 +77,26 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.post('api/getarticles', {'userId': this._userId})
-                    .then(res => {
-                        this.setState({'full_article_info': res.data.results})
+                // this.serverRequest = axios.post('api/getgroups', {'userId': this._userId, 'searchTerm': this._searchTerm})
+                //     .then(res => {
+                //         this.setState({'full_article_info': res.data.results})
 
-                        for(var article in this.state.full_article_info){
-                            var info = this.state.full_article_info[article]
-                            console.log(article, info)
-                            components.push(< Article title = { info['title'] }
-                                        link = {info['url']}
-                                        descrip = {info['blurb']}
-                                        image = {info['icon']}
-                                        tag = {info['tag']}
+                //         for(var article in this.state.full_article_info){
+                //             var info = this.state.full_article_info[article]
+                //             console.log(article, info)
+                //             components.push(< Article title = { info['title'] }
+                //                         link = {info['url']}
+                //                         descrip = {info['blurb']}
+                //                         image = {info['icon']}
+                //                         tag = {info['tag']}
                                         
-                                    />);
-                            }
-                         this.setState({
-                                article_components: components
-                        })
+                //                     />);
+                //             }
+                //          this.setState({
+                //                 group_components: components
+                //         })
 
-                    })
-                var loader = document.getElementById('loader')
-                loader.setAttribute('style', 'display:none')
+                //     })
                
             
             }
@@ -123,6 +123,8 @@ class PageContainer extends React.Component {
 
         }
 
+      
+
         // { }
         // extract on tags 
         // save from everything 
@@ -133,7 +135,28 @@ class PageContainer extends React.Component {
         // ---------------------------------------    
         render() {
 
-         
+            for (var i = 0; i < 10; i++) { 
+              this.state.group_components.push(<Group groupName = {'Group' + (i)} groupPage = 'google.com' /> )
+            }
+
+
+            const loadPage = (event) => {
+                console.log('hey')
+                // how to pass a varible to this??
+
+            }
+
+            const onChange = (event) => {
+                alert('heyyy')
+            }
+
+            const addGroup = (event) => {
+                alert('heyyy')
+                // axios request tom ake new group
+            }
+
+
+
             const tag_1 = 'food'
             const tag_2 = 'tech'
             const tag_3 = 'business'
@@ -147,38 +170,25 @@ class PageContainer extends React.Component {
                     <UserBox firstname="olivia"></UserBox>
                      <Row>
                      <Col xs={3} md={2}>
-                        <h3>tags</h3>
+                
                         <ButtonToolbar>
-                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
-                              <ToggleButton className = "navButton" value={tag_1} onChange={this.handleChange}>{tag_1}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_2} onChange={this.handleChange}>{tag_2}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_3} onChange={this.handleChange}>{tag_3}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_4} onChange={this.handleChange}>{tag_4}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_5} onChange={this.handleChange}>{tag_5}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_7} onChange={this.handleChange}>{tag_7}</ToggleButton><br></br>
-                            </ToggleButtonGroup>
-                        </ButtonToolbar>
-                        <br></br>
-                        <h3>time</h3>
-                        <ButtonToolbar>
-                            <ToggleButtonGroup type="radio" name = "time_range" value={1} onChange={this.handleChange}>
-                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
-                            </ToggleButtonGroup> <br></br> <br></br>
-                            <br></br> <br></br>
-                            <Button bsStyle="info"> Reload Articles </Button>
-                        </ButtonToolbar>
-                 
-                    </Col>
-                    <Col xs={4} md={4}>
-                        <h2>{this._user}'s Noteable</h2><br></br><br></br>
-                        <img id = "loader" src="loading.gif" ></img>
-                        {this.state.article_components.map(article => <div>{article}</div>)} 
-                    </Col>
+                             <h3>Groups Toolbar </h3>
+                            <Button onclick={loadPage('me')}> Show My Groups </Button> 
+                                <br></br><br></br><br></br>
+                            <input id="group_search"  className = 'input-lg' type="text" placeholder="Find Groups" name="searchTerm" value={this.state.value}/><br></br>
+                            <Button onclick={addGroup}> + Make New Group </Button>
 
+                         
+                        </ButtonToolbar>
+                    
+                   
+                    </Col>
+                    <Col xs={1} md={1}></Col>
+                        
+                    <Col xs={8} md={8}>
+                        <h2>{this._user}'s Noteable</h2> 
+                        {this.state.group_components.map(group => <div>{group}</div>)} 
+                    </Col>
 
 
                     </Row>
@@ -199,5 +209,5 @@ class PageContainer extends React.Component {
             clearErrors: () => dispatch(setErrorMessage(''))
         })
 
-        // Make this component exportable to appear in other components
-        export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
+            // Make this component exportable to appear in other components
+        export default connect(mapStateToProps, mapDispatchToProps)(GroupContainer)
