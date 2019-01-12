@@ -5,7 +5,6 @@ from database import Database
 import requests
 from bs4 import BeautifulSoup
 import json
-import metadata_parser
 import unicodedata
 import datetime
 from urllib import urlopen
@@ -36,6 +35,23 @@ def login():
 @login_required
 def protected():
     return jsonify(message="Hello Protected World!"), 200
+
+
+@bp.route("/checkuserexists", methods=["POST"])
+def checkuserexists():
+    json_payload = request.get_json()
+    userId = json_payload['user_Id']
+    print(userId, 'userId and google code')
+    
+    database = Database()
+    database.connect()
+    userExists = database.checkUser(userId)
+
+    return jsonify(exists = userExists), 200
+
+  
+    
+
 
 @bp.route("/createuser", methods=["POST"])
 def createuser():

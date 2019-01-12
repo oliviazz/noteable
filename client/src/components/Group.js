@@ -102,7 +102,7 @@ class Group extends React.Component {
               <br></br>
               <br></br>
               <img src={this.props.image} className="img-responsive center-block"/>  
-               {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
+              {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
               {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
                
               </Panel.Body>
