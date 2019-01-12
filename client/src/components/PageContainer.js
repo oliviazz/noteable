@@ -36,8 +36,6 @@ class PageContainer extends React.Component {
         constructor(props) {
             super(props)
             this.state = {
-                'cleaned_article_names': [],
-                'articles': [],
                 'full_article_info':[],
                 'article_components':[]
             }
@@ -69,68 +67,38 @@ class PageContainer extends React.Component {
                 var article = ""
                 let cleaned_article_names = []
                 let full_info = []
-                let comp = []
-                console.log(this._ismounted)
+                let components = []
+            
                 // {API} Load the articles from the database by calling getarticle
                 if (typeof this._source != typeof undefined) {
                     this._source.cancel('Operation canceled due to new request.')
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.get('https://localhost:8000/api/getarticles', {'user': JSON.stringify(this._user)})
+                this.serverRequest = axios.get('api/getarticles', {'user': JSON.stringify(this._user)})
                     .then(res => {
-                        if (this._ismounted && res.data) {
-                            this._retrieved_articles = res.data.articles
-                        }
-                        try {
-                            if (this._ismounted && this._retrieved_articles) {
+                        this.setState({'full_article_info': res.data.results})
 
-                                for (var i = 0; i < this._retrieved_articles.length; i++) {
-                                    article = this._retrieved_articles[i]
-                                    let defunct_urls = ["hellozoe!.com", "lol.com2", "cos333.com",
-                                        "itsanewwebsiteurl.com", "dfafa.com", "articleURL", "articleURLs", "exampleartickeolivia.com"
-                                    ]
-                                    if (defunct_urls.includes(article[6])) {
-                                        continue;
-                                    }
-                                    this._article_urls.push(article[6]);
-                                }
-
-                                this.setState({"articles":this._article_urls})
-
-                                /// This.state.articles has the FULL article info
-                                // this.setState({"articles":this._full_article_info})
-                                axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
-
-                                        .then(res => {
-                                            if (this._ismounted && res.data) {
-                                               this.setState({'full_article_info':res.data.all_article_info})
-                                           
-                                               for(var article in this.state.full_article_info){
-                                                    var article_info = this.state.full_article_info[article]
-                                                    comp.push(< Article title = { article }
-                                                        link = {article_info['url']}
-                                                        descrip = {article_info['descrip']}
-                                                        image = {article_info['image']}
-                                                        title = {article_info['title']}
-                                                        />);
-                                                }
-                                                this.setState({'article_components':comp})
-                                                document.getElementById("loader").remove();
-                                            }
-                                        })    
+                        for(var article in this.state.full_article_info){
+                            var info = this.state.full_article_info[article]
+                            console.log(article, info)
+                            components.push(< Article title = { info['title'] }
+                                        link = {info['url']}
+                                        descrip = {info['blurb']}
+                                        image = {info['icon']}
+                                        
+                                    />);
                             }
-                        } catch (err) {
-                            console.log("Error in loading articles from database", err);
-                        }
-                    })
-                this.setState({
-                    art: comp
-                })
+                         this.setState({
+                                article_components: components
+                        })
 
+                    })
+               
+            
             }
-            // Keep track internally of mounted state
-            // to avoid erros
+
+        
             // ---------------------------------------
 
         componentWillUnmount() {

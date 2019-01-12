@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import json
 import metadata_parser
 import unicodedata
+import datetime
+from urllib import urlopen
 
 
 bp = Blueprint('blueprint', __name__, template_folder='templates')
@@ -62,14 +64,47 @@ def addarticle():
 
     userId = '12345'
 
+    my_info = {'title': '', 'url':'', 'descrip':'', 'image':'', 'author':''}
 
+    working = False
     try:
-        database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
-        database.disconnect()
-        return jsonify(message="Posted article: " + article), 200
+        trimmed_url = article[1:-1].encode('utf-8')
+        soup = BeautifulSoup(urlopen(trimmed_url).read(), "lxml")
+            
+        title = soup.find("meta",  property="og:title")
+        url = soup.find("meta",  property="og:url")
+        descrip = soup.find("meta", property="og:description")
+        image = soup.find("meta", property="og:image")
+        author = soup.find('meta', {'name': 'byl'})
+
+
+        if title: 
+            my_info['title'] = title['content']
+            working = True
+        if url: my_info['url'] = url['content']
+        if descrip: my_info['descrip'] = descrip['content']
+        if image: my_info['image'] = image['content']
+        if author:my_info['author'] = author['content']
+
+        time = datetime.datetime.today().strftime('%Y-%m-%d')
+        
     except Exception as e:
         print(e)
         return jsonify(message='Error!'), 400
+
+
+    print(my_info, userId)
+    try:
+
+        database.insertArticle(userID=userId, articleTitle=my_info['title'], articleIcon=my_info['image'], 
+                                articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
+                                articleURL=my_info['url'], tags=tags)
+    except Exception as e:
+        print(e, "adding error!")
+
+    
+    database.disconnect()
+    return jsonify(message="Posted article: " + article + '; Metadata collection: ' + str(working) ), 200
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
@@ -102,59 +137,97 @@ def getarticles():
     database.connect()
     json_payload = request.get_json()
     
-    user = json.loads(json_payload['user'])
+    #user = json.loads(json_payload['user'])
+    userId = "12345"
     print(json_payload, "json payload")
 
-    # #use dummy userId for now 
-    userId = "12345"
-    database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
+    # database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
     
     # hardcoding rn
     
     tags = ""
-    article_query_results = database.userTagArticles(userId, "")
+    article_query_results = database.userTagArticles(userId, tags)
     
-    print(article_query_results, " these are the results")
-    return jsonify(articles=article_query_results)
+    #print(article_query_results, " these are the results")
+    formatted_results = {}
+    for i in range(0, len(article_query_results)):
+        print(article_query_results[i])
 
-@bp.route("/getarticlesinfo", methods=["POST"])
-def getarticlesinfo():
-    json_payload = request.get_json()
+        # 0: article
+        # 1: tag (individual, lol)
+        # 2: user ID? 
+        # 3: title
+        # 4: icon
+        # 5: blurb
+        # 6: author
+        # 7
+        # 8: url
+        article_id = str(article_query_results[i][0])
+
+        article_url = str(article_query_results[i][8])
+        article_url = article_url[1:-1]
+
+        formatted_results[article_url] = {
+            'tag': article_query_results[i][1],
+            'title': article_query_results[i][3],
+            'icon': article_query_results[i][4], 
+            'blurb': article_query_results[i][5],
+            'author': article_query_results[i][6],
+            'url': article_url
+        }
+
+    print('all done')
+    return jsonify(results=formatted_results)
+
+# @bp.route("/getarticlesinfo", methods=["GET"])
+# def getarticlesinfo():
+#     json_payload = request.get_json()
     
-    articles = json.loads(json_payload['articles'])
-    # check if article url has an entry
-    print(articles, "HEY")
-    article_full_info = {}
-    for article in articles:
-        # if (has_info(article)):
-        #     continue
-        article = str(article)
-        my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
-        # const urlMetadata = require('url-metadata');
-        proxyurl = "https://cors-anywhere.herokuapp.com/";
-        headers = {'x-requested-with': 'XMLHttpRequest'}
-        response = requests.get(proxyurl+article, headers=headers)
-        soup = BeautifulSoup(response.text, "lxml")
-        
-        title = soup.find("meta",  property="og:title")
-        url = soup.find("meta",  property="og:url")
-        descrip = soup.find("meta", property="og:description")
-        image = soup.find("meta", property="og:image")
+#     #articles = json.loads(json_payload['articles'])
+#     articles = ['https://www.vogue.com/article/slam-jam-luca-benini-interview-pitti-uomo']
+#     # check if article url has an entry
+#     print("HEY")
+#     article_full_info = {}
+#     for article in articles:
+#         # if (has_info(article)):
+#         #     continue
+       
+#         # article = str(article)
+#         my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
+#         try:
+#             proxyurl = "https://cors-anywhere.herokuapp.com/";
+#             # headers = {'x-requested-with': 'XMLHttpRequest'}
+#             # response = requests.get(proxyurl+article, headers=headers)
+#             print('here>>')
+#             soup = BeautifulSoup(urlopen(article).read())
+            
+#             title = soup.find("meta",  property="og:title")
+#             url = soup.find("meta",  property="og:url")
+#             descrip = soup.find("meta", property="og:description")
+#             image = soup.find("meta", property="og:image")
 
-        # print(title["content"] if title else "No meta title given")
-        # print(url["content"] if url else "No meta url given")
-        # print(image["content"] if image else "No meta image given")
-        # print(descrip["content"] if descrip else "No meta descrip given")
-        
-        if title: my_info['title'] = title['content']
-        if url: my_info['url'] = url['content']
-        if descrip: my_info['descrip'] = descrip['content']
-        if image: my_info['image'] = image['content']
 
-        article_full_info[article] = my_info
+#             if title: my_info['title'] = title['content']
+#             if url: my_info['url'] = url['content']
+#             if descrip: my_info['descrip'] = descrip['content']
+#             if image: my_info['image'] = image['content']
 
-    #print(article_full_info)
-    return jsonify(all_article_info=article_full_info)
+#             print(title, url, descrip, image)
+
+            
+#         except Exception, err:
+#             print('Error in retrieving stuff: ', str(err))
+#         # print(title["content"] if title else "No meta title given")
+#         # print(url["content"] if url else "No meta url given")
+#         # print(image["content"] if image else "No meta image given")
+#         # print(descrip["content"] if descrip else "No meta descrip given")
+    
+
+#         article_full_info[article] = my_info
+#     print(article_full_info)
+
+#     #print(article_full_info)
+#     return jsonify(all_article_info=article_full_info)
      
 # def has_info(article):
 
