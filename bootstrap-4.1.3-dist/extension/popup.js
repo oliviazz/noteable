@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // snip
         event.preventDefault()
         var http = new XMLHttpRequest();
-        var url = '/api/addarticle';
+        var url = 'localhost:5000/api/addarticle';
         var params = 'article_url=' + cur_url;
         http.open('POST', url, true);
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         http.send(params);
 
-        this.props.history.push('/mypage')
+       
 
     });
 });

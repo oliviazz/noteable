@@ -37,7 +37,8 @@ class PageContainer extends React.Component {
             super(props)
             this.state = {
                 'full_article_info':[],
-                'article_components':[]
+                'article_components':[],
+                'holder':''
             }
 
             this._retrieved_articles = [];
@@ -60,12 +61,30 @@ class PageContainer extends React.Component {
 
             this._active_tag_filters = ''
 
+             ///
+            
+
         }
 
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
+                var passed_state =  this.props.location.state
+                if (passed_state){
+            
+                    this._userId = passed_state['userId']
+                    this._displayUserId = passed_state['displayUserId']
+                    
+                    console.log('Passed user Id, now set: ', this._userId, ' as viewing and ', this._displayUserId, ' as the page ot be viewed')
+                    this.setState({'holder':'hi'})
+                }
+                else{
+                    console.log(passed_state, " no passed variables found")
+
+                }
+
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
+
 
                 this._ismounted = true;
                 var article_names = [];
@@ -121,6 +140,9 @@ class PageContainer extends React.Component {
 
 
         load_page_results = (selected) => {
+            
+
+            /// 
             console.log('reloading this!!!')
             
 
@@ -137,17 +159,7 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-            var passed_state =  this.props.location.state
-            if (passed_state){
-        
-                this._userId = passed_state['userId']
-                this._displayUserId = passed_state['displayUserId']
-                console.log('Passed user Id, now set: ', this._userId, ' as viewing and ', this._displayUserId, ' as the page ot be viewed')
-            }
-            else{
-                console.log(passed_state, " no passed variables found")
 
-            }
             const tag_1 = 'food'
             const tag_2 = 'tech'
             const tag_3 = 'business'
@@ -188,7 +200,7 @@ class PageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         {this._displayUserId == this._userId ? <h1>your noteable</h1>: <h1>{this._displayUserId}'s moteable </h1>}
+                         {this._displayUserId == this._userId ? <h1>your noteable: {this._userId} </h1>: <h1>{this._displayUserId}'s moteable </h1>}
                          <br></br><br></br>
                         <br></br>
                        

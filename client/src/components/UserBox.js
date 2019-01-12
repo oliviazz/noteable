@@ -70,7 +70,8 @@ class UserBox extends React.Component {
                     })
     var userId = this.props.userId
     var userViewing = this.props.userViewing 
-    console.log(userId, userViewing)
+
+    console.log(userId, userViewing, " one user!!")
     return (
       <div>
          <div className = "container">
