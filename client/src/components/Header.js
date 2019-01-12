@@ -43,7 +43,7 @@ class Header extends React.Component {
             <Navbar.Header>
               <div className = "logoText">
                 <Navbar.Brand className = "logo">
-                  <a href="#home">Noteable</a>
+                  <a href="/">Noteable</a>
                 </Navbar.Brand>
               <Navbar.Toggle />
               </div>

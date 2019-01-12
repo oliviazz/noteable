@@ -1241,7 +1241,7 @@ if __name__ == '__main__':
     # # c.insertUser('firstName', 'lastName', 'username9', 'userID9')
     # # c.insertUser('firstName', 'lastName', 'username10', 'userID10')
 
-    # print c.allUsers()
+    print c.allUsers()
     # # c.deleteUser('userID1')
     # # print c.allUsers()
     # # c.insertUser('firstName', 'lastName', 'username1', 'userID1')

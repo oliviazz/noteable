@@ -35,6 +35,16 @@ def login():
 def protected():
     return jsonify(message="Hello Protected World!"), 200
 
+@bp.route("/createuser", methods=["POST"])
+def createuser():
+    json_payload = request.get_json()
+    user_data = json_payload['data']
+    print(user_data, 'user data')
+    database = Database()
+    database.connect()
+    database.insertUser(str(user_data['first_name']), str(user_data['last_name']), str(user_data['username']), str(user_data['userId']))
+    return jsonify(message="Hello Protected World!"), 200
+
   
 
 @bp.route("/addarticle", methods=["POST"])

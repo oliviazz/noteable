@@ -4,6 +4,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 
 import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
+import UserAdd from 'components/UserAdd'
 
 class LoginContainer extends React.Component {
   componentWillMount() {
@@ -15,16 +16,10 @@ class LoginContainer extends React.Component {
 
     return (
       <div>
-        {loggedIn ? (
-          <Redirect to="/" />
-        ) : (
-          <LoginForm
-            handleSubmit={handleSubmit}
-            currentlySending={currentlySending}
-            formState={formState}
-            errorMessage={errorMessage}
-          />
-        )}
+      <UserAdd />
+       
+
+    
       </div>
     )
   }

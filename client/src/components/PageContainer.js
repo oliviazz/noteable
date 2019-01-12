@@ -77,7 +77,7 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.get('/api/getarticles', {'user': JSON.stringify(this._user)})
+                this.serverRequest = axios.get('https://localhost:8000/api/getarticles', {'user': JSON.stringify(this._user)})
                     .then(res => {
                         if (this._ismounted && res.data) {
                             this._retrieved_articles = res.data.articles
