@@ -110,7 +110,7 @@ def addarticle():
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
-
+    print('DElete Article')
     json_payload = request.get_json()
     article = str(json_payload['article_url'])
     userId = json_payload['userId']
@@ -141,14 +141,16 @@ def getarticles():
 
     database = Database()
     database.connect()
+
     json_payload = request.get_json()
+
     print(json_payload, "payload in get articles")
     userId = json_payload['userId']
     print(userId)
     # userId = "54321"
     
 
-    database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
+    #database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
     
     # hardcoding rn
     
@@ -172,7 +174,7 @@ def getarticles():
         article_id = str(article_query_results[i][0])
 
         article_url = str(article_query_results[i][8])
-        article_url = article_url[1:-1]
+    
 
         formatted_results[article_url] = {
             'tag': article_query_results[i][1],
