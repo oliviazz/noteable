@@ -4,8 +4,6 @@
 //
 // Team Noteable -  Olivia, Zoe, and Lyra
 //----------------------------------------
-
-
 import React from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -18,29 +16,12 @@ import { withRouter } from "react-router-dom";
 
 import Select from 'react-select';
 
-const options = [
-      { value: 'food', label: 'Food' },
-      { value: 'tech', label: 'Tech' },
-      { value: 'science', label: 'Science' },
-      {value: 'politics', label: 'Politics'},
-      {value: 'funny', label: 'Funny'},
-      {value: 'health', label: 'Health'},
-      {value: 'beauty', label: 'Beauty'},
-      {value: 'fashion', label: 'Fashion'},
-      {value: 'sports', label: 'Sports'},
-      {value: 'long_read', label: 'Long Read'},
-      {value: 'short_read', label: 'Short Read'},
-      {value: 'family', label: 'Family'}
-    ];
 
-
-class Article extends React.Component {
+class UserBox extends React.Component {
 
   constructor() {
     super()
-    this.my_selectedOption = ""
     
-  
   }
 
   state = {
@@ -52,10 +33,10 @@ class Article extends React.Component {
     console.log(`Option selected:`, selectedOption);
   }
 
-  
   render() {
-    const { selectedOption } = this.my_selectedOption;
+    const { selectedOption } = ''
     const true_holder = true;
+    
     const handleDelete = (event) => {
       event.preventDefault()
       var r = window.confirm('Are you sure you want to delete this article from your page?')
@@ -67,55 +48,30 @@ class Article extends React.Component {
                  console.log('delete successful')
                }
           })
-          window.location.reload();
-
-           
+          window.location.reload();    
       }
       else{
         console.log('dsafa')
         return
       }
-     
-
-      
   }
     return (
       <div>
          <div className = "container">
          
             <Panel>
-            <Panel.Heading>
-
-              <Panel.Title componentClass="h3">{this.props.title}
-               <button onClick={handleDelete}>X</button></Panel.Title>
-             
-            </Panel.Heading>
-            <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-            <Panel.Body>
+              <Panel.Heading>
+                <Panel.Title componentClass="h2">{this.props.firstname}'s noteable</Panel.Title>
+              </Panel.Heading>
             
-              <span className ="link-spanner"></span>
-              {this.props.descrip}
-              <h4> {this.props.sitename} </h4>
-              <br></br>
-              <br></br>
-              <br></br>
-              <img src={this.props.image} className="img-responsive center-block"/>   
-              
-             
+              <Panel.Body>
+                <img src={this.props.image} className="img-responsive center-block"/> 
+                <br></br>
+    
               </Panel.Body>
-               </a>
-
-               <Select
-                value={selectedOption}
-                onChange={this.handleChange}
-                options={options}
-                isMulti={true_holder}
-              />
-
+     
             </Panel>
-          
         </div>
-        
       </div> 
     );
   }
@@ -129,4 +85,4 @@ const mapDispatchToProps = dispatch => ({
   handleChange: values => dispatch(changeForm(values))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Article)
+export default connect(mapStateToProps, mapDispatchToProps)(UserBox)

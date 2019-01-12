@@ -9,6 +9,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
+import UserBox from 'components/UserBox'
 
 import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
@@ -21,6 +22,9 @@ import Col from 'react-bootstrap/lib/Col';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import Nav from 'react-bootstrap/lib/Nav';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import ToggleButton from 'react-bootstrap/lib/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
 
 
@@ -39,6 +43,7 @@ class PageContainer extends React.Component {
             }
 
             this._retrieved_articles = [];
+
             this._ismounted = true;
             // Stores valid article URLs
             this._article_urls = [];
@@ -49,9 +54,9 @@ class PageContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this._user = 'Olivia'
+            this._user = '12345'
 
-
+            this._active_tag_filters = ''
         }
 
         // Called right after component mounts
@@ -72,10 +77,9 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.get('/api/getarticles', { 'cancelToken':  this._source.token})
+                this.serverRequest = axios.get('/api/getarticles', {'user': JSON.stringify(this._user)})
                     .then(res => {
                         if (this._ismounted && res.data) {
-
                             this._retrieved_articles = res.data.articles
                         }
                         try {
@@ -89,21 +93,26 @@ class PageContainer extends React.Component {
                                     if (defunct_urls.includes(article[6])) {
                                         continue;
                                     }
-                                    // Store the full article information
-                                    //this._article_urls.push(article);
-                                    this._full_article_info.push(article)
-                                
+                                    this._article_urls.push(article[6]);
                                 }
-                                /// This.state.articles has the FULL article info
-                                this.setState({"articles":this._full_article_info})
 
+                                this.setState({"articles":this._article_urls})
+
+                                /// This.state.articles has the FULL article info
+                                // this.setState({"articles":this._full_article_info})
+
+
+<<<<<<< HEAD
                                     axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
+=======
+                                axios.post('/api/getarticlesinfo', { 'articles': JSON.stringify(this.state.articles), 'user': JSON.stringify(this._user)})
+>>>>>>> olivia
                                         .then(res => {
                                             if (this._ismounted && res.data) {
-                                               this.setState({'articles_post_request':res.data.all_article_info})
+                                               this.setState({'full_article_info':res.data.all_article_info})
                                            
-                                               for(var article in this.state.articles_post_request){
-                                                    var article_info = this.state.articles_post_request[article]
+                                               for(var article in this.state.full_article_info){
+                                                    var article_info = this.state.full_article_info[article]
                                                     comp.push(< Article title = { article }
                                                         link = {article_info['url']}
                                                         descrip = {article_info['descrip']}
@@ -114,9 +123,7 @@ class PageContainer extends React.Component {
                                                 this.setState({'article_components':comp})
                                                 document.getElementById("loader").remove();
                                             }
-                                        })
-                              
-                                    
+                                        })    
                             }
                         } catch (err) {
                             console.log("Error in loading articles from database", err);
@@ -125,8 +132,6 @@ class PageContainer extends React.Component {
                 this.setState({
                     art: comp
                 })
-
-            
 
             }
             // Keep track internally of mounted state
@@ -138,80 +143,91 @@ class PageContainer extends React.Component {
 
         }
 
+        handleChange = (selected) => {
+            console.log('selected', selected);
+            this.setState({selected})
+        }
+
+
+        load_page_results = (selected) => {
+            console.log('reloading this!!!')
+            
+
+            // make a http request 
+
+        }
+
+        // { }
+        // extract on tags 
+        // save from everything 
+
+
         // Defines the HTML code atually returned and shown
         // in the component
         // ---------------------------------------    
         render() {
-                return(<div> 
-                    <Grid>
-     <Row>
-     <Col xs={3} md={2}>
-        <p>Tags</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    Food
-                      <Glyphicon glyph="star" /> 
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Photography
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Travel
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Funny
-                  </NavItem>
-                
-        </Nav>
-        <p>Time</p>
-        <Nav  stacked>
-            
-                  <NavItem eventKey={2} href="#">
-                    All Time
-                    
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Month
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                   Last Week
-                  </NavItem>
-                   <NavItem eventKey={2} href="#">
-                    Today
-                  </NavItem>
-                
-        </Nav>
-    </Col>
-    <Col xs={5} md={4}>
-        <h2>{this._user}'s Articles</h2><br></br><br></br>
-        <img id = "loader" src="loading.gif" ></img>
-        {this.state.article_components.map(article => <div>{article}</div>)} 
-    </Col>
+
+         
+            const tag_1 = 'food'
+            const tag_2 = 'tech'
+            const tag_3 = 'business'
+            const tag_4 = 'funny'
+            const tag_5 = 'politics'
+            const tag_6 = 'health'
+            const tag_7 = 'music'
+            return(
+                <div> 
+                <Grid>
+                    <UserBox firstname="olivia"></UserBox>
+                     <Row>
+                     <Col xs={3} md={2}>
+                        <h3>tags</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
+                              <ToggleButton className = "navButton" value={tag_1} onChange={this.handleChange}>{tag_1}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_2} onChange={this.handleChange}>{tag_2}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_3} onChange={this.handleChange}>{tag_3}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_4} onChange={this.handleChange}>{tag_4}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_5} onChange={this.handleChange}>{tag_5}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value={tag_7} onChange={this.handleChange}>{tag_7}</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                        <br></br>
+                        <h3>time</h3>
+                        <ButtonToolbar>
+                            <ToggleButtonGroup type="radio" name = "time_range" value={1} onChange={this.handleChange}>
+                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
+                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
+                            </ToggleButtonGroup>
+                        </ButtonToolbar>
+                    </Col>
+                    <Col xs={4} md={4}>
+                        <h2>{this._user}'s Noteable</h2><br></br><br></br>
+                        <img id = "loader" src="loading.gif" ></img>
+                        {this.state.article_components.map(article => <div>{article}</div>)} 
+                    </Col>
 
 
-    </Row>
-</Grid>
-                  
-                    
-                    </div >);
-                    
-
-                }
+                    </Row>
+                </Grid>      
+            </div >);
             }
-                   
+        }
 
-            const mapStateToProps = state => ({
-                loggedIn: state.loggedIn,
-                currentlySending: state.currentlySending,
-                formState: state.formState,
-                errorMessage: state.errorMessage
-            })
+        const mapStateToProps = state => ({
+            loggedIn: state.loggedIn,
+            currentlySending: state.currentlySending,
+            formState: state.formState,
+            errorMessage: state.errorMessage
+        })
 
-            const mapDispatchToProps = dispatch => ({
-                handleSubmit: (username, password) => dispatch(login(username, password)),
-                clearErrors: () => dispatch(setErrorMessage(''))
-            })
+        const mapDispatchToProps = dispatch => ({
+            handleSubmit: (username, password) => dispatch(login(username, password)),
+            clearErrors: () => dispatch(setErrorMessage(''))
+        })
 
             // Make this component exportable to appear in other components
-            export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)
+        export default connect(mapStateToProps, mapDispatchToProps)(PageContainer)

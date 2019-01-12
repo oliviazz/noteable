@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 #-----------------------------------------------------------------------
 # init.py
@@ -31,3 +32,4 @@ login_manager.init_app(app)
 app.register_blueprint(bp, url_prefix='/api')
 
 from app import views # noqa
+

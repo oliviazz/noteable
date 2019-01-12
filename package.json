@@ -52,7 +52,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-
   "dependencies": {
     "react-select": "^2.2.0"
   }

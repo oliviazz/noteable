@@ -9,9 +9,6 @@ import metadata_parser
 import unicodedata
 
 
-
-
-
 bp = Blueprint('blueprint', __name__, template_folder='templates')
 
 
@@ -42,22 +39,27 @@ def protected():
 
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
-
+    
     json_payload = request.get_json()
-    print(json_payload, "JSON PAYLOAD!!!!")
-    article = json_payload['article_url']
-    #return jsonify(message=article), 200
-
+    print(json_payload, " addarticle json payload")
+    userId = str(json_payload['userId'])
+    article = str(json_payload['article_url'])
+    tags = str(json_payload['tags'])
+  
+    print(userId, article, tags)
     database = Database()
     database.connect()
-    print(article, " article")
+
+    userId = '12345'
+
 
     try:
-        database.insertArticle('dummy2', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, 'tags')
+        database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', article, tags)
         database.disconnect()
         return jsonify(message="Posted article: " + article), 200
-    except:
-        return jsonify(message="Error in posting article!"), 400
+    except Exception as e:
+        print(e)
+        return jsonify(message='Error!'), 400
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
@@ -72,8 +74,8 @@ def deletearticle():
     try:
         article_id = hash(article)
       
-        database.deleteArticle(userID='dummy2', articleID=article_id)
-       
+        database.deleteArticle(userID='12345', articleID=article_id)
+ 
         database.disconnect()
 
         return jsonify(message="Deleted article: " + article), 200
@@ -81,109 +83,70 @@ def deletearticle():
         print('Error in deleting article: ', str(err))
         return jsonify(message="Error in deleting article article!"), 400
 
-@bp.route("/quickadd", methods=["GET"])
-def quickadd():
-    return jsonify(message="It's working!!!!"), 200
+
 
 @bp.route("/getarticles", methods=["GET"])
 def getarticles():
 
     database = Database()
     database.connect()
-
     json_payload = request.get_json()
     
     user = json.loads(json_payload['user'])
     print(json_payload, "json payload")
 
-    #use dummy userId for now 
-    article_query_results = database.userArticles(user)
-    print(article_query_results, " ok")
+    # #use dummy userId for now 
+    userId = "12345"
+    database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
+    
+    # hardcoding rn
+    
+    tags = ""
+    article_query_results = database.userTagArticles(userId, "")
+    
+    print(article_query_results, " these are the results")
     return jsonify(articles=article_query_results)
-
-def article_needs_info(article):
-    # IF some threshold of fields is blank
-   
-    # if Both fields are blank
-    if (article[1] == 'articleTitle' and article[2] == 'articleIcon'):
-        return True
-    else:
-        return False
 
 @bp.route("/getarticlesinfo", methods=["POST"])
 def getarticlesinfo():
-    print('hey!!')
     json_payload = request.get_json()
     
     articles = json.loads(json_payload['articles'])
-    #print(articles, "HEY")
+    # check if article url has an entry
+    print(articles, "HEY")
     article_full_info = {}
-    database = Database()
-    database.connect()
-
     for article in articles:
-        article = [str(i) for i in article]
-        print(article, " question mark")
-        # scrape info only if article doesn't have database already
-        # if (article_needs_info(article)):
-        print(article, " needs information")
-        article_url = article[6]
+        # if (has_info(article)):
+        #     continue
+        article = str(article)
         my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
         # const urlMetadata = require('url-metadata');
         proxyurl = "https://cors-anywhere.herokuapp.com/";
         headers = {'x-requested-with': 'XMLHttpRequest'}
-        response = requests.get(proxyurl+article_url, headers=headers)
-        
-        #### these are what we find
+        response = requests.get(proxyurl+article, headers=headers)
         soup = BeautifulSoup(response.text, "lxml")
+        
         title = soup.find("meta",  property="og:title")
         url = soup.find("meta",  property="og:url")
         descrip = soup.find("meta", property="og:description")
         image = soup.find("meta", property="og:image")
 
-        # Replace -------------
-        # article_id = hash(url)
-        # database.deleteArticle('dummy', article_id )
-        # database.insertArticle(self, 'dummy', title, image, descrip, articleAuthor, articleDate, url, tags)
-        # Replace ------------- 
-
+        # print(title["content"] if title else "No meta title given")
+        # print(url["content"] if url else "No meta url given")
+        # print(image["content"] if image else "No meta image given")
+        # print(descrip["content"] if descrip else "No meta descrip given")
+        
         if title: my_info['title'] = title['content']
         if url: my_info['url'] = url['content']
         if descrip: my_info['descrip'] = descrip['content']
         if image: my_info['image'] = image['content']
 
-        article_full_info[article_url] = my_info
-        
-        # else:
-        #     database.userArticles('dummy2')
-        #     # package database result into a dictionary 
-        #     my_info = {'title': '', 'url':'', 'descrip':'', 'image':''}
-        #     my_info['image'] = 
+        article_full_info[article] = my_info
 
-
-    # article_query_results = database.userArticles('dummy2')
-    # print(article_query_results, " ok")
-    # for article in article_query_results:
-    #     article = [str(i) for i in article]
-        
-    #     my_info['url'] = article[6]
-    #     my_info['image'] = article[5]
-    #     my_info['title'] = article[2]
-    #     my_info['descrip'] = article[3]
-    #     my_info['author'] = article[4]
-    #     my_info['date']= article[5]
-
-    #     url = article[6]
-    #     article_full_info[url] = my_info
-
-    
-
-
-    print(type(article_full_info))
-
+    #print(article_full_info)
     return jsonify(all_article_info=article_full_info)
      
-
+# def has_info(article):
 
 def quickadd():
     return jsonify(message="It's working!!!!"), 200

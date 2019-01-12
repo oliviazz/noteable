@@ -4,9 +4,12 @@
 // # Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
 // #-----------------------------------------------------------------------
 */
- #sidebar {
-            padding-left: 10px;
-        }
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:regular,bold,italic&subset=latin,latin-ext');
+
+#sidebar {
+    padding-left: 10px;
+}
 #btn {
     padding: 0px;
     margin-right: 10px;
@@ -26,11 +29,21 @@
     margin-top: 20px;
 }
 
+.logo navbar-brand{
+  font-size: 16px;
+  color: white;
+
+}
+
+.navBarMain{
+  background-color: #C3CDE6;
+}
+
 
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Montserrat';
 }
 
 a{
@@ -45,25 +58,22 @@ a.headerLink{
     
 }
 
+
+
 div.box:hover {
     cursor: hand;
     cursor: pointer;
     opacity: .9;
 }
-/*
-.container {
-	border-color: blue;
-	border-style: dotted;
-	background-color: white;
-	opacity: .7;
-	color: #323299;
-	align-self: center;
-	align-content: center;
-	align-items: center;
-	height: 350px;
-}
-*/
 
+.navbar-header{
+  background-color:#C3CDE6;
+  color:white;
+}
+.navbar-div{
+  background-color:#C3CDE6;
+  color: white;
+}
 a.divLink {
     position: relative;
     width: 100%;
@@ -125,6 +135,22 @@ a.divLink {
 	align-self: right;
 }
 
+.navButton{
+  width:150px;
+  font-size:13pt;
+  border-color:#E7E7E7;
+}
+
+.navButton:hover { 
+  background-color: #C3CDE6;
+  color:white;
+  border-color:#E7E7E7;
+}
+
+.navButton:focus {
+  background-color: #74819F;
+}
+
 img{
 	height:250px;
 	width:250px;
@@ -140,8 +166,8 @@ img{
 
 .article_input {
 	height:50px;
-  width:70%;
-	font-size:24px;
+  width:100%;
+	font-size:14px;
 }
 
 input[type=button] {
@@ -166,6 +192,7 @@ header {
 	color: #0B3861;
 	font-size:24px;
 	background-color: white;
-	height:200px;
+	height:125px;
+  font-family: 'Montserrat';
 }
 

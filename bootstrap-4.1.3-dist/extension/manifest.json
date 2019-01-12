@@ -2,7 +2,7 @@
     "name": "Noteable Extension",
     "version": "1.0",
     "description": "Add articles to your account directly from the link using the Noteable Extension.",
-    "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "/api/*", "http://*/"],
+    "permissions": ["activeTab", "declarativeContent", "storage", "tabs", "/api/*"],
     "options_page": "options.html",
     "background": {
         "scripts": ["background.js"],
