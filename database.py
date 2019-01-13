@@ -765,7 +765,8 @@ class Database:
     # Adds article to the article table in database    
     def insertArticle(self, username, articleTitle, articleIcon, articleBlurb, articleAuthor, articleDate, articleURL, tags):
         cursor = self._connection.cursor()
-        userID = self.getUserID(username)
+        #userID = self.getUserID(username)
+        userID = hash(username)
         groupID = self.getGroupID(username)
 
         ID = ""

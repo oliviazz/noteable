@@ -56,7 +56,6 @@ def modularAddArticle(json_payload, username):
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
   
-    print(username, article, tags)
     database = Database()
     database.connect()
 
@@ -83,6 +82,7 @@ def modularAddArticle(json_payload, username):
         if author:my_info['author'] = author['content']
 
         time = datetime.datetime.today().strftime('%Y-%m-%d')
+
         return jsonify(message='Successfully entered!'), 200
         
     except Exception as e:
@@ -97,7 +97,7 @@ def modularAddArticle(json_payload, username):
                                 articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
                                 articleURL=my_info['url'], tags=tags)
 
-        print(database.userTagArticles(username, ""))
+        print(database.userTagArticles(username, " ---hererherhehr-\n\n\n\n\n"))
         print('above are my tags')
     except Exception as e:
         print(e, "adding error!")
