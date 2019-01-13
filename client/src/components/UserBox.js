@@ -57,17 +57,17 @@ class UserBox extends React.Component {
 
     }
     
-    this.serverRequest = axios.post('api/checkfriends', {'userId': this._myuserId, 'viewing_username': this._username})
-                    .then(res => {
-                        var friend_status = res.data.friends
+    // this.serverRequest = axios.post('api/checkfriends', {'userId': this._myuserId, 'viewing_username': this._username})
+    //                 .then(res => {
+    //                     var friend_status = res.data.friends
 
                   
-                        this.setState({
-                          isfriend:friend_status
+    //                     this.setState({
+    //                       isfriend:friend_status
                                 
-                        })
+    //                     })
 
-                    })
+    //                 })
     var userId = this.props.userId
     var userViewing = this.props.userViewing 
 

@@ -70,7 +70,32 @@ class GroupContainer extends React.Component {
                 var article = ""
                 let cleaned_article_names = []
                 let full_info = []
-                let components = []
+
+                var components = []
+                var groups
+                console.log('Did the state change', this.state.display)
+
+                if (this.state.display == 'all'){
+                     axios.post('/api/displayallgroups').then(res => {
+                        groups = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        for(var i = 0; i < 4; i++){
+                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+                        }
+                        this.setState({group_components:components})
+                    })
+                }
+                else if (this.state.display = 'mine_only'){
+                    axios.post('/api/displaymygroups').then(res => {
+                        groups = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        for(var i = 0; i < 4; i++){
+                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+                        }
+                        this.setState({group_components:components})
+                    })
+
+                }
             
                 // {API} Load the articles from the database by calling getarticle
                 if (typeof this._source != typeof undefined) {
@@ -136,6 +161,13 @@ class GroupContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
+             alert('loadPage')
+                // console.log('hey')
+                // how to pass a varible to this??
+                
+
+
+
 
 
 
@@ -159,39 +191,40 @@ class GroupContainer extends React.Component {
              
             }
             
-            const loadPage = (event) => {
-                // console.log('hey')
-                // how to pass a varible to this??
-                var components = []
-                var groups
-                console.log('Did the state change', this.state.display)
+            // const loadPage = (event) => {
+            //     alert('loadPage')
+            //     // console.log('hey')
+            //     // how to pass a varible to this??
+            //     var components = []
+            //     var groups
+            //     console.log('Did the state change', this.state.display)
 
-                if (this.state.display == 'all'){
-                     axios.post('/api/displayallgroups').then(res => {
-                        groups = res.data.results;
-                        console.log("Received response: ", res.data.results);
-                        for(var i = 0; i < 4; i++){
-                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
-                        }
-                        this.setState({group_components:components})
-                    })
-                }
-                else if (this.state.display = 'mine_only'){
-                    axios.post('/api/displaymygroups').then(res => {
-                        groups = res.data.results;
-                        console.log("Received response: ", res.data.results);
-                        for(var i = 0; i < 4; i++){
-                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
-                        }
-                        this.setState({group_components:components})
-                    })
+            //     if (this.state.display == 'all'){
+            //          axios.post('/api/displayallgroups').then(res => {
+            //             groups = res.data.results;
+            //             console.log("Received response: ", res.data.results);
+            //             for(var i = 0; i < 4; i++){
+            //                 components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+            //             }
+            //             this.setState({group_components:components})
+            //         })
+            //     }
+            //     else if (this.state.display = 'mine_only'){
+            //         axios.post('/api/displaymygroups').then(res => {
+            //             groups = res.data.results;
+            //             console.log("Received response: ", res.data.results);
+            //             for(var i = 0; i < 4; i++){
+            //                 components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+            //             }
+            //             this.setState({group_components:components})
+            //         })
 
-                }
+            //     }
 
 
                 
                 
-            }
+            // }
 
 
             const addGroup = (event) => {
@@ -224,7 +257,6 @@ class GroupContainer extends React.Component {
             return(
                 <div> 
                 <Grid>
-                    <UserBox firstname="olivia"></UserBox>
                      <Row>
                      <Col xs={3} md={2}>
                 
@@ -247,6 +279,7 @@ class GroupContainer extends React.Component {
                         
                     <Col xs={8} md={8}>
                         <h2>{this._user}'s Noteable</h2> 
+                        <h3>Showing {this.state.display} Articles </h3>
                         {this.state.group_components.map(group => <div>{group}</div>)} 
                     </Col>
 
