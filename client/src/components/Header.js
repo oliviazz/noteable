@@ -60,6 +60,7 @@ class Header extends React.Component {
                 <NavItem eventKey={1} href="/quickadd">
                     Add Article
                 </NavItem>
+                
                 <NavItem eventKey={2} href="/groups">
                     Groups
                 </NavItem>

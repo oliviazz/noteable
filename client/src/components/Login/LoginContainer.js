@@ -62,9 +62,9 @@ class LoginContainer extends React.Component {
                         this._username = postData['email']
                         
                         this.props.history.push({
-                                  pathname: '/mypage',
-                                  state: {username: this._username, displayUserId: this._username} // your data array of objects
-                                }) 
+                                    pathname: '/quickadd',
+                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
+                                  }) 
                     }
                     else{
                       alert('Error: User not found ')
@@ -112,10 +112,9 @@ class LoginContainer extends React.Component {
                           axios.post('/api/createuser', {data: relevantData})
                           .then(res => {
                                   console.log("Received response: ", res.data);
-                                  
                                   this.props.history.push({
-                                    pathname: '/mypage',
-                                    state: {username: this._username, displayUserId: this._username} // your data array of objects
+                                    pathname: '/quickadd',
+                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
                                   }) 
                           })
                     }

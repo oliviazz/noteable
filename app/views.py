@@ -83,6 +83,7 @@ def modularAddArticle(json_payload, username):
         if author:my_info['author'] = author['content']
 
         time = datetime.datetime.today().strftime('%Y-%m-%d')
+        return jsonify(message='Successfully entered!'), 200
         
     except Exception as e:
         print(e)
@@ -163,7 +164,7 @@ def createuser():
     database = Database()
     database.connect()
     userId = hash(user_data['username'])
-    database.insertUser(str(user_data['firstName']), str(user_data['lastName']), str(user_data['username']), userId)
+    database.insertUser(str(user_data['firstName']), str(user_data['lastName']), str(user_data['username']))
     return jsonify(message=("User" + user_data['username']+ "successfully entered")), 200
 
 
@@ -436,9 +437,10 @@ def addarticle():
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
     # UPDATE LATER
-    # username = str(json_payload['username'])
-    username = 'livz'
-    modularAddArticle(json_payload, username)
+    username = str(json_payload['username'])
+
+    
+    return modularAddArticle(json_payload, username)
     
 
 @bp.route("/deletearticle", methods=["POST"])
@@ -481,9 +483,7 @@ def getarticles():
 
     print(json_payload, "payload in get articles")
     # PUT THIS BACK LATER
-    # username = json_payload['username']
-    username = 'livz'
-    
+    username = json_payload['username']    
     tags = ""
     article_query_results = database.userTagArticles(username, tags)
     print article_query_results

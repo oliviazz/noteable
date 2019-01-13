@@ -55,7 +55,7 @@ class ArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._userId = "ozhang@princeton.edu"
+    this._username = ""
     
   
   }
@@ -85,13 +85,23 @@ class ArticleAdd extends React.Component {
       this.my_selectedOption = tag_string
     }
 
+// function requireAuth(nextState, replace, next) {
+//   if (!authenticated) {
+//     replace({
+//       pathname: "/login",
+//       state: {nextPathname: nextState.location.pathname}
+//     });
+//   }
+//   next();
+// }
+
   render() {
 
       var passed_state =  this.props.location.state
                 if (passed_state){
-                    this._userId = passed_state['userId']
-                    this.setState({'userId': this._userId})
-                    console.log('Passed user Id, now set: ', this._userId)
+                    this._username = passed_state['username']
+                    
+                    console.log('Passed username, now set: ', this._username)
                 
                 }
                 else{
@@ -104,15 +114,15 @@ class ArticleAdd extends React.Component {
 
       const submitArticle = event => {
           event.preventDefault()
-          alert('Submitted ' + this.state.article_url + "for user " + this._userId);
+          alert('Submitted ' + this.state.article_url + "for user " + this._username);
           alert('Tags: ', JSON.stringify(this.my_selectedOption));
-          axios.post('/api/addarticle', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), userId: this._userId})
+          axios.post('/api/addarticle', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), username: this._username})
               .then(res => {
                   console.log("Received response: ", res.data);
               })
           this.props.history.push({
             pathname: '/mypage',
-            state: {userId: this._userId, displayUserId: this._userId} // your data array of objects
+            state: {username: this._username, displayUsername: this._username} // your data array of objects
           }) 
           // this.props.router.push({
           //   pathname: '/other-page',
