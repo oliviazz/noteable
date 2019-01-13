@@ -5,7 +5,7 @@ from database import Database
 import requests
 from bs4 import BeautifulSoup
 import json
-import metadata_parser
+# import metadata_parser
 import unicodedata
 import datetime
 from urllib import urlopen
@@ -13,7 +13,107 @@ from urllib import urlopen
 
 bp = Blueprint('blueprint', __name__, template_folder='templates')
 
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+# HELPER FUNCTIONS                                                                                                                                   #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+def displayArticlesHelper(article_query_results):
+    print("RESULTS, " + str(article_query_results), " these are the results")
+    formatted_results = {}
+    for i in range(0, len(article_query_results)):
+        'CREATE TABLE articles(articleURL TEXT NOT NULL, numUses integer)'
 
+        # 0: articleID
+        # 1: title
+        # 2: icon
+        # 3: blurb
+        # 4: author
+        # 5: date
+        # 6: URL
+        # 7: numuses
+        # 8: tags, separated by comma
+
+        article_id = str(article_query_results[i][0])
+
+        article_url = str(article_query_results[i][6])
+    
+        formatted_results[article_url] = {
+            'title': article_query_results[i][1],
+            'icon': article_query_results[i][2], 
+            'blurb': article_query_results[i][3],
+            'author': article_query_results[i][4],
+            'date': article_query_results[i][6],
+            'tag': article_query_results[i][8],
+        }
+
+        #ormatted_results = sorted(formatted_results, key=formatted_results['date'])
+        print(formatted_results, "FORMATTED???")
+    return formatted_results
+
+def modularAddArticle(json_payload, username):
+    article = str(json_payload['article_url'])
+    tags = str(json_payload['tags'])
+  
+    print(username, article, tags)
+    database = Database()
+    database.connect()
+
+    my_info = {'title':'', 'url':'', 'descrip':'', 'image':'', 'author':''}
+
+    working = False
+    try:
+        trimmed_url = article[1:-1].encode('ascii', errors='ignore')
+        print "trimmed_url: " + str(trimmed_url)
+        soup = BeautifulSoup(urlopen(trimmed_url).read(), "lxml")
+        title = soup.find("meta",  property="og:title")
+        print title
+        url = soup.find("meta",  property="og:url")
+        descrip = soup.find("meta", property="og:description")
+        image = soup.find("meta", property="og:image")
+        author = soup.find('meta', {'name': 'byl'})
+
+        if title: 
+            my_info['title'] = title['content']
+            working = True
+        if url: my_info['url'] = url['content']
+        if descrip: my_info['descrip'] = descrip['content']
+        if image: my_info['image'] = image['content']
+        if author:my_info['author'] = author['content']
+
+        time = datetime.datetime.today().strftime('%Y-%m-%d')
+        
+    except Exception as e:
+        print(e)
+        return jsonify(message='Error!'), 400
+
+
+    print(my_info, username)
+    try:
+
+        database.insertArticle(username, articleTitle=my_info['title'], articleIcon=my_info['image'], 
+                                articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
+                                articleURL=my_info['url'], tags=tags)
+
+        print(database.userTagArticles(username, ""))
+        print('above are my tags')
+    except Exception as e:
+        print(e, "adding error!")
+
+    
+    database.disconnect()
+    return jsonify(message="Posted article: " + article + '; Metadata collection: ' + str(working) ), 200
+
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+# LOGIN/USER                                                                                                                                         #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
 @bp.route("/", methods=["GET"])
 def index():
     return jsonify(message="Hello World!"), 200
@@ -22,7 +122,8 @@ def index():
 @bp.route("/login", methods=["POST"])
 def login():
     json_payload = request.get_json()
-    user_entry = User.get(json_payload['username'])
+    # user_entry = User.get(json_payload['username'])
+    username = 'livz'
     if (user_entry):
         user = User(*user_entry)
         if (user.password == json_payload['password']):  # not for prod
@@ -44,78 +145,293 @@ def createuser():
     print(user_data, 'user data')
     database = Database()
     database.connect()
-    database.insertUser(str(user_data['first_name']), str(user_data['last_name']), str(user_data['username']), str(user_data['userId']))
+    userID = hash(username)
+    database.insertUser(str(user_data['first_name']), str(user_data['last_name']), str(user_data['username']), userID)
     return jsonify(message="Hello Protected World!"), 200
 
-  
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+# GROUP SHIT                                                                                                                                         #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+@bp.route("/creategroup", methods=["POST"])
+def creategroup():
+    json_payload = request.get_json()
+    database = Database()
+    database.connect()
+    database.insertGroup(json_payload['groupname'])
+    database.disconnect()
+    return jsonify(message="Created group: " + json_payload['groupname']), 200
+
+@bp.route("/joingroup", methods=["POST"])
+def joingroup():
+    json_payload = request.get_json()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    groupname = str(json_payload['groupname'])
+    
+    database = Database()
+    database.connect()
+    database.addUserToGroup(username, groupname)
+    database.disconnect()
+    return jsonify(message="Added: " + username + " to group " + groupname), 200
+
+@bp.route("/displayallgroups", methods=["POST"])
+def displayallgroups():
+    database = Database()
+    database.connect()
+    groups = database.allGroups()
+    formatted_results = {}
+    for i in range(0, len(groups)):
+        formatted_results[i] = {
+            'groupname': groups[i][0]
+        }
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+@bp.route("/displaymygroups", methods=["POST"])
+def displaymygroups():
+    database = Database()
+    database.connect()
+    json_payload = request.get_json()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    groups = database.displayAllGroupsFromUsername(username)
+    formatted_results = {}
+    for i in range(0, len(groups)):
+        formatted_results[i] = {
+            'groupname': groups[i][0]
+        }
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+@bp.route("/displaygrouparticles", methods=["POST"])
+def displaygrouparticles():
+    database = Database()
+    database.connect()
+
+    json_payload = request.get_json()
+
+    print(json_payload, "payload in get articles")
+    # PUT THIS BACK LATER
+    # groupname = json_payload['groupname']
+    groupname = 'livz'
+    tags = ""
+
+    article_query_results = database.userTagArticles(groupname, tags)
+    print article_query_results
+
+    formatted_results = displayArticlesHelper(article_query_results)
+
+    print('all done')
+    return jsonify(results=formatted_results)
+
+@bp.route("/leavegroup", methods=["POST"])
+def leavegroup():
+    json_payload = request.get_json()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    groupname = str(json_payload['groupname'])
+    
+    database = Database()
+    database.connect()
+    database.deleteUserFromGroup(username, groupname)
+    database.disconnect()
+    return jsonify(message="Removed: " + userID + " to group " + groupname), 200
+
+
+@bp.route("/addarticletogroup", methods=["POST"])
+def addarticletogroup():
+    json_payload = request.get_json()
+    print(json_payload, " addarticle json payload")
+    # UPDATE LATER
+    # groupname = str(json_payload['groupname'])
+    groupname = 'groupname1'
+    modularAddArticle(json_payload, groupname)
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+# FRIEND FUNCTIONS                                                                                                                                   #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+@bp.route("/addfriend", methods=["POST"])
+def addfriend():
+    json_payload = request.get_json()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    # username2 = str(json_payload['username2'])
+    username2 = 'username2'
+    
+    database = Database()
+    database.connect()
+    database.addfriend(username, username2)
+    database.disconnect()
+    
+@bp.route("/removefriend", methods=["POST"])
+def removefriend():
+    json_payload = request.get_json()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    # username2 = str(json_payload['username2'])
+    username2 = 'username2'
+    
+    database = Database()
+    database.connect()
+    database.deleteFriend(username, username2)
+    database.disconnect()
+
+@bp.route("/displaypending", methods=["POST"])
+def displaypending():
+    json_payload = request.get_json()
+    database = Database()
+    database.connect()
+    # username = str(json_payload['username'])
+    username = 'livz'
+    allpending = database.displaypending(username)
+
+    formatted_results = {}
+    for i in range(0, len(allpending)):
+        formatted_results[i] = {
+            'firstname': allpending[i][0],
+            'lastname': allpending[i][1],
+            'username': allpending[i][2]
+        }
+
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+@bp.route("/friendarticles", methods=["POST"])
+def friendarticles():
+    json_payload = request.get_json()
+    # PUT THIS BACK LATER
+    # username = json_payload['username']
+    username = 'livz'
+    # username2 = json_payload['username2']
+    username2 = 'username10'
+
+    tags = ""
+
+    database = Database()
+    database.connect()
+    friendsLogic = database.checkFriends(username, username2)
+
+    if friendsLogic == True:
+        article_query_results = database.userTagArticles(username, tags)
+        print article_query_results
+        formatted_results = displayArticlesHelper(article_query_results)
+        print('all done')
+        return jsonify(results=formatted_results)
+    else:
+        print "you are not friendos"
+        return "Would you like to add this user as a friend?"
+
+@bp.route("/allfriends", methods=["POST"])
+def allfriends():
+    json_payload = request.get_json()
+    # PUT THIS BACK LATER
+    # username = json_payload['username']
+    username = 'livz'
+
+    database = Database()
+    database.connect()
+    friends = database.allUserFriends(username)
+    formatted_results = {}
+    for i in range(0, len(friends)):
+        formatted_results[i] = {
+            'firstname': friends[i][0],
+            'lastname': friends[i][1],
+            'username': friends[i][2]
+        }
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+@bp.route("/allusers", methods=["POST"])
+def allusers():
+    database = Database()
+    database.connect()
+    users = database.allUsers()
+    formatted_results = {}
+
+    for i in range(0, len(friends)):
+        formatted_results[i] = {
+            'firstname': users[i][0],
+            'lastname': users[i][1],
+            'username': users[i][2]
+        }
+
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+@bp.route("/allusers", methods=["POST"])
+def alltags():
+    database = Database()
+    database.connect()
+    tags = database.alltags()
+    formatted_results = {}
+
+    for i in range(0, len(tags)):
+        formatted_results[i] = {
+            'tagname': tags[i][0],
+        }
+
+    database.disconnect()
+    return jsonify(results=formatted_results), 200
+
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+# ARTICLE FUNCTIONS                                                                                                                                  #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+#                                                                                                                                                    #
+# ---------------------------------------------------------------------------------------------------------------------------------------------------#
+@bp.route("/feed", methods=["POST"])
+def feed():
+    database = Database()
+    database.connect()
+
+    json_payload = request.get_json()
+
+    print(json_payload, "payload in get articles")
+    # PUT THIS BACK LATER
+    # username = json_payload['username']
+    username = 'livz'
+    
+    tags = ""
+
+    article_query_results = database.feed(username, tags)
+    print article_query_results
+
+    formatted_results = displayArticlesHelper(article_query_results)
+
+    print('all done')
+    return jsonify(results=formatted_results)
 
 @bp.route("/addarticle", methods=["POST"])
 def addarticle():
     
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
-    userId = str(json_payload['userId'])
-    article = str(json_payload['article_url'])
-    tags = str(json_payload['tags'])
-  
-    print(userId, article, tags)
-    database = Database()
-    database.connect()
-
-
-    my_info = {'title': '', 'url':'', 'descrip':'', 'image':'', 'author':''}
-
-    working = False
-    try:
-        trimmed_url = article[1:-1].encode('utf-8')
-        soup = BeautifulSoup(urlopen(trimmed_url).read(), "lxml")
-            
-        title = soup.find("meta",  property="og:title")
-        url = soup.find("meta",  property="og:url")
-        descrip = soup.find("meta", property="og:description")
-        image = soup.find("meta", property="og:image")
-        author = soup.find('meta', {'name': 'byl'})
-
-
-        if title: 
-            my_info['title'] = title['content']
-            working = True
-        if url: my_info['url'] = url['content']
-        if descrip: my_info['descrip'] = descrip['content']
-        if image: my_info['image'] = image['content']
-        if author:my_info['author'] = author['content']
-
-        time = datetime.datetime.today().strftime('%Y-%m-%d')
-        
-    except Exception as e:
-        print(e)
-        return jsonify(message='Error!'), 400
-
-
-    print(my_info, userId)
-    try:
-
-        database.insertArticle(userID=userId, articleTitle=my_info['title'], articleIcon=my_info['image'], 
-                                articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
-                                articleURL=my_info['url'], tags=tags)
-
-        print(database.userTagArticles(userId, ""))
-        print('above are my tags')
-    except Exception as e:
-        print(e, "adding error!")
-
+    # UPDATE LATER
+    # username = str(json_payload['username'])
+    username = 'livz'
+    modularAddArticle(json_payload, username)
     
-    database.disconnect()
-    return jsonify(message="Posted article: " + article + '; Metadata collection: ' + str(working) ), 200
 
 @bp.route("/deletearticle", methods=["POST"])
+
 def deletearticle():
-    print('DElete Article')
+    print('Delete Article')
     json_payload = request.get_json()
     article = str(json_payload['article_url'])
-    userId = json_payload['userId']
-    print(article, userId)
-    #userId = 12345
+    # PUT THIS BACK LATER
+    # username = json_payload['username']
+    username = 'livz'
+    print(article, username)
     #return jsonify(message=article), 200
 
     database = Database()
@@ -123,9 +439,9 @@ def deletearticle():
     print(article, "hey!!!! hashes")
 
     try:
-        articleId = hash(article)
+        articleID = hash(article)
       
-        database.deleteArticle(userID=userId, articleID=articleId)
+        database.deleteArticle(username=username, articleID=articleID)
  
         database.disconnect()
 
@@ -145,49 +461,15 @@ def getarticles():
     json_payload = request.get_json()
 
     print(json_payload, "payload in get articles")
-    userId = json_payload['userId']
-    print(userId)
-    # userId = "54321"
-    
-
-    #database.insertArticle(userId, 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'hello.com', 'baking')
-    
-    # hardcoding rn
+    # PUT THIS BACK LATER
+    # username = json_payload['username']
+    username = 'livz'
     
     tags = ""
-    article_query_results = database.userTagArticles(userId, tags)
+    article_query_results = database.userTagArticles(username, tags)
+    print article_query_results
 
-    
-    print(article_query_results, " these are the results")
-    formatted_results = {}
-    for i in range(0, len(article_query_results)):
-
-        # 0: article
-        # 1: tag (individual, lol)
-        # 2: user ID? 
-        # 3: title
-        # 4: icon
-        # 5: blurb
-        # 6: author
-        # 7
-        # 8: url
-        article_id = str(article_query_results[i][0])
-
-        article_url = str(article_query_results[i][8])
-    
-
-        formatted_results[article_url] = {
-            'tag': article_query_results[i][1],
-            'title': article_query_results[i][3],
-            'icon': article_query_results[i][4], 
-            'blurb': article_query_results[i][5],
-            'author': article_query_results[i][6],
-            'url': article_url,
-            'date': article_query_results[i][7]
-        }
-
-        #ormatted_results = sorted(formatted_results, key=formatted_results['date'])
-        print(formatted_results, "FORMATTED???")
+    formatted_results = displayArticlesHelper(article_query_results)
 
     print('all done')
     return jsonify(results=formatted_results)
