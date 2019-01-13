@@ -144,24 +144,23 @@ class GroupContainer extends React.Component {
                 alert('displaying all groups')
                 var groups = axios.post('/api/displayallgroups').then(res => {
                   console.log("Received response: ", res.data.results);
-                })
-                console.log(groups)
-                for(var i = 0; i < groups.length; i++){
+                  for(var i = 0; i < groups.length; i++){
                     this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
                 }
+                })
+                console.log(groups)
+             
             }
             
             const loadPage = (event) => {
                 // console.log('hey')
                 // how to pass a varible to this??
                 alert('displaying all groups')
-                axios.post('/api/displayallgroups').then(res => {
-                  console.log("Received response: ", res.data.results);
+                var groups; axios.post('/api/displayallgroups').then(res => {
+                    groups = res.data.results;
+                    console.log("Received response: ", res.data.results);
                 })
-                console.log(groups)
-                for(var i = 0; i < groups.length; i++){
-                    this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
-                }
+                
             }
 
             const onChange = (event) => {
