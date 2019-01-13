@@ -55,7 +55,7 @@ class ArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._userId = "54321"
+    this._userId = "ozhang@princeton.edu"
     
   
   }
@@ -86,6 +86,18 @@ class ArticleAdd extends React.Component {
     }
 
   render() {
+
+      var passed_state =  this.props.location.state
+                if (passed_state){
+                    this._userId = passed_state['userId']
+                    this.setState({'userId': this._userId})
+                    console.log('Passed user Id, now set: ', this._userId)
+                
+                }
+                else{
+                    console.log(passed_state, " no passed variables found")
+
+                }
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;
       const status = 'Enter Article URL';

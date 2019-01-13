@@ -31,6 +31,7 @@ class LoginContainer extends React.Component {
            redirect: false
         };
         this.signup = this.signup.bind(this);
+        this._username = ''
     }
 
   componentWillMount() {
@@ -38,12 +39,41 @@ class LoginContainer extends React.Component {
   }
 
   login(res, type) {
+    let postData;
 
+    if (type === 'google' && res.w3.U3) {
+        postData = {
+          name: res.w3.ig,
+          provider: type,
+          email: res.w3.U3,
+          first_name: res.w3.ofa,
+          last_name: res.w3.wea,
+          provider_id: res.El,
+          token: res.Zi.access_token,
+          provider_pic: res.w3.Paa
+        }
+    }
 
+    if (postData) {
+          axios.post('api/checkuserexists', {pre_user_Id: postData['email']})
+          .then(res => {
+                    if (res.data['exists']){
+                        console.log('Welcome!')
+                        this._username = postData['email']
+                        
+                        this.props.history.push({
+                                  pathname: '/mypage',
+                                  state: {username: this._username, displayUserId: this._username} // your data array of objects
+                                }) 
+                    }
+                    else{
+                      alert('Error: User not found ')
+                    }
+          })
+    }
   }
 
-
-  signup(res, type) {
+  signup(res, type){
         // postData connects to database, and must include all info needed
         let postData;
 
@@ -63,60 +93,41 @@ class LoginContainer extends React.Component {
         if (postData) {
       
           console.log("Working", postData)
-          axios.post('api/checkuserexists', {user_Id: postData['token']})
-          .then(res => {
-                    console.log('Checking for token', postData['token'])
-                    if (! res.data['exists']){
 
-                          relevantData = {
-                            'userId':
-                            'firstName':
-                            'lastName':
-                            'email':
+          axios.post('api/checkuserexists', {pre_user_Id: postData['email']})
+          .then(res => {
+                    console.log('Checking for existence of user ', postData['email'])
+                    if (! res.data['exists']){
+                        // ask for username
+                        console.log('bro u wrong')
+
+                          var relevantData = {
+                            'firstName':  postData['first_name'],
+                            'lastName': postData['last_name'],
+                            'pre_userId': postData['email'], 
+                            'username': postData['email']
                           }
-                          axios.post('/api/createuser', {data: user_data})
+                          this._username = postData['email']
+
+                          axios.post('/api/createuser', {data: relevantData})
                           .then(res => {
                                   console.log("Received response: ", res.data);
+                                  
                                   this.props.history.push({
                                     pathname: '/mypage',
-                                    state: {userId: this._userId, displayUserId: this._userId} // your data array of objects
+                                    state: {username: this._username, displayUserId: this._username} // your data array of objects
                                   }) 
                           })
                     }
-                    console.log("does it exist?", res.data['exists'])
-                    // this.props.history.push({
-                    //   pathname: '/mypage',
-                    //   state: {userId: this._userId, displayUserId: this._userId} // your data array of objects
-                    // }) 
+                    else{
+                      alert('Error: user already exists with that Google account. Please Log in Instead. ')
+                      console.log('tried to sign up for existing user')
+                    }
 
-
+                   
           })
         }
-
-           // axios.post('/api/createuser', {data: user_data})
-           //  .then(res => {
-           //          console.log("Received response: ", res.data);
-           //          this.props.history.push({
-           //            pathname: '/mypage',
-           //            state: {userId: this._userId, displayUserId: this._userId} // your data array of objects
-           //          }) 
-           //  })
-         
-
-
-           
       }
-      
-            // PostData('/mypage', postData).then((result) => {
-            //    console.log("line 35");
-            //    let responseJson = result;
-            //    console.log(responseJson);
-            // // if(responseJson.userData){}
-            //     //userData contains token***
-            //    sessionStorage.setItem("userData", JSON.stringify(responseJson));
-            //    this.setState({redirect: true});
-            //     //}
-            // });
     
    
 
@@ -131,18 +142,22 @@ class LoginContainer extends React.Component {
         //     return (<Redirect to={'/home'}/>)
         // }
       
-      const responseGoogle = (response) => {
+      const responseGoogleLogin = (response) => {
             // 17:20 for google info demo
  
             console.log(response);
-            this.signup(response, 'google');
+            this.login(response, 'google');
         }
       const responseGoogleSignUp = (response) => {
 
         
             console.log(response);
-            this.login(response, 'google');
+            this.signup(response, 'google');
 
+      }
+
+      const responseGoogle = (response) => {
+        alert('Error: please try again')
       }
 
         return (
@@ -156,14 +171,16 @@ class LoginContainer extends React.Component {
                     <h1> Welcome to Noteable </h1> <br></br>
                     <GoogleLogin
                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
-                      buttonText="Login with Google"
-                      onSuccess={responseGoogle}
+                      buttonText="Sign Up with Google"
+                      onSuccess={responseGoogleSignUp}
                       onFailure={responseGoogle}/>
                       <br></br>
+                      <h5> If you already have an account: </h5>
+                   
                     <GoogleLogin
                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
-                      buttonText="Sign Up with Google"
-                      onSuccess={responseGoogle}
+                      buttonText="Login with Google"
+                      onSuccess={responseGoogleLogin}
                       onFailure={responseGoogle}/>
                </Col>
             </Row>

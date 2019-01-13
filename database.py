@@ -405,7 +405,7 @@ class Database:
             return (False, e)
 
         one = cursor.fetchall()[0][0]
-        print one
+        print one, " hey the method"
         return one == 1
 
         cursor.close()

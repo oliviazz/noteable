@@ -27,7 +27,6 @@ import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
 
-
 class PageContainer extends React.Component {
         // 
         // Set some initial properties we want to 
@@ -38,7 +37,9 @@ class PageContainer extends React.Component {
             this.state = {
                 'full_article_info':[],
                 'article_components':[],
-                'holder':''
+                'holder':'', 
+                'userId':'',
+                'displayUserId':''
             }
 
             this._retrieved_articles = [];
@@ -74,9 +75,11 @@ class PageContainer extends React.Component {
             
                     this._userId = passed_state['userId']
                     this._displayUserId = passed_state['displayUserId']
+
+                    this.setState({'userId': this._userId, 'displayUserID': this._displayUserId})
                     
                     console.log('Passed user Id, now set: ', this._userId, ' as viewing and ', this._displayUserId, ' as the page ot be viewed')
-                    this.setState({'holder':'hi'})
+                
                 }
                 else{
                     console.log(passed_state, " no passed variables found")
@@ -102,7 +105,6 @@ class PageContainer extends React.Component {
                 this.serverRequest = axios.post('api/getarticles', {'userId': this._userId})
                     .then(res => {
                         this.setState({'full_article_info': res.data.results})
-
                         for(var article in this.state.full_article_info){
                             var info = this.state.full_article_info[article]
                             console.log(article, info)
@@ -111,7 +113,7 @@ class PageContainer extends React.Component {
                                         descrip = {info['blurb']}
                                         image = {info['icon']}
                                         tag = {info['tag']}
-                                        
+                    
                                     />);
                             }
                          this.setState({
@@ -200,7 +202,7 @@ class PageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         {this._displayUserId == this._userId ? <h1>your noteable: {this._userId} </h1>: <h1>{this._displayUserId}'s moteable </h1>}
+                         {this._displayUserId == this._userId ? <h1>your noteable: {this._userId} </h1>: <h1>{this._displayUserId}'s noteable </h1>}
                          <br></br><br></br>
                         <br></br>
                        

@@ -40,11 +40,12 @@ def protected():
 @bp.route("/checkuserexists", methods=["POST"])
 def checkuserexists():
     json_payload = request.get_json()
-    userId = json_payload['user_Id']
-    print(userId, 'userId and google code')
+    preUserId = str(json_payload['pre_user_Id'])
+    userId = hash(preUserId)
     
     database = Database()
     database.connect()
+
     userExists = database.checkUser(userId)
 
     return jsonify(exists = userExists), 200
@@ -57,11 +58,12 @@ def checkuserexists():
 def createuser():
     json_payload = request.get_json()
     user_data = json_payload['data']
-    print(user_data, 'user data')
+    print(user_data, ' \n\nuser data')
     database = Database()
     database.connect()
-    database.insertUser(str(user_data['first_name']), str(user_data['last_name']), str(user_data['username']), str(user_data['userId']))
-    return jsonify(message="Hello Protected World!"), 200
+    userId = hash(user_data['username'])
+    database.insertUser(str(user_data['firstName']), str(user_data['lastName']), str(user_data['username']), userId)
+    return jsonify(message=("User" + user_data['username']+ "successfully entered")), 200
 
   
 
@@ -70,9 +72,11 @@ def addarticle():
     
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
-    userId = str(json_payload['userId'])
+    username = str(json_payload['userId'])
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
+
+    userId = hash(username)
   
     print(userId, article, tags)
     database = Database()
@@ -161,8 +165,8 @@ def getarticles():
     json_payload = request.get_json()
 
     print(json_payload, "payload in get articles")
-    userId = json_payload['userId']
-    print(userId)
+    username = json_payload['userId']
+    userId = hash(username)
     # userId = "54321"
     
 
