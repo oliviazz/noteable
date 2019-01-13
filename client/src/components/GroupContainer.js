@@ -109,9 +109,10 @@ class GroupContainer extends React.Component {
 
         }
 
-        handleChange = (selected) => {
-            console.log('selected', selected);
-            this.setState({selected})
+        handleChange(e) {
+            this.setState({
+                [e.target.name]: e.target.value
+            })
         }
 
 
@@ -135,15 +136,32 @@ class GroupContainer extends React.Component {
         // ---------------------------------------    
         render() {
 
-            for (var i = 0; i < 10; i++) { 
-              this.state.group_components.push(<Group groupName = {'Group' + (i)} groupPage = 'google.com' /> )
+//            for (var i = 0; i < 10; i++) { 
+//              this.state.group_components.push(<Group groupName = {'Group' + (i)} groupPage = 'google.com' /> )
+//            }
+
+            const displayallgroups = (event) => {
+                alert('displaying all groups')
+                var groups = axios.post('/api/displayallgroups').then(res => {
+                  console.log("Received response: ", res.data.results);
+                })
+                console.log(groups)
+                for(var i = 0; i < groups.length; i++){
+                    this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
+                }
             }
-
-
+            
             const loadPage = (event) => {
-                console.log('hey')
+                // console.log('hey')
                 // how to pass a varible to this??
-
+                alert('displaying all groups')
+                axios.post('/api/displayallgroups').then(res => {
+                  console.log("Received response: ", res.data.results);
+                })
+                console.log(groups)
+                for(var i = 0; i < groups.length; i++){
+                    this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
+                }
             }
 
             const onChange = (event) => {
@@ -151,10 +169,18 @@ class GroupContainer extends React.Component {
             }
 
             const addGroup = (event) => {
-                alert('heyyy')
-                // axios request tom ake new group
+                alert('creating group')
+                // console.log(JSON.stringify(this.state.newgroup))
+                axios.post('/api/creategroup', {groupname: JSON.stringify(this.state.newgroup)}).then(res => {
+                  console.log("Received response: ", res.data);
+              })
+                
+                
             }
 
+            const searchGroups = (event) => {
+                alert('searching for group')
+            }
 
 
             const tag_1 = 'food'
@@ -175,8 +201,11 @@ class GroupContainer extends React.Component {
                              <h3>Groups Toolbar </h3>
                             <Button onclick={loadPage('me')}> Show My Groups </Button> 
                                 <br></br><br></br><br></br>
-                            <input id="group_search"  className = 'input-lg' type="text" placeholder="Find Groups" name="searchTerm" value={this.state.value}/><br></br>
-                            <Button onclick={addGroup}> + Make New Group </Button>
+                            <input id="group_search"  className = 'input-lg' type="text" placeholder="New Group Name" name="newgroup" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
+                            <Button onClick={addGroup}> + Make New Group </Button>
+                            <br></br><br></br><br></br>
+                            <input id="group_search"  className = 'input-lg' type="text" placeholder="Find Group" name="searchTerm" value={this.state.value}/><br></br>
+                            <Button onClick={searchGroups}> Search Groups </Button>
 
                          
                         </ButtonToolbar>
