@@ -109,28 +109,31 @@ class UserContainer extends React.Component {
             this._ismounted = false;
 
         }
+        showFiends(){
+            this.setState({'display': 'friends'})
+            console.log('friends')
+        }
+
+        showPending() {
+            // setting state triggers a re-rendering of component
+            this.setState({'display': 'pending'})
+            console.log('pending')
+        }
 
         handleChange = (selected) => {
             console.log('selected', selected);
             this.setState({selected})
         }
 
-        setFriends = (event) => {
-            this.setState({'display': 'friends'})
-        }
+        
 
-        setPending = (event) => {
-            this.setState({'display': 'pending'})
-        }
+        
 
         render() {
-            var components;
-            console.log(this.state.display)
 
-            this.state.user_components.push(<UserBox username = {'Person 1'} userId = '12345' userViewing = {this._userViewingId} /> )
-            
-            this.state.user_components.push(<UserBox username = {'Person 2'} userId = '54321' userViewing = {this._userViewingId} /> )
-            
+
+            var components;
+            console.log(this.state.display)     
             if (this.state.display == 'friends'){
                      axios.post('/api/allfriends').then(res => {
                         components = []
@@ -147,6 +150,23 @@ class UserContainer extends React.Component {
             }
 
             else if (this.state.display == 'all'){
+                console.log('nice!')
+                    axios.post('/api/allusers').then(res => {
+                        components = []
+                        var users = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        var len_dict = Object.keys(users).length
+                        console.log(len_dict)
+                        for(var i = 0; i < len_dict; i++){
+                            components.push(<UserBox firstname={users[i]['firstname']} lastname = {users[i]['lastname']} username = {users[i]['username']} />);
+                        }
+
+                        this.setState({render_components:components})
+                    })
+
+            }
+
+            else if (this.state.display == 'pending'){
                 console.log('nice!')
                     axios.post('/api/allusers').then(res => {
                         components = []
@@ -197,7 +217,7 @@ class UserContainer extends React.Component {
                     </Col>
 
                     <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
-                    <Button bsStyle='info' onClick={showPending}>Show Friends </Button>
+                    <Button bsStyle='info' onClick={showPending}> Show Friends </Button>
                     <Col xs={8} md={8}>
                         <h2>User Results</h2> 
                         {this.state.render_components.map(user => <div>{user}</div>)} 
