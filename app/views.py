@@ -321,8 +321,7 @@ def displaypending():
     json_payload = request.get_json()
     database = Database()
     database.connect()
-    # username = str(json_payload['username'])
-    username = 'livz'
+    username = str(json_payload['username'])
     allpending = database.displaypending(username)
 
     formatted_results = {}
