@@ -1619,8 +1619,8 @@ if __name__ == '__main__':
 
     # Test: Insert/Delete Articles and User_Article_Tags and updating tags
     # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL987', 'Design Food Music')
-    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
-    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
+    # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
+    # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Design News Politics')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL3', 'Design World USA')
     # c.insertArticle('username9', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL4', 'Design Baking Lists')
@@ -1630,7 +1630,7 @@ if __name__ == '__main__':
 
     # c.insertArticle('livz', 'THISISATEST', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURLTest1', 'Design')
     # print len(c.allUsersArticlesTags())
-    # c.deleteArticle('livz', '8834987638503293226')
+    # c.deleteArticle('lkatzman@princeton.edu', '-7493312828975800069')
     # print len(c.allUsersArticlesTags())
     # print c.userTagArticles('livz', "")
 

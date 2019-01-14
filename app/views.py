@@ -46,10 +46,11 @@ def displayArticlesHelper(article_query_results):
             'author': article_query_results[i][4],
             'date': article_query_results[i][6],
             'tag': article_query_results[i][8],
+            'url': article_query_results[i][6]
         }
 
         #ormatted_results = sorted(formatted_results, key=formatted_results['date'])
-        print(formatted_results, "FORMATTED???")
+       
     return formatted_results
 
 def modularAddArticle(json_payload, username):
@@ -471,19 +472,15 @@ def addarticle():
     
 
 @bp.route("/deletearticle", methods=["POST"])
-
 def deletearticle():
-    print('Delete Article')
     json_payload = request.get_json()
-    article = str(json_payload['article_url'])
-    # PUT THIS BACK LATER
-    username = json_payload['username']
-    print(article, username)
-    #return jsonify(message=article), 200
+    print json_payload
 
+    username = str(json_payload['username'])
+    article = str(json_payload['article_url'])
+ 
     database = Database()
     database.connect()
-    print(article, "hey!!!! hashes")
 
     try:
         articleID = hash(article)

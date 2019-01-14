@@ -105,8 +105,6 @@ class PageContainer extends React.Component {
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){
                             var info = this.state.full_article_info[article]
-                            console.log(article, info)
-                           
                             components.push(< Article title = { info['title'] }
                                         link = {info['url']}
                                         descrip = {info['blurb']}
@@ -161,6 +159,14 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
+            // this.tags = []
+            // make api call and save returned "tags" as a call 
+            // this.serverRequest = axios.post('api/alltags')
+            //         .then(res => {
+            //             this.tags = res.data.results 
+
+
+            //         })
 
             const tag_1 = 'food'
             const tag_2 = 'tech'
@@ -176,6 +182,7 @@ class PageContainer extends React.Component {
                      <Row>
                      <Col xs={3} md={2}>
                         <h3>tags</h3>
+                 
                         <ButtonToolbar>
                             <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
                               <ToggleButton className = "navButton" value={tag_1} onChange={this.handleChange}>{tag_1}</ToggleButton><br></br>
@@ -188,29 +195,13 @@ class PageContainer extends React.Component {
                             </ToggleButtonGroup>
                         </ButtonToolbar>
                         <br></br>
-                        <h3>time</h3>
-                        <ButtonToolbar>
-                            <ToggleButtonGroup type="radio" name = "time_range" value={1} onChange={this.handleChange}>
-                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
-                            </ToggleButtonGroup> <br></br> <br></br>
-                            <br></br> <br></br>
-                            <Button bsStyle="info"> Reload Articles </Button>
-                        </ButtonToolbar>
                  
                     </Col>
                     <Col xs={4} md={4}>
-                    <UserBox username={this._username} />
-                         {this._displayUsername == this._username ? <h1>your noteable: {this._username} </h1>: <h1>{this._displayUsername}'s noteable </h1>}
-                         <br></br><br></br>
-                        <br></br>
-                       
+                         <div className = "usernameDisplay">{this._username}'s  notable:  </div>
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 
                     </Col>
-
 
 
                     </Row>
