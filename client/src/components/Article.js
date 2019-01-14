@@ -63,7 +63,6 @@ class Article extends React.Component {
     const true_holder = true;
     var mylink = this.props.link
 
-
     const handleDelete = (event) => {
         var r = window.confirm('Are you sure you want to delete this article from your page?')
         

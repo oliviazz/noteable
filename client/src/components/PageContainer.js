@@ -128,12 +128,13 @@ class PageContainer extends React.Component {
                     tags = res.data.results
                     var formatted_tags = []
                     console.log("Received response: tags ", tags);
-                    for(var i = 0; i < Object.keys(tags).length; i++) {
-                        formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>{tags[i]['tagname']}</ToggleButton>)
-                    }
-                    console.log(formatted_tags)
-                    console.log('formatted tags the first time')
-                    this.setState({tags_components:formatted_tags})
+                    // for(var i = 0; i < Object.keys(tags).length; i++) {
+                    //     formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>Hello</ToggleButton>)
+                    // }
+                    // console.log(formatted_tags)
+                    // console.log('formatted tags the first time')
+                    // this.setState({tags_components:formatted_tags})
+                    // {this.state.tags_components.map(tag => <div>{tag}</div>)}
 
                 })            
             }
@@ -194,21 +195,47 @@ class PageContainer extends React.Component {
                    
                      <Row>
                      <Col xs={3} md={2}>
-                        <h3>tags</h3>
+                        <div className="tagsHeader">tags</div>
                         <ButtonToolbar>
                             <ToggleButtonGroup type="checkbox">
-                                {this.state.tags_components.map(tag => <div>{tag}</div>)}
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Advice</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Art</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Blogs</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Business</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>College</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Comedy</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Cooking</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Design</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Economy</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Entrepreneurship</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Environment</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Fashion</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Film</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Games</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Health</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>History</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Holidays</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Journalism</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Media</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Money</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Politics</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Productivity</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Race</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Reading</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Religion</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Sports</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Technology</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Travel</ToggleButton>
                             </ToggleButtonGroup>
                         </ButtonToolbar>
                         <br></br>
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         <div className = "usernameDisplay">{this._username}'s  notable:  </div>
+                         <div className = "usernameDisplay">{this._username}'s notable:  </div>
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 
                     </Col>
-
 
                     </Row>
                 </Grid>      
