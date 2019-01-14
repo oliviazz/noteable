@@ -38,7 +38,9 @@ class UserContainer extends React.Component {
 
             this.state = {
                 'full_article_info':[],
-                'user_components':[]
+                'user_components':[],
+                'display': 'all',
+                'render_components': []
             }
 
             this.searchTerm = ''
@@ -113,40 +115,50 @@ class UserContainer extends React.Component {
             this.setState({selected})
         }
 
+        setFriends = (event) => {
+            this.setState({'display': 'friends'})
+        }
 
-        load_page_results = (selected) => {
-            console.log('reloading this!!!')
-            
-
-            // make a http request 
-
+        setPending = (event) => {
+            this.setState({'display': 'pending'})
         }
 
         render() {
+            var components;
+            console.log(this.state.display)
 
             this.state.user_components.push(<UserBox username = {'Person 1'} userId = '12345' userViewing = {this._userViewingId} /> )
             
             this.state.user_components.push(<UserBox username = {'Person 2'} userId = '54321' userViewing = {this._userViewingId} /> )
             
-            if (this.state.searchTerm != ''){
-                     axios.post('/api/displayallgroups').then(res => {
-                        groups = res.data.results;
+            if (this.state.display == 'friends'){
+                     axios.post('/api/allfriends').then(res => {
+                        components = []
+                        var friends = res.data.results;
                         console.log("Received response: ", res.data.results);
-                        for(var i = 0; i < 4; i++){
-                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+                        var len_dict = Object.keys(friends).length
+                        console.log(len_dict)
+                        for(var i = 0; i < len_dict; i++){
+                            components.push(<UserBox firstname={friends[i]['firstname']} lastname = {friends[i]['lastname']} username = {friends[i]['username']} />);
+                              
                         }
-                        this.setState({group_components:components})
+                        this.setState({render_components:components})
                     })
             }
 
-            else if (this.state.display = 'mine_only'){
-                    axios.post('/api/displaymygroups').then(res => {
-                        groups = res.data.results;
+            else if (this.state.display == 'all'){
+                console.log('nice!')
+                    axios.post('/api/allusers').then(res => {
+                        components = []
+                        var users = res.data.results;
                         console.log("Received response: ", res.data.results);
-                        for(var i = 0; i < 4; i++){
-                            components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
+                        var len_dict = Object.keys(users).length
+                        console.log(len_dict)
+                        for(var i = 0; i < len_dict; i++){
+                            components.push(<UserBox firstname={users[i]['firstname']} lastname = {users[i]['lastname']} username = {users[i]['username']} />);
                         }
-                        this.setState({group_components:components})
+
+                        this.setState({render_components:components})
                     })
 
             }
@@ -188,7 +200,7 @@ class UserContainer extends React.Component {
                     <Button bsStyle='info' onClick={showPending}>Show Friends </Button>
                     <Col xs={8} md={8}>
                         <h2>User Results</h2> 
-                        {this.state.user_components.map(user => <div>{user}</div>)} 
+                        {this.state.render_components.map(user => <div>{user}</div>)} 
                     </Col>
 
 
