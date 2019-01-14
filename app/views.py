@@ -203,6 +203,7 @@ def displayallgroups():
     database = Database()
     database.connect()
     groups = database.allGroups()
+    print groups
     formatted_results = {}
     for i in range(0, len(groups)):
         formatted_results[i] = {
