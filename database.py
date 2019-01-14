@@ -727,7 +727,7 @@ class Database:
         cursor = self._connection.cursor()
 
         if check1 == True and checkGroup == True:
-            self.deleteFriend(groupname, username, cursor)
+            self.deleteFriend(groupname, username)
 
         cursor.close()
 

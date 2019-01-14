@@ -270,7 +270,7 @@ def leavegroup():
     database.connect()
     database.deleteUserFromGroup(username, groupname)
     database.disconnect()
-    return jsonify(message="Removed: " + userID + " to group " + groupname), 200
+    return jsonify(message="Removed: " + username + " from group " + groupname), 200
 
 
 @bp.route("/addarticletogroup", methods=["POST"])

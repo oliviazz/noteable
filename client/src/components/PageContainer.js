@@ -10,8 +10,6 @@ import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
 import UserBox from 'components/UserBox'
-
-import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 
