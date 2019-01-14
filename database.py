@@ -1213,7 +1213,8 @@ class Database:
 
     def insertTags(self):  
         cursor = self._connection.cursor()
-        allTags = self.allTags()
+        allTags = self.daTagList()
+
         for tag in allTags:
             print tag
             stmtStr = "INSERT INTO tags(tagName) VALUES (?)"
@@ -1234,7 +1235,7 @@ class Database:
     def allTags(self):  
         cursor = self._connection.cursor()
 
-        stmtStr = "SELECT tags.tagName FROM tags"
+        stmtStr = "SELECT * FROM tags"
         
         try:
             cursor.execute(stmtStr)
@@ -1244,8 +1245,9 @@ class Database:
             return (False, e)
 
         allEntries = cursor.fetchall() 
-
+        print(allEntries, '1')
         cursor.close()
+        print(allEntries, '2')
         return allEntries
 
     #-----------------------------------------------------------------------
@@ -1593,7 +1595,7 @@ if __name__ == '__main__':
 
     c.connect()
     # Initialize Tags Setup
-    # c.insertTags()
+    print c.allTags()
 
     # Test: Insert Users Dummy1-10
     # c.insertUser('firstName', 'lastName', 'username1')
