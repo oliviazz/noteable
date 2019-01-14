@@ -54,31 +54,33 @@ class Header extends React.Component {
             <Navbar.Header>
               <div className = "logoText">
                 <Navbar.Brand className = "logo">
-                  <a href="/">Noteable</a>
+                  <div className = "NoteableLogo">
+                    <a href="/">Noteable</a>
+                  </div>
                 </Navbar.Brand>
               <Navbar.Toggle />
               </div>
             </Navbar.Header>
             <Nav>
                 <NavItem eventKey={1} href="/quickadd">
-                    Add Article
+                    + article
                 </NavItem>
 
                 <NavItem eventKey={2} href="/groups">
-                    Groups
+                    groups
                 </NavItem>
                 <NavItem eventKey={3} href="/mypage">
-                    My Noteable
+                    my noteable
                 </NavItem>
                 <NavItem eventKey={4} href="/users">
-                    Friends
+                    friends
                 </NavItem>
 
                 <Navbar.Form pullRight>
                     <FormGroup>
-                        <FormControl type="text" placeholder="Search Users" name="searchTerm" value={this.state.value} onChange = {onChange}/>
+                        <FormControl type="text" placeholder="search users" name="searchTerm" value={this.state.value} onChange = {onChange}/>
                     </FormGroup>{' '}
-                    <Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
+                    <Button type="submit" onClick={(e) => onSubmit()}>submit</Button>
                 </Navbar.Form>
           </Nav>
         </Navbar>
