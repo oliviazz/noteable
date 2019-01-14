@@ -166,14 +166,16 @@ class UserContainer extends React.Component {
                         for(var i = 0; i < len_dict; i++){
                            
                             var u = users[i]['username']
+                     
                             var u_fn = users[i]['firstname']
                             var u_ln = users[i]['lastname']
                             console.log(users[i]['username'],'new user', this._username, u, u_fn, u_ln, 'dfdafa')
 
-                            axios.post('/api/checkfriends', {'username': this._username, 'username2':u})
+                            axios.post('/api/checkfriends', {'username': this._username, 'username2':users[i]['username']})
                             .then(res => {
                                 
                                 var areFriends = res.data.results
+                                alert(u +  'after response')
                                 console.log(this._username, ' and ', u, 'are friends: ', areFriends)
                                 components = []
                                 components.push(

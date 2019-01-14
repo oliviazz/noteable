@@ -485,15 +485,16 @@ def deletearticle():
     try:
         articleID = hash(article)
         print('--------------')
-        print(database.userTagArticles(username,""))
+        #print(database.userTagArticles(username,""))
         database.deleteArticle(username=username, articleID=articleID)
-        print(database.userTagArticles(username, ""))
+        #print(database.userTagArticles(username, ""))
         print('--------------')
         database.disconnect()
 
         return jsonify(message="Deleted article: " + article), 200
     except Exception, err:
         print('Error in deleting article: ', str(err))
+        database.disconnect()
         return jsonify(message="Error in deleting article article!"), 400
 
 
@@ -516,7 +517,7 @@ def getarticles():
     print "Article Query Results: ", article_query_results
 
     formatted_results = displayArticlesHelper(article_query_results)
-
+    database.disconnect()
     print('all done')
     return jsonify(results=formatted_results)
 
