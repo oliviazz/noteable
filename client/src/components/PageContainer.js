@@ -37,7 +37,8 @@ class PageContainer extends React.Component {
                 'article_components':[],
                 'holder':'', 
                 'username':'',
-                'displayUsername':''
+                'displayUsername':'',
+                'articles_by_tag':{}
             }
 
             this._retrieved_articles = [];
@@ -90,7 +91,8 @@ class PageContainer extends React.Component {
                 this._ismounted = true;
                 var article_names = [];
                 var article = ""
-                let components = []
+                let components = [];
+                var tag_dict = {};
                 var loader = document.getElementById('loader')
                 loader.setAttribute('style', 'display:visible')
             
@@ -110,12 +112,27 @@ class PageContainer extends React.Component {
                                         descrip = {info['blurb']}
                                         image = {info['icon']}
                                         tag = {info['tag']}
-                    
+                                    />);
+                            // create tag list
+                            var tag_list = info['tag'].split(",");
+                            console.log(tag_list);
+                            // save in dictionary
+                            for (var i = 0; i < Object.keys(tag_list).length; i++){
+                                if (tag_dict[tag_list[i]] == null){
+                                    tag_dict[tag_list[i]] = []
+                                }
+                                tag_dict[tag_list[i]].push(< Article title = { info['title'] }
+                                        link = {info['url']}
+                                        descrip = {info['blurb']}
+                                        image = {info['icon']}
+                                        tag = {info['tag']}
                                     />);
                             }
-                        
+                        }
+                        console.log(tag_dict)
                          this.setState({
-                                article_components: components
+                                article_components: components,
+                                articles_by_tag: tag_dict            
                         })
 
                     })
