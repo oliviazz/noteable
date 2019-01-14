@@ -474,7 +474,7 @@ def addarticle():
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
     json_payload = request.get_json()
-    print json_payload
+    print json_payload, "!!!!!!!!"
 
     username = str(json_payload['username'])
     article = str(json_payload['article_url'])
@@ -484,9 +484,11 @@ def deletearticle():
 
     try:
         articleID = hash(article)
-      
+        print('--------------')
+        print(database.userTagArticles(username,""))
         database.deleteArticle(username=username, articleID=articleID)
- 
+        print(database.userTagArticles(username, ""))
+        print('--------------')
         database.disconnect()
 
         return jsonify(message="Deleted article: " + article), 200
