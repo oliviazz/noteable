@@ -127,17 +127,24 @@ class UserContainer extends React.Component {
                             axios.post('/api/checkfriends', {'username': this._username, 'username2':users[i]['username']})
                             .then(res => {
                                 var areFriends = res.data.results
-                                console.log(this._username, ' and ', users[i]['username'], 'are friends: ', areFriends)
+                                console.log(i, "wtffff")
                                 components = []
                                 components.push(
                                     <UserBox firstname={users[i]['firstname']} 
                                     lastname = {users[i]['lastname']} 
-                                    username = {users[i]['username']} />);
+                                    username = {users[i]['username']} 
+                                    userviewing = {this._username}
+                                    areFriends = {areFriends} />);
+                                console.log(this._username, ' and ', users[i]['username'], 'are friends: ', areFriends)
                         })
-
-                        components.push(<UserBox firstname={friends[i]['firstname']} lastname = {friends[i]['lastname']} username = {friends[i]['username']} userviewing = {this._username} />);
-                              
+                            console.log('iteration')
                         }
+                        alert('wtf')
+                        console.log("components", components)
+
+                        // components.push(<UserBox firstname={friends[i]['firstname']} lastname = {friends[i]['lastname']} username = {friends[i]['username']} userviewing = {this._username} />);
+                              
+                    
                         this.render_components = components
                         if (this.render_components.length == 0){
                             return
@@ -157,10 +164,11 @@ class UserContainer extends React.Component {
                             return
                         console.log(len_dict)
                         for(var i = 0; i < len_dict; i++){
-                            console.log(users[i]['username'], this._username, 'dfdafa')
+                           
                             var u = users[i]['username']
                             var u_fn = users[i]['firstname']
                             var u_ln = users[i]['lastname']
+                            console.log(users[i]['username'],'new user', this._username, u, u_fn, u_ln, 'dfdafa')
 
                             axios.post('/api/checkfriends', {'username': this._username, 'username2':u})
                             .then(res => {
@@ -176,6 +184,8 @@ class UserContainer extends React.Component {
                                     arefriends = {areFriends} />);
                             })
                         }
+
+
 
                          this.render_components = components
                           if (this.render_components.length == 0){
@@ -249,7 +259,7 @@ class UserContainer extends React.Component {
                      <Col xs={1} md={1}>
 
                     </Col>
-
+                    <h5>{this._username}</h5>
                     <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
                     <Button bsStyle='info' onClick={showFriends}> Show Friends </Button>
                     <Col xs={8} md={8}>

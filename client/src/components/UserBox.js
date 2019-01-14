@@ -78,7 +78,7 @@ class UserBox extends React.Component {
     //                 })
     var userId = this.props.userId
     var userViewing = this.props.userViewing 
-
+    this.state.isFriend = this.props.arefriends
     console.log(userId, userViewing, " one user!!")
     return (
       <div>
@@ -92,7 +92,7 @@ class UserBox extends React.Component {
               <Panel.Body>
               <h4>{this.props.username}</h4>
               <h5>{this.props.userId}</h5>
-              
+              <h5>{this.props.arefriends}</h5>
 
               {this.state.isFriend ?  <Button bsStyle="success" disabled>Friends!</Button> : <Button onClick={sendRequest}> 'Add Friend'</Button>} 
                 <br></br>
