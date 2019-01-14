@@ -414,14 +414,15 @@ def allusers():
 def alltags():
     database = Database()
     database.connect()
-    tags = database.alltags()
+    tags = database.allTags()
+    print(tags, "AGGGGGG")
     formatted_results = {}
 
     for i in range(0, len(tags)):
         formatted_results[i] = {
             'tagname': tags[i][0],
         }
-
+    print(formatted_results, "FORMATTED RESULTS")
     database.disconnect()
     return jsonify(results=formatted_results), 200
 

@@ -110,7 +110,7 @@ class ArticleAdd extends React.Component {
       //           }
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;
-      const status = 'Enter Article URL';
+      const status = 'Please Enter Article URL:';
 
       const submitArticle = event => {
           event.preventDefault()
@@ -134,59 +134,27 @@ class ArticleAdd extends React.Component {
 
       }
         return (
-            <div>
+          <div>
             <Grid>
-            <Row>
- 
-            <Col xs={5} md={2}>
-                        <h3>tags</h3>
-                        <ButtonToolbar>
-                            <ToggleButtonGroup  onChange={this.handleChange_searchtag} type="checkbox" value={1}>
-                              <ToggleButton className = "navButton" value={tag_1}>{tag_1}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_2}>{tag_2}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_3}>{tag_3}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_4}>{tag_4}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_5}>{tag_5}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_7}>{tag_7}</ToggleButton><br></br>
-                            </ToggleButtonGroup>
-                        </ButtonToolbar>
-                        <br></br>
-                        <h3>time</h3>
-                        <ButtonToolbar>
-                            <ToggleButtonGroup onChange={this.handleChange_searchtag} type="checkbox" value={1}>
-                              <ToggleButton className = "navButton" value="week">This Week</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="month">This Month</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="3months">Last 3 Months</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value="year">This Year</ToggleButton><br></br>
-                            </ToggleButtonGroup>
-                        </ButtonToolbar>
-                    </Col>
-                    <Col xs={2} md={2}>
-                
-                    </Col>
-                    <Col xs={5} md={4}>
-                        <h1> Noteable </h1> 
-                        <div className = "status" > { status } < /div>
-                        <form onSubmit = { submitArticle } >
-
-                        <input class="form-control input-lg" className = "article_input" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
-                        <br></br>
-
-                        <ButtonToolbar>
-                        <Select
-                            value={selectedOption}
-                            onChange={this.handleChange_tag}
-                            options={options}
-                            isMulti={true_holder}
-                        />
-                        <Button type="submit"> Submit</Button>
-                        </ButtonToolbar>
-                        </form> 
-                    </Col>
-        </Row>
-        </Grid>
-            </div> 
+              <Row>
+                <Col xs={5} md={4}>
+                  <div className = "status" > { status } < /div>
+                  <form onSubmit = { submitArticle } className = "addarticleForm addarticle" >
+                  <input className="form-control input-lg addarticleForm" className = "article_input addarticle" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
+                  <ButtonToolbar>
+                  <Select className = "addarticle"
+                      value={selectedOption}
+                      onChange={this.handleChange_tag}
+                      options={options}
+                      isMulti={true_holder}
+                  />
+                  <Button type="submit" className = "addarticle submitaddarticle"> Submit</Button>
+                  </ButtonToolbar>
+                  </form> 
+              </Col>
+            </Row>
+          </Grid>
+        </div> 
 
         );
     }

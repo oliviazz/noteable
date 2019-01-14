@@ -76,37 +76,50 @@ class Group extends React.Component {
         })   
     }
     return (
-      <div>
-         <div className = "container">
-            <Panel>
-            <Panel.Heading>
 
-              <Panel.Title componentClass="h3">{this.props.groupName}</Panel.Title>
+      // <div>
+      //    <div className = "container">
+
+
+      //       <Panel>
+      //       <Panel.Heading>
+
+      //         <Panel.Title componentClass="h3">{this.props.groupName}</Panel.Title>
             
-               <Button bsStyle="info" href = {this.props.groupPage} > View Group </Button>
+      //          <Button bsStyle="info" href = {this.props.groupPage} > View Group </Button>
              
-            </Panel.Heading>
-            <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-            <Panel.Body>
+      //       </Panel.Heading>
+      //       <a href={this.props.link} target="_blank" rel="noopener noreferrer">
+      //       <Panel.Body>
             
-              <span className ="link-spanner"></span>
-              {this.props.descrip}
-              <h4> {this.props.sitename} </h4>
-              <br></br>
-              <br></br>
-              <br></br>
-              <img src={this.props.image} className="img-responsive center-block"/>  
-              {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
-              {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+      //         <span className ="link-spanner"></span>
+      //         {this.props.descrip}
+      //         <h4> {this.props.sitename} </h4>
+      //         <br></br>
+      //         <br></br>
+      //         <br></br>
+      //         <img src={this.props.image} className="img-responsive center-block"/>  
+      //         {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
+      //         {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
                
-              </Panel.Body>
-               </a>
+      //         </Panel.Body>
+      //          </a>
 
-            </Panel>
+      //       </Panel>
           
-        </div>
+      //   </div>
         
-      </div> 
+      // </div> 
+      <div className = "container">
+        <div className="row groupContainer">
+            <div className = "row groupInside groupName" href={this.props.link} target="_blank" rel="noopener noreferrer">{this.props.groupName}</div>
+            <div className = "row groupInside articleBottom ">
+              <Button bsStyle="info" href = {this.props.groupPage} className="showgroupButton viewGroup"> View Group </Button>
+              {this.state.isMember ?  <Button bsStyle="success" className="showgroupButton" disabled>Member </Button> : <Button onClick={joinGroup} className="groupButton"> 'Join Group'</Button>} 
+              {this.state.isMember ?  <Button bsStyle="error"  className="showgroupButton" onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+            </div>         
+        </div>
+      </div>
     );
   }
 }
