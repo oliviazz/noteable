@@ -1037,7 +1037,9 @@ class Database:
         check1 = self.checkUser(userID1)
         check2 = self.checkUser(userID2)
 
+        print username1
         print check1
+        print username2
         print check2
 
         check3 = self.checkFriends(username1, username2)
@@ -1400,6 +1402,7 @@ class Database:
         curse = []
         cursor = self._connection.cursor()
         splitTags = tags.split(' ')
+        print "here"
         if len(splitTags) == 0:
             curse = self.userArticles(username, cursor)
         else:
@@ -1564,6 +1567,7 @@ class Database:
     def feed(self, username, tags):
         userID = self.getUserID(username)
         curse = []
+
         cursor = self._connection.cursor()
         splitTags = tags.split(' ')
         if len(splitTags) == 0:
@@ -1574,10 +1578,10 @@ class Database:
             self.internallyCopyTags(cursor)
             self.internallyDeleteTags(tags, cursor)
             self.internallyDeleteArticlesWithoutTags(cursor)
-            articles = self.internallyDisplayArticles(cursor)
+            curse = self.internallyDisplayArticles(cursor)
 
         cursor.close()
-        return articles
+        return curse
 
     #-----------------------------------------------------------------------
 
@@ -1591,19 +1595,20 @@ if __name__ == '__main__':
     # c.insertTags()
 
     # Test: Insert Users Dummy1-10
-    # c.insertUser('firstName', 'lastName', 'username1', 'userID1')
-    # c.insertUser('firstName', 'lastName', 'username2', 'userID2')
-    # c.insertUser('firstName', 'lastName', 'username3', 'userID3')
-    # c.insertUser('firstName', 'lastName', 'username4', 'userID4')
-    # c.insertUser('firstName', 'lastName', 'username5','userID5')
-    # c.insertUser('firstName', 'lastName', 'username6', 'userID6')
-    # c.insertUser('firstName', 'lastName', 'username7', 'userID7')
-    # c.insertUser('firstName', 'lastName', 'username8', 'userID8')
+    # c.insertUser('firstName', 'lastName', 'username1')
+    # c.insertUser('firstName', 'lastName', 'username2')
+    # c.insertUser('firstName', 'lastName', 'username3')
+    # c.insertUser('firstName', 'lastName', 'username4')
+    # c.insertUser('firstName', 'lastName', 'username5')
+    # c.insertUser('firstName', 'lastName', 'username6')
+    # c.insertUser('firstName', 'lastName', 'username7')
+    # c.insertUser('firstName', 'lastName', 'username8')
     # c.insertUser('firstName', 'lastName', 'username11')
     # c.insertUser('firstName', 'lastName', 'username12')
     # c.insertUser('firstName', 'lastName', 'username13')
-    # c.insertUser('firstName', 'lastName', 'username14')
+    # c.insertUser('firstName', 'lastName', 'username9')
     # c.insertUser('firstName', 'lastName', 'username15')
+    # c.insertUser('firstName', 'lastName', 'livz')
 
     # print c.allUsers()
     # c.deleteUser('userID1')
@@ -1612,9 +1617,9 @@ if __name__ == '__main__':
     # print c.allUsers()
 
     # Test: Insert/Delete Articles and User_Article_Tags and updating tags
-    # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Music')
-    # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
-    # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
+    # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL987', 'Design Food Music')
+    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
+    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Design News Politics')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL3', 'Design World USA')
     # c.insertArticle('username9', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL4', 'Design Baking Lists')
@@ -1626,6 +1631,7 @@ if __name__ == '__main__':
     # print len(c.allUsersArticlesTags())
     # c.deleteArticle('livz', '8834987638503293226')
     # print len(c.allUsersArticlesTags())
+    # print c.userTagArticles('livz', "")
 
     # Test: UserArticles
     # articles = c.userTagArticles('livz', 'Design')
@@ -1654,14 +1660,20 @@ if __name__ == '__main__':
     # print c.getArticlesFromGroup('group1')
 
     # Test Friendships
-    # print c.allUserFriends('username9')
+    # print c.allUserFriends('livz')
     # c.displayPending('username9')
     # c.addFriend('livz', 'username9')
     # c.addFriend('username9', 'livz')
     # c.addFriend('userID1', 'username1')
-    print c.feed('livz', 'Design')
+    # print c.feed('livz', 'Design')
     # c.deleteFriend('livz', 'other')
 
     # Test: 
     # print c.displayAllGroupsFromUsername('username1')
     c.disconnect()
+
+
+
+
+
+
