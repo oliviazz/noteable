@@ -281,10 +281,10 @@ def addarticletogroup():
 @bp.route("/addfriend", methods=["POST"])
 def addfriend():
     json_payload = request.get_json()
-    # username = str(json_payload['username'])
-    username = 'livz'
-    # username2 = str(json_payload['username2'])
-    username2 = 'username2'
+    username = str(json_payload['username'])
+    #username = 'livz'
+    username2 = str(json_payload['username2'])
+    #username2 = 'username2'
     
 
     database = Database()
