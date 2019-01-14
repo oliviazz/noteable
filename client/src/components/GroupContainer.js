@@ -79,6 +79,7 @@ class GroupContainer extends React.Component {
                 if (this.state.display == 'all'){
                      axios.post('/api/displayallgroups').then(res => {
                         groups = res.data.results;
+                        console.log("all: ", groups)
                         console.log("Received response: ", res.data.results);
                         for(var i = 0; i < Object.keys(groups).length; i++){
                             components.push(<Group groupName = {groups[i]['groupname']} groupPage = 'insertURL.com'/>)
@@ -106,7 +107,7 @@ class GroupContainer extends React.Component {
                             }
                         }
                         console.log("Received response: ", groups);
-                        for(var i = 0; i < 4; i++){
+                        for(var i = 0; i < Object.keys(groups); i++){
                                 components.push(<Group groupName = {groups[i]} groupPage = 'insertURL.com'/>)
                         }
                         this.setState({group_components:components})
@@ -122,32 +123,16 @@ class GroupContainer extends React.Component {
             
             }
 
-        componentWillUnmount() {
-            this._ismounted = false;
-
-        }
+//        componentWillUnmount() {
+//            this._ismounted = false;
+//
+//        }
 
         handleChange(e) {
             this.setState({
                 [e.target.name]: e.target.value
             })
         }
-
-
-        load_page_results = (selected) => {
-            console.log('reloading this!!!')
-            
-
-            // make a http request 
-
-        }
-
-      
-
-        // { }
-        // extract on tags 
-        // save from everything 
-
 
         // Defines the HTML code atually returned and shown
         // in the component
@@ -159,16 +144,20 @@ class GroupContainer extends React.Component {
             }
 
             const displayallgroups = (event) => {
-                alert('displaying all groups')
-                this.setState({'display': 'all'})
-                var groups = axios.post('/api/displayallgroups').then(res => {
+                // alert('displaying all groups')
+                
+                var groups = []
+                var components = []
+                axios.post('/api/displayallgroups').then(res => {
+                    groups = res.data.results;
                   console.log("Received response: ", res.data.results);
-                  for(var i = 0; i < groups.length; i++){
-                    this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
+                  for(var i = 0; i < Object.keys(groups).length; i++){
+                    components.push(<Group groupName = {groups[i]['groupname']} groupPage = 'insertURL.com'/>)
                     }
-                })
-                console.log(groups)
-             
+                    this.setState({group_components:components})
+                });
+                console.log(groups);
+                this.setState({'display': 'all'});
             }
 
             const addGroup = (event) => {
@@ -178,15 +167,19 @@ class GroupContainer extends React.Component {
             }
 
             const showmygroups = (event) => {
-                this.setState({'display': 'mine_only'})
-                
-                var groups = axios.post('/api/displaymygroups').then(res => {
-                  console.log("Received response: ", res.data.results);
-                  for(var i = 0; i < groups.length; i++){
-                    this.state.group_components(<Group groupName = {groups[i][0]} groupPage = 'insertURL.com'/>)
+                var components = []
+                var groups = []
+                axios.post('/api/displaymygroups').then(res => {
+                    groups = res.data.results;
+                    console.log("Received response: ", res.data.results);
+                    console.log(groups)
+                    for(var i = 0; i < Object.keys(groups).length; i++){
+                        components.push(<Group groupName = {groups[i]['groupname']} groupPage = 'insertURL.com'/>);
                     }
+                    this.setState({group_components:components})
                 })
-                console.log(groups)
+//                console.log(groups)
+                this.setState({'display': 'mine_only'})
             }
 
             const searchGroups = (event) => {
@@ -198,8 +191,14 @@ class GroupContainer extends React.Component {
                 var components = []
                     axios.post('/api/displayallgroups').then(res => {
                         groups = res.data.results;
-                        for(var j = 0; j < Object.keys(groups).length; j++){          
-                            if(groups[j]['groupname'].includes(JSON.stringify(this.state.searchTerm), 0)){
+                        
+                        for(var j = 0; j < Object.keys(groups).length; j++){   
+                            var searchTerm = String(this.state.searchTerm)
+                            var myName = groups[j]['groupname']
+                            // console.log(myName, searchTerm)
+                            var matches = myName.includes(searchTerm)
+                            if(matches){
+                                // console.log(myName, 'it matches!!', searchTerm)     
                                 foundgroups.push(groups[j]);
                             }
                         }

@@ -580,7 +580,9 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        return cursor.fetchall()
+        curse = cursor.fetchall()
+        cursor.close()
+        return curse
 
     #-----------------------------------------------------------------------
     #
@@ -608,7 +610,7 @@ class Database:
         userID = self.getUserID(username)
         cursor = self._connection.cursor()
 
-        stmtStr = "CREATE TEMPORARY TABLE allFriends AS SELECT DISTINCT userID1 FROM friends WHERE userID2 = ?"
+        stmtStr = "CREATE TEMPORARY TABLE allGroupFriends AS SELECT DISTINCT userID1 FROM friends WHERE userID2 = ?"
 
         try:
             cursor.execute(stmtStr, [str(userID)])
@@ -617,8 +619,8 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        stmtStr = "SELECT groups.groupname FROM groups, temp.allFriends WHERE groups.groupID = allFriends.userID1"
-
+        stmtStr = "SELECT groups.groupname FROM groups, temp.allGroupFriends WHERE groups.groupID = allGroupFriends.userID1"
+        
         try:
             cursor.execute(stmtStr)
             self._connection.commit()
@@ -627,6 +629,7 @@ class Database:
             return (False, e)
 
         curse = cursor.fetchall()
+        cursor.close()
         return curse
 
     #-----------------------------------------------------------------------
@@ -671,7 +674,9 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        return cursor.fetchall()
+        curse = cursor.fetchall()
+        cursor.close()
+        return curse
 
     #-----------------------------------------------------------------------
     #
@@ -723,9 +728,7 @@ class Database:
         #check that user1, user2 exist, and that they are not already friends
         check1 = self.checkUser(userID)
         checkGroup= self.checkGroup(groupID)
-
-        cursor = self._connection.cursor()
-
+        
         if check1 == True and checkGroup == True:
             self.deleteFriend(groupname, username)
 
@@ -1151,7 +1154,7 @@ class Database:
     #----------------------------------------------------------------------- 
 
     def internallyDeletePending(self, userID1, userID2, cursor):
-        print "before"
+        # print "before"
         stmtStr = "DELETE FROM pendingfriends WHERE userID1 = (?) and userID2 = (?)"
         try:
             cursor.execute(stmtStr, [str(userID1), str(userID2)])
@@ -1159,7 +1162,7 @@ class Database:
         except Exception, e:
             print >>stderr, e
             return (False, e)
-        print "after"
+        #print "after"
 
     #-----------------------------------------------------------------------
     #
@@ -1172,6 +1175,9 @@ class Database:
     def deleteFriend(self, username1, username2):
         userID1 = self.getUserID(username1)
         userID2 = self.getUserID(username2)
+        
+        if (self.checkUser(userID1) != True):
+            userID1 = self.getGroupID(username1)
 
         cursor = self._connection.cursor()
         self.internallyDeletePending(userID1, userID2, cursor)
@@ -1367,7 +1373,9 @@ class Database:
             print >>stderr, e
             return (False, e)
 
-        return cursor.fetchall()
+        curse = cursor.fetchall()
+        cursor.close()
+        return curse
 
     #-----------------------------------------------------------------------
     #
@@ -1619,8 +1627,8 @@ if __name__ == '__main__':
 
     # Test: Insert/Delete Articles and User_Article_Tags and updating tags
     # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL987', 'Design Food Music')
-    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
-    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
+#    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Architecture')
+#    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Design News Politics')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL3', 'Design World USA')
     # c.insertArticle('username9', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL4', 'Design Baking Lists')
@@ -1652,8 +1660,13 @@ if __name__ == '__main__':
     # c.addUserToGroup('livz', 'group1')
     # c.addUserToGroup('livz', 'group2')
     # c.addUserToGroup('livz', 'group3')
-    # c.addUserToGroup('livz', 'group4')
-    # print c.displayAllGroupsFromUsername('livz')
+#    c.addUserToGroup('livz', 'group5')
+#    print c.displayAllGroupsFromUsername('livz')
+#    c.deleteUserFromGroup('livz', 'group5')
+#    c.disconnect()
+#    c.connect()
+#    print c.displayAllGroupsFromUsername('livz')
+
 
     # print c.allFriendPairings()
     # print c.printUsersInGroup('group1')

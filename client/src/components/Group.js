@@ -46,35 +46,24 @@ class Group extends React.Component {
     const { selectedOption } = this.my_selectedOption;
     const true_holder = true;
 
-    const handleDelete = (event) => {
-        var r = window.confirm('Are you sure you want to delete this article from your page?')
-        
-        if (r == true){
-           this.serverRequest = axios.post('/api/deletearticle', { userId: this._userId, article_url: this.props.link})
-            .then(res => {
-                if(res.data){
-                   console.log(res.data)
-                   console.log('delete successful')
-                 }
-            })
-            window.location.reload();  
-        }
-        else{ return }
-    }
-
     const leaveGroup = (event) => {
         this.setState({isMember: false})
-        axios.post('/api/joingroup', {groupname: this.props.groupName}).then(res => {
-            console.log("Received response: ", res.data.results);
+        axios.post('/api/leavegroup', {groupname: this.props.groupName}).then(res => {
+            console.log("Received leave response: ", res.data.results);
         })
     }
 
     const joinGroup = (event) => {
           this.setState({isMember: true})
-          axios.post('/api/leavegroup', {groupname: this.props.groupName}).then(res => {
-            console.log("Received response: ", res.data.results);
+          axios.post('/api/joingroup', {groupname: this.props.groupName}).then(res => {
+            console.log("Received join response: ", res.data.results);
         })   
     }
+    
+    
+    //               {this.state.isMember ?  <Button bsStyle="info" onClick={joinGroup}> 'Join Group'</Button> : <Button bsStyle="success"> Member </Button>} 
+//              {this.state.isMember ?  <Button bsStyle="default"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+    
     return (
       <div>
          <div className = "container">
@@ -98,7 +87,6 @@ class Group extends React.Component {
               <img src={this.props.image} className="img-responsive center-block"/>  
               {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
               {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
-               
               </Panel.Body>
                </a>
 

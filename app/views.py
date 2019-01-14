@@ -268,7 +268,13 @@ def leavegroup():
     
     database = Database()
     database.connect()
+    print "before"
+    print database.displayAllGroupsFromUsername(username)
     database.deleteUserFromGroup(username, groupname)
+    print "after"
+    database.disconnect()
+    database.connect()
+    print database.displayAllGroupsFromUsername(username)
     database.disconnect()
     return jsonify(message="Removed: " + username + " from group " + groupname), 200
 
