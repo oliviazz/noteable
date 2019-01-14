@@ -55,6 +55,7 @@ def displayArticlesHelper(article_query_results):
 def modularAddArticle(json_payload, username):
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
+    print 'Verifying that article and tags parsed', article, tags
   
     database = Database()
     database.connect()
@@ -63,8 +64,12 @@ def modularAddArticle(json_payload, username):
 
     working = False
     try:
-        trimmed_url = article[1:-1].encode('ascii', errors='ignore')
+        #trimmed_url = article[1:-1].encode('ascii', errors='ignore')
+        trimmed_url  = article.replace('"', '').replace("'", '')
+
         print "trimmed_url: " + str(trimmed_url)
+        trimmed_url = trimmed_url.encode('ascii', errors='ignore')
+        print "trimmed_url 2: " + str(trimmed_url) 
         soup = BeautifulSoup(urlopen(trimmed_url).read(), "lxml")
         title = soup.find("meta",  property="og:title")
         print title
@@ -74,38 +79,43 @@ def modularAddArticle(json_payload, username):
         author = soup.find('meta', {'name': 'byl'})
 
         if title: 
-            my_info['title'] = title['content']
+            my_info['title'] = title['content'].encode('ascii', errors='ignore')
             working = True
-        if url: my_info['url'] = url['content']
-        if descrip: my_info['descrip'] = descrip['content']
-        if image: my_info['image'] = image['content']
-        if author:my_info['author'] = author['content']
+        if url: my_info['url'] = url['content'].encode('ascii', errors='ignore')
+        if descrip: my_info['descrip'] = descrip['content'].encode('ascii', errors='ignore')
+        if image: my_info['image'] = image['content'].encode('ascii', errors='ignore')
+        if author:my_info['author'] = author['content'].encode('ascii', errors='ignore')
 
-        time = datetime.datetime.today().strftime('%Y-%m-%d')
-
-        return jsonify(message='Successfully entered!'), 200
-        
-    except Exception as e:
-        print(e)
-        return jsonify(message='Error!'), 400
-
-
-    print(my_info, username)
-    try:
+        time = datetime.datetime.today().strftime('%Y-%m-%d').encode('ascii', errors='ignore')
 
         database.insertArticle(username, articleTitle=my_info['title'], articleIcon=my_info['image'], 
                                 articleBlurb=my_info['descrip'], articleAuthor=my_info['author'], articleDate=time,
                                 articleURL=my_info['url'], tags=tags)
 
-        print(database.userTagArticles(username, " ---hererherhehr-\n\n\n\n\n"))
+        print(database.userTagArticles(username, ""), "LEt's see if this worked!")
         print('above are my tags')
+        print('verifiting that the info was successfully parsed \n\n ', my_info, username)
+        database.disconnect()
+        return jsonify(message="Posted article: " + article + '; Metadata collection: ' + str(working) ), 200
+
+
+        
     except Exception as e:
-        print(e, "adding error!")
+        print(e)
+        database.disconnect()
+        return jsonify(message='Error!'), 400
+
 
     
-    database.disconnect()
-    return jsonify(message="Posted article: " + article + '; Metadata collection: ' + str(working) ), 200
+   
 
+        
+   
+
+    
+   
+   
+    
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------#
 # LOGIN/USER                                                                                                                                         #
@@ -436,9 +446,14 @@ def addarticle():
     print(json_payload, " addarticle json payload")
     # UPDATE LATER
     username = str(json_payload['username'])
+    print "now, testing that it exists after adding"
 
     
-    return modularAddArticle(json_payload, username)
+
+    result = modularAddArticle(json_payload, username)
+
+
+    return result
     
 
 @bp.route("/deletearticle", methods=["POST"])
@@ -448,8 +463,7 @@ def deletearticle():
     json_payload = request.get_json()
     article = str(json_payload['article_url'])
     # PUT THIS BACK LATER
-    # username = json_payload['username']
-    username = 'livz'
+    username = json_payload['username']
     print(article, username)
     #return jsonify(message=article), 200
 
@@ -479,12 +493,14 @@ def getarticles():
 
     json_payload = request.get_json()
 
-    print(json_payload, "payload in get articles")
+    print json_payload, "payload for get articles"
+
     # PUT THIS BACK LATER
     username = json_payload['username']    
     tags = ""
+
     article_query_results = database.userTagArticles(username, tags)
-    print article_query_results
+    print "Article Query Results: ", article_query_results
 
     formatted_results = displayArticlesHelper(article_query_results)
 
