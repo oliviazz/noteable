@@ -354,8 +354,7 @@ def friendarticles():
 def allfriends():
     json_payload = request.get_json()
     # PUT THIS BACK LATER
-    # username = json_payload['username']
-    username = 'livz'
+    username = json_payload['username']
 
     database = Database()
     database.connect()
@@ -377,7 +376,7 @@ def allusers():
     users = database.allUsers()
     formatted_results = {}
 
-    for i in range(0, len(friends)):
+    for i in range(0, len(users)):
         formatted_results[i] = {
             'firstname': users[i][0],
             'lastname': users[i][1],
@@ -387,7 +386,7 @@ def allusers():
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
-@bp.route("/allusers", methods=["POST"])
+@bp.route("/alltags", methods=["POST"])
 def alltags():
     database = Database()
     database.connect()
