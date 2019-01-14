@@ -108,6 +108,7 @@ class PageContainer extends React.Component {
                         for(var article in this.state.full_article_info){
                             var info = this.state.full_article_info[article]
                             console.log(article, info)
+                           
                             components.push(< Article title = { info['title'] }
                                         link = {info['url']}
                                         descrip = {info['blurb']}
@@ -116,6 +117,7 @@ class PageContainer extends React.Component {
                     
                                     />);
                             }
+                        }
                          this.setState({
                                 article_components: components
                         })
