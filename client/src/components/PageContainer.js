@@ -38,8 +38,8 @@ class PageContainer extends React.Component {
                 'full_article_info':[],
                 'article_components':[],
                 'holder':'', 
-                'userId':'',
-                'displayUserId':''
+                'username':'',
+                'displayUsername':''
             }
 
             this._retrieved_articles = [];
@@ -56,8 +56,8 @@ class PageContainer extends React.Component {
 
             //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
             // calculate the Id frm the username
-            this._userId = ''
-            this._displayUserId = ''
+            this._username = ''
+            this._displayUsername = ''
 
 
             this._active_tag_filters = ''
@@ -73,12 +73,12 @@ class PageContainer extends React.Component {
                 var passed_state =  this.props.location.state
                 if (passed_state){
             
-                    this._userId = passed_state['userId']
-                    this._displayUserId = passed_state['displayUserId']
+                    this._username = passed_state['username']
+                    this._displayUsername = passed_state['displayUsername']
 
-                    this.setState({'userId': this._userId, 'displayUserID': this._displayUserId})
+                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
                     
-                    console.log('Passed user Id, now set: ', this._userId, ' as viewing and ', this._displayUserId, ' as the page ot be viewed')
+                    console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
                 
                 }
                 else{
@@ -102,7 +102,7 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.post('api/getarticles', {'userId': this._userId})
+                this.serverRequest = axios.post('api/getarticles', {'username': this._username})
                     .then(res => {
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){
@@ -202,7 +202,8 @@ class PageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         {this._displayUserId == this._userId ? <h1>your noteable: {this._userId} </h1>: <h1>{this._displayUserId}'s noteable </h1>}
+                    <UserBox username={this._username} />
+                         {this._displayUsername == this._username ? <h1>your noteable: {this._username} </h1>: <h1>{this._displayUsername}'s noteable </h1>}
                          <br></br><br></br>
                         <br></br>
                        

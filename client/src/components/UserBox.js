@@ -11,12 +11,13 @@ import { changeForm } from 'actions/appActions'
 import axios from 'axios';
 import Panel from 'react-bootstrap/lib/Panel';
 import { Redirect } from 'react-router-dom'
-
+import { Route, BrowserRouter as Router } from 'react-router-dom'
 import { withRouter } from "react-router-dom";
 
 import Select from 'react-select';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import Button from 'react-bootstrap/lib/Button';
+
 
 class UserBox extends React.Component {
 
@@ -57,17 +58,17 @@ class UserBox extends React.Component {
 
     }
     
-    this.serverRequest = axios.post('api/checkfriends', {'userId': this._myuserId, 'viewing_username': this._username})
-                    .then(res => {
-                        var friend_status = res.data.friends
+    // this.serverRequest = axios.post('api/checkfriends', {'userId': this._myuserId, 'viewing_username': this._username})
+    //                 .then(res => {
+    //                     var friend_status = res.data.friends
 
                   
-                        this.setState({
-                          isfriend:friend_status
+    //                     this.setState({
+    //                       isfriend:friend_status
                                 
-                        })
+    //                     })
 
-                    })
+    //                 })
     var userId = this.props.userId
     var userViewing = this.props.userViewing 
 
@@ -84,6 +85,7 @@ class UserBox extends React.Component {
               <Panel.Body>
               <h4>{this.props.username}</h4>
               <h5>{this.props.userId}</h5>
+              
 
               {this.state.isfriend ?  <Button bsStyle="success" disabled>You are Friends!</Button> : <Button onClick={sendRequest}> 'Friend'</Button>} 
                 <br></br>

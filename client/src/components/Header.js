@@ -32,10 +32,13 @@ class Header extends React.Component {
     }
 
     const onSubmit = event => {   
-      alert(this.state.value);
+    
       console.log(this.props)
       try {
-        this.props.history.push('/users')
+        this.props.history.push({
+          pathname: '/users',
+          state: {searchTerm: this.state.value}
+         })
         
       }
       catch(error) {
@@ -60,11 +63,15 @@ class Header extends React.Component {
                 <NavItem eventKey={1} href="/quickadd">
                     Add Article
                 </NavItem>
+
                 <NavItem eventKey={2} href="/groups">
                     Groups
                 </NavItem>
                 <NavItem eventKey={3} href="/mypage">
                     My Noteable
+                </NavItem>
+                <NavItem eventKey={4} href="/users">
+                    Friends
                 </NavItem>
 
                 <Navbar.Form pullRight>
