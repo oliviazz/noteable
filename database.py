@@ -818,10 +818,10 @@ class Database:
         cursor = self._connection.cursor()
 
         stmtStr = "DELETE FROM user_article_tags WHERE articleID = ? AND userID = ?"
-
         try:
             cursor.execute(stmtStr, [str(articleID), str(userID)])
             self._connection.commit()
+     
         except Exception, e:
             print >>stderr, e
             return (False, e)
@@ -1638,7 +1638,7 @@ if __name__ == '__main__':
 
     # c.insertArticle('livz', 'THISISATEST', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURLTest1', 'Design')
     # print len(c.allUsersArticlesTags())
-    # c.deleteArticle('livz', '8834987638503293226')
+    # c.deleteArticle('lkatzman@princeton.edu', '-7493312828975800069')
     # print len(c.allUsersArticlesTags())
     # print c.userTagArticles('livz', "")
 

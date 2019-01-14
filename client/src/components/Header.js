@@ -9,13 +9,18 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import { 
+        Route, 
+        BrowserRouter as Router, 
+        withRouter,
+        Redirect } from 'react-router-dom'
 
 
 import './mypage.css';
 
 class Header extends React.Component {
 
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       searchTerm: ""
@@ -54,39 +59,82 @@ class Header extends React.Component {
             <Navbar.Header>
               <div className = "logoText">
                 <Navbar.Brand className = "logo">
-                  <a href="/">Noteable</a>
+                  <div className = "NoteableLogo">
+                    <a href="/">Noteable</a>
+                  </div>
                 </Navbar.Brand>
               <Navbar.Toggle />
               </div>
             </Navbar.Header>
             <Nav>
                 <NavItem eventKey={1} href="/quickadd">
-                    Add Article
+                    + article
                 </NavItem>
 
                 <NavItem eventKey={2} href="/groups">
-                    Groups
+                    groups
                 </NavItem>
                 <NavItem eventKey={3} href="/mypage">
-                    My Noteable
+                    my noteable
                 </NavItem>
                 <NavItem eventKey={4} href="/users">
-                    Friends
+                    friends
                 </NavItem>
 
                 <Navbar.Form pullRight>
                     <FormGroup>
-                        <FormControl type="text" placeholder="Search Users" name="searchTerm" value={this.state.value} onChange = {onChange}/>
+                        <FormControl type="text" placeholder="search users" name="searchTerm" value={this.state.value} onChange = {onChange}/>
                     </FormGroup>{' '}
-                    <Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
+                    <Button type="submit" onClick={(e) => onSubmit()}>submit</Button>
                 </Navbar.Form>
           </Nav>
+          <AuthButton />
         </Navbar>
     </header>
     </div>
     );
   }
 }
+
+function Public() {
+  return <h3>Public</h3>;
+}
+
+function Protected() {
+  return <h3>Protected</h3>;
+}
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+const AuthButton  = 
+      withRouter(
+      ({ history }) =>
+        fakeAuth.isAuthenticated ? (
+          <p>
+            Welcome!{" "}
+            <button
+              onClick={() => {
+                fakeAuth.signout(() => history.push("/"));
+              }}
+            >
+              Sign out
+            </button>
+          </p>
+        ) : (
+          <p>You are not logged in.</p>
+        )
+    );
+
 const mapStateToProps = state => ({
   loggedIn: state.loggedIn,
 

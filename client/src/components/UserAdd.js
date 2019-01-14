@@ -94,10 +94,6 @@ class UserAdd extends React.Component {
           .then(res => {
                   console.log("Received response: ", res.data);
               })
-
-
-          
-
       }
         return (
             <div>

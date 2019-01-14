@@ -46,10 +46,11 @@ def displayArticlesHelper(article_query_results):
             'author': article_query_results[i][4],
             'date': article_query_results[i][6],
             'tag': article_query_results[i][8],
+            'url': article_query_results[i][6]
         }
 
         #ormatted_results = sorted(formatted_results, key=formatted_results['date'])
-        print(formatted_results, "FORMATTED???")
+       
     return formatted_results
 
 def modularAddArticle(json_payload, username):
@@ -328,7 +329,7 @@ def displaypending():
     database = Database()
     database.connect()
     username = str(json_payload['username'])
-    allpending = database.displaypending(username)
+    allpending = database.displayPending(username)
 
     formatted_results = {}
     for i in range(0, len(allpending)):
@@ -341,14 +342,27 @@ def displaypending():
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
+@bp.route("/checkfriends", methods=["POST"])
+def checkfriends():
+    json_payload = request.get_json()
+    username = json_payload['username']
+   
+    username2 = json_payload['username2']
+
+    database = Database()
+    database.connect()
+    friendsLogic = database.checkFriends(username, username2)
+
+    return jsonify(results=friendsLogic), 200
+
+
 @bp.route("/friendarticles", methods=["POST"])
 def friendarticles():
     json_payload = request.get_json()
     # PUT THIS BACK LATER
-    # username = json_payload['username']
-    username = 'livz'
-    # username2 = json_payload['username2']
-    username2 = 'username10'
+    username = json_payload['username']
+
+    username2 = json_payload['username2']
 
     tags = ""
 
@@ -464,30 +478,29 @@ def addarticle():
     
 
 @bp.route("/deletearticle", methods=["POST"])
-
 def deletearticle():
-    print('Delete Article')
     json_payload = request.get_json()
-    article = str(json_payload['article_url'])
-    # PUT THIS BACK LATER
-    username = json_payload['username']
-    print(article, username)
-    #return jsonify(message=article), 200
+    print json_payload, "!!!!!!!!"
 
+    username = str(json_payload['username'])
+    article = str(json_payload['article_url'])
+ 
     database = Database()
     database.connect()
-    print(article, "hey!!!! hashes")
 
     try:
         articleID = hash(article)
-      
+        print('--------------')
+        #print(database.userTagArticles(username,""))
         database.deleteArticle(username=username, articleID=articleID)
- 
+        #print(database.userTagArticles(username, ""))
+        print('--------------')
         database.disconnect()
 
         return jsonify(message="Deleted article: " + article), 200
     except Exception, err:
         print('Error in deleting article: ', str(err))
+        database.disconnect()
         return jsonify(message="Error in deleting article article!"), 400
 
 
@@ -510,7 +523,7 @@ def getarticles():
     print "Article Query Results: ", article_query_results
 
     formatted_results = displayArticlesHelper(article_query_results)
-
+    database.disconnect()
     print('all done')
     return jsonify(results=formatted_results)
 
