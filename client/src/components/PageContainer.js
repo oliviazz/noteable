@@ -115,7 +115,7 @@ class PageContainer extends React.Component {
                     
                                     />);
                             }
-                        }
+                        
                          this.setState({
                                 article_components: components
                         })
