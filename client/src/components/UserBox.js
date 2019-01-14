@@ -23,18 +23,24 @@ class UserBox extends React.Component {
 
   constructor() {
     super()
-    
-    
+    this._username = ''
+    this._userviewing = ''
+
+    this.state = {
+      selectedOption: null,
+      isFriend:false,
+
+    }
   }
 
-  state = {
-    selectedOption: null,
-    isfriend:false
-  }
 
   handleChange = (selectedOption) => {
     this.my_selectedOption = selectedOption;
     console.log(`Option selected:`, selectedOption);
+  }
+
+  componentDidMount() {
+    this.setState({isFriend:this.props.areFriends})
   }
 
   render() {
@@ -43,18 +49,19 @@ class UserBox extends React.Component {
 
     const sendRequest = event =>{
       alert('added')
-      this.setState({isfriend: true})
-      // axios.post('api/addFriend', {'userId': this._myuserId, 'viewing_username': this._username})
-      //               .then(res => {
-      //                   var friend_status = res.data.friends
+      
+      axios.post('api/addFriend', {'username': this.props.username, 'username2': this.props.userviewing})
+                    .then(res => {
+                        var friend_status = res.data.friends
+                        console.log(res.data.friends, "added??")
 
                   
-      //                   this.setState({
-      //                     isfriend:friend_status
+                        this.setState({
+                          isFriend:friend_status
                                 
-      //                   })
+                        })
 
-      //               })
+                    })
 
     }
     
@@ -79,7 +86,7 @@ class UserBox extends React.Component {
          
             <Panel>
               <Panel.Heading>
-                <Panel.Title componentClass="h2">{this.props.firstname}'s noteable</Panel.Title>
+                <Panel.Title componentClass="h2">{this.props.firstname} {this.props.lastname}'s noteable</Panel.Title>
               </Panel.Heading>
             
               <Panel.Body>
@@ -87,7 +94,7 @@ class UserBox extends React.Component {
               <h5>{this.props.userId}</h5>
               
 
-              {this.state.isfriend ?  <Button bsStyle="success" disabled>You are Friends!</Button> : <Button onClick={sendRequest}> 'Friend'</Button>} 
+              {this.state.isFriend ?  <Button bsStyle="success" disabled>Friends!</Button> : <Button onClick={sendRequest}> 'Add Friend'</Button>} 
                 <br></br>
               <Link to={{
                 pathname: '/mypage',
