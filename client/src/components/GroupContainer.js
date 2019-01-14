@@ -214,30 +214,29 @@ class GroupContainer extends React.Component {
                 <Grid>
                      <Row>
                     
-                     <Col xs={3} md={2}>
+                     <Col xs={3} md={2} className = "buttonToolbar">
                 
                         <ButtonToolbar>
-                             <h3>Groups Toolbar </h3>
-                            <Button onClick={displayallgroups}> Show All Groups </Button> 
+                             <div className = "groupsToolbar tagsHeader">groups toolbar </div>
+                            <Button onClick={displayallgroups} className="groupButton"> Show All Groups </Button> 
                                 <br></br><br></br><br></br>
-                            <Button onClick={showmygroups}> Show My Groups </Button> 
+                            <Button onClick={showmygroups} className="groupButton"> Show My Groups </Button> 
                                 <br></br><br></br><br></br>
-                            <input id="group_search"  className = 'input-lg' type="text" placeholder="New Group Name" name="newgroup" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
-                            <Button onClick={addGroup}> + Make New Group </Button>
+                            <input id="group_search"  className = 'input-lg groupButton' type="text" placeholder="New Group Name" name="newgroup" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
+                            <Button onClick={addGroup} className="groupButton"> + Make New Group </Button>
                             <br></br><br></br><br></br>
-                            <input id="group_search"  className = 'input-lg' type="text" placeholder="Find Group" name="searchTerm" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
-                            <Button onClick={searchGroups}> Search Groups </Button>
+                            <input id="group_search"  className = 'input-lg groupButton' type="text" placeholder="Find Group" name="searchTerm" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
+                            <Button onClick={searchGroups} className="groupButton"> Search Groups </Button>
 
                          
                         </ButtonToolbar>
                     
                    
                     </Col>
-                    <Col xs={1} md={1}></Col>
-                        
-                    <Col xs={8} md={8}>
-                        <h2>{this._user}'s Noteable</h2> 
-                        <h3>Showing {this.state.display} Groups </h3>
+                    
+                    <Col xs={4} md={4}>
+                        <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this._user}'s</div> <div className="groupsNoteable">Noteable:</div> </div> 
+                        <div className = "usernameDisplay groupdisplay showingBlankGroups">showing {this.state.display} groups </div>
                         {this.state.group_components.map(group => <div>{group}</div>)} 
                     </Col>
 

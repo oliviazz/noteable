@@ -1219,7 +1219,8 @@ class Database:
 
     def insertTags(self):  
         cursor = self._connection.cursor()
-        allTags = self.allTags()
+        allTags = self.daTagList()
+
         for tag in allTags:
             print tag
             stmtStr = "INSERT INTO tags(tagName) VALUES (?)"
@@ -1240,7 +1241,7 @@ class Database:
     def allTags(self):  
         cursor = self._connection.cursor()
 
-        stmtStr = "SELECT tags.tagName FROM tags"
+        stmtStr = "SELECT * FROM tags"
         
         try:
             cursor.execute(stmtStr)
@@ -1250,8 +1251,9 @@ class Database:
             return (False, e)
 
         allEntries = cursor.fetchall() 
-
+        print(allEntries, '1')
         cursor.close()
+        print(allEntries, '2')
         return allEntries
 
     #-----------------------------------------------------------------------
@@ -1631,7 +1633,7 @@ if __name__ == '__main__':
 #    c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Design News Politics')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL3', 'Design World USA')
-    # c.insertArticle('username9', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL4', 'Design Baking Lists')
+    c.insertArticle('lkatzman@princeton.edu', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'https://stackoverflow.com/questions/32347207/how-does-the-toggle-button-work-with-checkboxes', 'Science')
     # articles = c.allArticles()
     # for article in articles:
     #     print article
@@ -1643,10 +1645,10 @@ if __name__ == '__main__':
     # print c.userTagArticles('livz', "")
 
     # Test: UserArticles
-    # articles = c.userTagArticles('livz', 'Design')
-    # for article in articles:
-    #     print article
-    #     print
+    articles = c.userTagArticles('lkatzman@princeton.edu', 'Science')
+    for article in articles:
+        print article
+        print
     # Test: Add and Test Group Functionality
     # c.insertGroup("group1")
     # c.insertGroup("group2")

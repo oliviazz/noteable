@@ -69,6 +69,10 @@ render() {
       }
     }
     
+    // <Navbar.Form pullRight>
+    //   <Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
+    // </Navbar.Form>
+    
     return (
        <Router>
       <div>
@@ -98,10 +102,7 @@ render() {
                     Friends
                 </NavItem>
 
-                <Navbar.Form pullRight>
-                   
-                    <Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
-                </Navbar.Form>
+                
           </Nav>
           <AuthButton />
         </Navbar>

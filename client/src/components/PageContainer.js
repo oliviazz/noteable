@@ -35,6 +35,7 @@ class PageContainer extends React.Component {
             this.state = {
                 'full_article_info':[],
                 'article_components':[],
+                'tags_components':[],
                 'holder':'', 
                 'username':'',
                 'displayUsername':'',
@@ -138,11 +139,23 @@ class PageContainer extends React.Component {
                     })
                 var loader = document.getElementById('loader')
                 loader.setAttribute('style', 'display:none')
-               
-            
+                var tags = []
+
+                axios.post('/api/alltags').then(res => {
+                    tags = res.data.results
+                    var formatted_tags = []
+                    console.log("Received response: tags ", tags);
+                    // for(var i = 0; i < Object.keys(tags).length; i++) {
+                    //     formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>Hello</ToggleButton>)
+                    // }
+                    // console.log(formatted_tags)
+                    // console.log('formatted tags the first time')
+                    // this.setState({tags_components:formatted_tags})
+                    // {this.state.tags_components.map(tag => <div>{tag}</div>)}
+
+                })            
             }
 
-        
             // ---------------------------------------
 
         componentWillUnmount() {
@@ -185,41 +198,61 @@ class PageContainer extends React.Component {
 
             //         })
 
-            const tag_1 = 'food'
-            const tag_2 = 'tech'
-            const tag_3 = 'business'
-            const tag_4 = 'funny'
-            const tag_5 = 'politics'
-            const tag_6 = 'health'
-            const tag_7 = 'music'
+            // const tag_1 = 'food'
+            // const tag_2 = 'tech'
+            // const tag_3 = 'business'
+            // const tag_4 = 'funny'
+            // const tag_5 = 'politics'
+            // const tag_6 = 'health'
+            // const tag_7 = 'music'
+            console.log(this.state.tags_components)
             return(
                 <div> 
                 <Grid>
                    
                      <Row>
                      <Col xs={3} md={2}>
-                        <h3>tags</h3>
-                 
+                        <div className="tagsHeader">tags</div>
                         <ButtonToolbar>
-                            <ToggleButtonGroup type="checkbox" value={1} onChange={this.handleChange}>
-                              <ToggleButton className = "navButton" value={tag_1} onChange={this.handleChange}>{tag_1}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_2} onChange={this.handleChange}>{tag_2}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_3} onChange={this.handleChange}>{tag_3}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_4} onChange={this.handleChange}>{tag_4}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_5} onChange={this.handleChange}>{tag_5}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" className = "navButton" value={tag_6}>{tag_6}</ToggleButton><br></br>
-                              <ToggleButton className = "navButton" value={tag_7} onChange={this.handleChange}>{tag_7}</ToggleButton><br></br>
+                            <ToggleButtonGroup type="checkbox">
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Advice</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Art</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Blogs</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Business</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>College</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Comedy</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Cooking</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Design</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Economy</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Entrepreneurship</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Environment</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Fashion</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Film</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Games</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Health</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>History</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Holidays</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Journalism</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Media</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Money</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Politics</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Productivity</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Race</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Reading</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Religion</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Sports</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Technology</ToggleButton>
+                                <ToggleButton className = "navButton tagsButton" onChange={this.handleChange}>Travel</ToggleButton>
                             </ToggleButtonGroup>
                         </ButtonToolbar>
                         <br></br>
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         <div className = "usernameDisplay">{this._username}'s  notable:  </div>
+                         <div className = "usernameDisplay">{this._username}'s notable:  </div>
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 
                     </Col>
-
 
                     </Row>
                 </Grid>      

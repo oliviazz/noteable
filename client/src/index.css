@@ -9,6 +9,7 @@
 @import url('https://fonts.googleapis.com/css?family=Arvo');
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans:300');
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+
 #sidebar {
     padding-left: 10px;
 }
@@ -98,39 +99,13 @@ a.divLink {
     border-left:1px solid white;
 }
 
-
-	/*width:500px;
+.addarticleForm {
+  width: 500px;
 }
-*/
-/*.container{
-    width:200px;
-    height:200px;
-    background-color:black;
-    color:white;
-    /*Important:
-    position:relative;
-}*/
 
-/*Important:*/
-/*.link-spanner{
-  position:absolute; 
-  width:100%;
-  top:0;
-  left: 0;
-  z-index: 1;
-  height:100px;
-   edit: fixes overlap error in IE7/8, 
-     make sure you have an empty gif 
-  background-image: url('empty.gif');
-}   */
-
-/*.app_container {
-	
-	text-align: center;
-	align-self: center;
-	background-color: #CCCCFF;
-	height:100%;
-}*/
+.container {
+  margin-left: 4px;
+}
 
 .preview_img{
 	height:50px;
@@ -139,7 +114,7 @@ a.divLink {
 }
 
 .navButton{
-  width:150px;
+  width:100%;
   font-size:13pt;
   border-color:#E7E7E7;
 }
@@ -159,18 +134,31 @@ a.divLink {
   margin-right: 2%;
 }
 
-
+.sideTagNav {
+  background-color: blue;
+  float: left;
+  width: 100%;
+}
+.navButton {
+  background-color: black;
+  float: left;
+}
 .articleDate {
   float: left;
   border-left-style: solid;
   border-width: .1px;
   padding-left: 2%;
+  font-weight: bold;
 }
 
 .article_input {
   height:50px;
-  width:50px;
   font-size:14px;
+  width: 100%;
+}
+
+.addarticle {
+  margin: 5%;
 }
 
 .articleContainer {
@@ -178,6 +166,7 @@ a.divLink {
   text-transform: lowercase;
   float: left;
   margin: 0px;
+  margin-left: 5%;
 }
 
 .articleImageContainer {
@@ -235,7 +224,31 @@ a.divLink {
   text-transform: uppercase;
   margin-bottom: 5px;
   font-size: 10px;
+  font-weight: bold;
 }
+
+.groupButton {
+  background: #f7f3aa;
+  color: #FF1493;
+  border: 2px solid #FF1493;
+  border-radius: 3px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: bold;
+}
+.submitaddarticle {
+  background: #fff;
+  color: #FF1493;
+  border: 2px solid #FF1493;
+  border-radius: 3px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+
 .articleTitle {
   height: 30%;
   text-overflow: ellipsis; 
@@ -245,7 +258,27 @@ a.divLink {
   float: left;
   font-size: 30px;
 }
-
+.showgroupButton {
+  background: #C3CDE6;
+  color: #FF1493;
+  border: 2px solid gray;
+  border-radius: 3px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: bold;
+  width: 15%;
+  float: left;
+  margin-right: 5%;
+}
+.buttonToolbar {
+  border-right: 7px solid black;
+  margin-right: 5%;
+}
+.viewGroup {
+  bacKground: #f7f3aa
+}
 .articleBody {
   height: 25%;
   text-overflow: ellipsis; 
@@ -263,10 +296,49 @@ a.divLink {
 }
 .usernameDisplay {
   font-family: 'Arvo', serif;
+  margin-left: 20%;
+}
+
+.tagsButton {
+  background: #f7f3aa;
+  border: 2px solid #7b98e0;
+  border-radius: 5px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+  font-size: 10px;
+  color: #FF1493;
+  margin-right: none;
+/*  font-weight: bold;
+*/}
+
+.tagsHeader {
+  font-size: 30px;
+  margin-bottom: 10px;
+  font-family: 'Arvo', serif;
+}
+
+.groupdisplay {
+  margin-left: 0px;
+}
+
+.groupsNoteable {
+  font-weight: bold;
+  float: left;
+}
+
+.groupUser {
+  float: left;
+} 
+
+.groupName {
+  font-weight: bold;
+  font-size: 30px;
+  font-family: 'Arvo', serif;
 }
 input[type=button] {
 	height:30px;
-	width:10%;
+	width:100%;
 	font-size:12px;
 	background-color: #FFC0CB;
 }
@@ -278,6 +350,10 @@ input[type=submit] {
 	background-color: white;
 }
 
+input[type=checkbox] {
+  width: 1%;
+  float: left;
+}
 
 header {
 	align-content: center;
@@ -286,7 +362,41 @@ header {
 	color: #0B3861;
 	font-size:16px;
 	background-color: white;
-	height:125px;
   font-family: 'Montserrat';
 }
 
+  /*width:500px;
+}
+}
+}
+}
+*/
+/*.container{
+    width:200px;
+    height:200px;
+    background-color:black;
+    color:white;
+    /*Important:
+    position:relative;
+}*/
+
+/*Important:*/
+/*.link-spanner{
+  position:absolute; 
+  width:100%;
+  top:0;
+  left: 0;
+  z-index: 1;
+  height:100px;
+   edit: fixes overlap error in IE7/8, 
+     make sure you have an empty gif 
+  background-image: url('empty.gif');
+}   */
+
+/*.app_container {
+  
+  text-align: center;
+  align-self: center;
+  background-color: #CCCCFF;
+  height:100%;
+}*/
