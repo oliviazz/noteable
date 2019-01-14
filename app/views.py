@@ -213,6 +213,7 @@ def displayallgroups():
     database = Database()
     database.connect()
     groups = database.allGroups()
+    print groups
     formatted_results = {}
     for i in range(0, len(groups)):
         formatted_results[i] = {
@@ -269,7 +270,7 @@ def leavegroup():
     database.connect()
     database.deleteUserFromGroup(username, groupname)
     database.disconnect()
-    return jsonify(message="Removed: " + userID + " to group " + groupname), 200
+    return jsonify(message="Removed: " + username + " from group " + groupname), 200
 
 
 @bp.route("/addarticletogroup", methods=["POST"])

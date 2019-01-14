@@ -63,23 +63,17 @@ class Group extends React.Component {
     }
 
     const leaveGroup = (event) => {
-      alert('haha')
+        this.setState({isMember: false})
+        axios.post('/api/joingroup', {groupname: this.props.groupName}).then(res => {
+            console.log("Received response: ", res.data.results);
+        })
     }
 
     const joinGroup = (event) => {
-          event.preventDefault()
-      
           this.setState({isMember: true})
-          
-             // this.serverRequest = axios.post('/api/', { article_url: this.props.link })
-             //  .then(res => {
-             //      if(res.data){
-             //         console.log(res.data)
-             //         console.log('delete successful')
-             //       }
-             //  })
-             //  window.location.reload();  
-         
+          axios.post('/api/leavegroup', {groupname: this.props.groupName}).then(res => {
+            console.log("Received response: ", res.data.results);
+        })   
     }
     return (
       <div>

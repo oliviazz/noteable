@@ -247,6 +247,7 @@ class UserContainer extends React.Component {
                     
                      <Row>
                      <Col xs={1} md={1}>
+
                     </Col>
 
                     <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
