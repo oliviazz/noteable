@@ -9,13 +9,18 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import { 
+        Route, 
+        BrowserRouter as Router, 
+        withRouter,
+        Redirect } from 'react-router-dom'
 
 
 import './mypage.css';
 
 class Header extends React.Component {
 
-  constructor() {
+  constructor(props) {
     super()
     this.state = {
       searchTerm: ""
@@ -83,12 +88,53 @@ class Header extends React.Component {
                     <Button type="submit" onClick={(e) => onSubmit()}>submit</Button>
                 </Navbar.Form>
           </Nav>
+          <AuthButton />
         </Navbar>
     </header>
     </div>
     );
   }
 }
+
+function Public() {
+  return <h3>Public</h3>;
+}
+
+function Protected() {
+  return <h3>Protected</h3>;
+}
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
+  },
+  signout(cb) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+const AuthButton  = 
+      withRouter(
+      ({ history }) =>
+        fakeAuth.isAuthenticated ? (
+          <p>
+            Welcome!{" "}
+            <button
+              onClick={() => {
+                fakeAuth.signout(() => history.push("/"));
+              }}
+            >
+              Sign out
+            </button>
+          </p>
+        ) : (
+          <p>You are not logged in.</p>
+        )
+    );
+
 const mapStateToProps = state => ({
   loggedIn: state.loggedIn,
 
