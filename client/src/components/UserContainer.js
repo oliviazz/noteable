@@ -268,8 +268,6 @@ class UserContainer extends React.Component {
                         <h2>User Results: Showing {this.state.display} Users </h2> 
                         {this.render_components.map(user => <div>{user}</div>)} 
                     </Col>
-
-
                     </Row>
                 </Grid>      
             </div >);

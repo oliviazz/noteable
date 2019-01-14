@@ -97,17 +97,17 @@ class ArticleAdd extends React.Component {
 
   render() {
 
-      var passed_state =  this.props.location.state
-                if (passed_state){
-                    this._username = passed_state['username']
+      // var passed_state =  this.props.location.state
+      //           if (passed_state){
+      //               this._username = passed_state['username']
                     
-                    console.log('Passed username, now set: ', this._username)
+      //               console.log('Passed username, now set: ', this._username)
                 
-                }
-                else{
-                    console.log(passed_state, " no passed variables found")
+      //           }
+      //           else{
+      //               console.log(passed_state, " no passed variables found")
 
-                }
+      //           }
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;
       const status = 'Enter Article URL';

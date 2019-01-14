@@ -469,7 +469,7 @@ def addarticle():
 
 
     return result
-    
+
 
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
