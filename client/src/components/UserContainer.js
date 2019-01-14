@@ -35,26 +35,17 @@ class UserContainer extends React.Component {
         // ---------------------------------------
         constructor(props) {
             super(props)
+
             this.state = {
                 'full_article_info':[],
-                'user_components':[]
+                'user_components':[],
+                'display': 'all',
+                'render_components': []
             }
 
-            this._retrieved_articles = [];
+            this.searchTerm = ''
 
-            this._ismounted = true;
-            // Stores valid article URLs
-            this._article_urls = [];
-            // Stores metadata of all valid article URLs 
-            this._full_article_info = [];
-
-            this._gotfulldata = false;
-
-            this._userViewingId = '54321'
-
-            this._user = 'livz'
-
-            this._active_tag_filters = ''
+            this.view = ''
         }
 
         // Called right after component mounts
@@ -68,6 +59,18 @@ class UserContainer extends React.Component {
                 let cleaned_article_names = []
                 let full_info = []
                 let components = []
+
+                var passed_state =  this.props.location.state
+                if (passed_state){
+            
+                    this.searchTerm = passed_state['searchTerm']
+                    // this._username = passed_state['username']
+
+                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
+                    
+                    console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
+                
+                }
             
                 // {API} Load the articles from the database by calling getarticle
                 if (typeof this._source != typeof undefined) {
@@ -112,21 +115,53 @@ class UserContainer extends React.Component {
             this.setState({selected})
         }
 
+        setFriends = (event) => {
+            this.setState({'display': 'friends'})
+        }
 
-        load_page_results = (selected) => {
-            console.log('reloading this!!!')
-            
-
-            // make a http request 
-
+        setPending = (event) => {
+            this.setState({'display': 'pending'})
         }
 
         render() {
+            var components;
+            console.log(this.state.display)
 
             this.state.user_components.push(<UserBox username = {'Person 1'} userId = '12345' userViewing = {this._userViewingId} /> )
             
             this.state.user_components.push(<UserBox username = {'Person 2'} userId = '54321' userViewing = {this._userViewingId} /> )
             
+            if (this.state.display == 'friends'){
+                     axios.post('/api/allfriends').then(res => {
+                        components = []
+                        var friends = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        var len_dict = Object.keys(friends).length
+                        console.log(len_dict)
+                        for(var i = 0; i < len_dict; i++){
+                            components.push(<UserBox firstname={friends[i]['firstname']} lastname = {friends[i]['lastname']} username = {friends[i]['username']} />);
+                              
+                        }
+                        this.setState({render_components:components})
+                    })
+            }
+
+            else if (this.state.display == 'all'){
+                console.log('nice!')
+                    axios.post('/api/allusers').then(res => {
+                        components = []
+                        var users = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        var len_dict = Object.keys(users).length
+                        console.log(len_dict)
+                        for(var i = 0; i < len_dict; i++){
+                            components.push(<UserBox firstname={users[i]['firstname']} lastname = {users[i]['lastname']} username = {users[i]['username']} />);
+                        }
+
+                        this.setState({render_components:components})
+                    })
+
+            }
 
             // for (var i = 0; i < 10; i++) { 
             //   this.state.user_components.push(<UserBox username = {'Person ' + (i)} userId = '54321' userViewing = {this._userViewingId} /> )
@@ -147,6 +182,10 @@ class UserContainer extends React.Component {
                 // axios request tom ake new group
             }
 
+            const showPending = (event) => {
+                console.log('now i will show friend')
+            }
+
             return(
                 <div> 
                 <Grid>
@@ -157,10 +196,11 @@ class UserContainer extends React.Component {
                    
                     </Col>
 
-                        
+                    <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
+                    <Button bsStyle='info' onClick={showPending}>Show Friends </Button>
                     <Col xs={8} md={8}>
                         <h2>User Results</h2> 
-                        {this.state.user_components.map(user => <div>{user}</div>)} 
+                        {this.state.render_components.map(user => <div>{user}</div>)} 
                     </Col>
 
 

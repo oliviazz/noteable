@@ -202,6 +202,7 @@ class PageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
+                    <UserBox username={this._username} />
                          {this._displayUsername == this._username ? <h1>your noteable: {this._username} </h1>: <h1>{this._displayUsername}'s noteable </h1>}
                          <br></br><br></br>
                         <br></br>
