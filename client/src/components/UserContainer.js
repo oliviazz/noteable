@@ -47,13 +47,14 @@ class UserContainer extends React.Component {
             this.view = ''
             this._username = 'lkatzman@princeton.edu'
 
+
         }
 
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-
+                this._username = this.props.username
                 this._ismounted = true;
                 var article_names = [];
                 var article = ""

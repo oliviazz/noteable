@@ -43,7 +43,7 @@ class Article extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._username = 'lkatzman@princeton.edu'
+    this._username = 'zob@princeton.edu'
     
   
   }
@@ -57,6 +57,9 @@ class Article extends React.Component {
     console.log(`Option selected:`, selectedOption);
   }
 
+  componentDidMount() {
+   this._username = this.props.username
+ }
   
   render() {
     const { selectedOption } = this.my_selectedOption;

@@ -53,7 +53,7 @@ def displayArticlesHelper(article_query_results):
        
     return formatted_results
 
-def modularAddArticle(json_payload, username):
+def Article(json_payload, username):
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
     print 'Verifying that article and tags parsed', article, tags

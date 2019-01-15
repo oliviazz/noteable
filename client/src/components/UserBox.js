@@ -40,6 +40,7 @@ class UserBox extends React.Component {
 
   componentDidMount() {
     this.setState({isFriend:this.props.areFriends})
+    this._username = this.props.username
   }
 
   render() {
