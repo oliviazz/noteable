@@ -25,15 +25,23 @@ class Group extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._userId = '54321'
+    this.username = 'lkatzman@princeton.edu'
+    this.state = {
+      'isMember':false
+    }
+  }
 
-    
-  
+  componentDidMount() {
+    console.log("hi1")
+    axios.post('/api/checkfriends', {username2: JSON.stringify(this.username), username: JSON.stringify(this.props.groupName)}).then(res => {
+        this.state.isMember = res.data.results;
+        console.log("hi2")
+        console.log(this.state.isMember)
+    })
   }
 
   state = {
     selectedOption: null,
-    isMember: true
   }
 
   handleChange = (selectedOption) => {
@@ -46,83 +54,51 @@ class Group extends React.Component {
     const { selectedOption } = this.my_selectedOption;
     const true_holder = true;
 
+    const handleDelete = (event) => {
+        var r = window.confirm('Are you sure you want to delete this article from your page?')
+        
+        if (r == true){
+           this.serverRequest = axios.post('/api/deletearticle', { username: this.username, article_url: this.props.link})
+            .then(res => {
+                if(res.data){
+                   console.log(res.data)
+                   console.log('delete successful')
+                 }
+            })
+            window.location.reload();  
+        }
+        else{ return }
+    }
+
     const leaveGroup = (event) => {
         this.setState({isMember: false})
-        axios.post('/api/leavegroup', {groupname: this.props.groupName}).then(res => {
-            console.log("Received leave response: ", res.data.results);
+        axios.post('/api/leavegroup', {username: JSON.stringify(this.username), groupname: JSON.stringify(this.props.groupName)}).then(res => {
+            console.log("Received response: ", res.data.results);
         })
     }
 
     const joinGroup = (event) => {
-          this.setState({isMember: true})
-          axios.post('/api/joingroup', {groupname: this.props.groupName}).then(res => {
-            console.log("Received join response: ", res.data.results);
-        })   
-    }
-    
-    
-    //               {this.state.isMember ?  <Button bsStyle="info" onClick={joinGroup}> 'Join Group'</Button> : <Button bsStyle="success"> Member </Button>} 
-//              {this.state.isMember ?  <Button bsStyle="default"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
-    
+      this.setState({isMember: true})
+                axios.post('/api/joingroup', {username: JSON.stringify(this.username), groupname: JSON.stringify(this.props.groupName)}).then(res => {
+                  console.log("Received response: ", res.data);
+              }) 
+            }
+
     return (
-
-      // <div>
-      //    <div className = "container">
-
-
-      //       <Panel>
-      //       <Panel.Heading>
-
-      //         <Panel.Title componentClass="h3">{this.props.groupName}</Panel.Title>
-            
-      //          <Button bsStyle="info" href = {this.props.groupPage} > View Group </Button>
-             
-      //       </Panel.Heading>
-      //       <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-      //       <Panel.Body>
-            
-//              <span className ="link-spanner"></span>
-//              {this.props.descrip}
-//              <h4> {this.props.sitename} </h4>
-//              <br></br>
-//              <br></br>
-//              <br></br>
-//              <img src={this.props.image} className="img-responsive center-block"/>  
-//              {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
-//              {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
-//              </Panel.Body>
-//               </a>
-      //         <span className ="link-spanner"></span>
-      //         {this.props.descrip}
-      //         <h4> {this.props.sitename} </h4>
-      //         <br></br>
-      //         <br></br>
-      //         <br></br>
-      //         <img src={this.props.image} className="img-responsive center-block"/>  
-      //         {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
-      //         {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
-               
-      //         </Panel.Body>
-      //          </a>
-
-      //       </Panel>
-          
-      //   </div>
-        
-      // </div> 
       <div className = "container">
         <div className="row groupContainer">
-            <div className = "row groupInside groupName" href={this.props.link} target="_blank" rel="noopener noreferrer">{this.props.groupName}</div>
+            <div className = "row groupInside groupName" href={this.props.link} target="_blank" rel="noopener noreferrer" name="groupname">{this.props.groupName}</div>
             <div className = "row groupInside articleBottom ">
               <Button bsStyle="info" href = {this.props.groupPage} className="showgroupButton viewGroup"> View Group </Button>
-              {this.state.isMember ?  <Button bsStyle="success" className="showgroupButton" disabled>Member </Button> : <Button onClick={joinGroup} className="groupButton"> 'Join Group'</Button>} 
-              {this.state.isMember ?  <Button bsStyle="error"  className="showgroupButton" onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+              {this.state.isMember ? <Button bsStyle="success" className="groupButton" disabled>Join Group </Button> : <Button onClick={joinGroup} className="groupButton"> 'Join Group'</Button>}
+              {this.state.isMember ? <Button bsStyle="error" className="groupButton" onClick={leaveGroup} name='leavegroup'>Leave Group </Button> : <Button onClick={leaveGroup} className="groupButton" disabled> 'Leave Group'</Button>} 
             </div>         
         </div>
       </div>
     );
   }
 }
+              // {this.state.isMember ?  <Button bsStyle="error"  className="showgroupButton" onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
 
 const mapStateToProps = state => ({
     loggedIn: state.loggedIn

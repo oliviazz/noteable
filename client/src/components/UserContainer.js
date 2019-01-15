@@ -26,8 +26,6 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
-
-
 class UserContainer extends React.Component {
         // 
         // Set some initial properties we want to 
@@ -47,7 +45,8 @@ class UserContainer extends React.Component {
             this.searchTerm = ''
 
             this.view = ''
-            this._username = ''
+            this._username = 'lkatzman@princeton.edu'
+
 
         }
 
@@ -61,18 +60,46 @@ class UserContainer extends React.Component {
                 var article = ""
                 let cleaned_article_names = []
                 let full_info = []
-                let components = []
 
-                var passed_state =  this.props.location.state
-                if (passed_state){
-            
-                    this.searchTerm = passed_state['searchTerm']
-                    // this._username = passed_state['username']
+                var components = []
+                var users
+                console.log('Did the state change', this.state.display)
 
-                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
-                    
-                    console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
-                
+                if (this.state.display == 'all'){
+                     axios.post('/api/allusers').then(res => {
+                        users = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        for(var i = 0; i < Object.keys(users).length; i++){
+                            components.push(<UserBox username = {users[i]['username']} userPage = 'insertURL.com'/>)
+                        }
+                        this.setState({user_components:components})
+                    })
+                }
+                else if (this.state.display = 'friends'){
+                    axios.post('/api/allfriends').then(res => {
+                        users = res.data.results;
+                        console.log("Received response: ", res.data.results);
+                        for(var i = 0; i < Object.keys(users).length; i++){
+                            components.push(<UserBox username = {users[i]['username']} userPage = 'insertURL.com'/>)
+                        }
+                        this.setState({user_components:components})
+                    })
+
+                }
+                else if(this.state.display = "search_results"){
+                    users = []
+                    axios.post('/api/allusers').then(res => {
+                        for (var i = 0; i < Object.keys(res.data.results).length; i++){
+                            if(res.data.results[i]['username'].includes(JSON.stringify(this.state.search), 0)){
+                                users.push(res.data.results[i]['username']);
+                            }
+                        }
+                        console.log("Received response: ", users);
+                        for(var i = 0; i < 4; i++){
+                                components.push(<UserBox username = {users[i]} userPage = 'insertURL.com'/>)
+                        }
+                        this.setState({user_components:components})
+                    })
                 }
             
                 // {API} Load the articles from the database by calling getarticle
@@ -106,6 +133,7 @@ class UserContainer extends React.Component {
         }
 
         render() {
+            console.log("RENDER")
             var users;
             var friends;
 
@@ -242,34 +270,92 @@ class UserContainer extends React.Component {
 
             const showPending = (event) => {
                 this.render_components = []
-                    
-                this.setState({display:'pending'})
+                this.setState({'display':'pending'})
                    
             }
 
             const showFriends = (event) => {
                 this.render_components = []
-                this.setState({display:'friends'})
+                this.setState({'display':'friends'})
+            }
+
+            const showAllUsers = (event) => {
+                this.render_components = []
+                this.setState({'display':'all'})
+            }
+
+            const searchUsers = (event) => {
+                alert('searching for user')
+                this.setState({'display': 'search_results'})
+                
+                var users = []
+                var foundusers = []
+                var components = []
+
+                    axios.post('/api/allusers').then(res => {
+                        users = res.data.results;
+                        for(var j = 0; j < Object.keys(users).length; j++){          
+                            if(users[j]['username'].includes(JSON.stringify(this.state.searchTerm), 0)){
+                                foundusers.push(users[j]);
+                            }
+                        }
+                        for(var i = 0; i < Object.keys(foundusers).length; i++){
+                                components.push(<UserBox username = {foundusers[i]['username']} userPage = 'insertURL.com'/>)
+                        }
+                        this.setState({user_components:components})
+                    })
             }
 
             return(
                 <div> 
                 <Grid>
-                    
                      <Row>
-                     <Col xs={1} md={1}>
+                    
+                     <Col xs={3} md={2} className = "buttonToolbar">
+                
+                        <ButtonToolbar>
+                             <div className = "usersToolbar tagsHeader">users toolbar </div>
+                            <Button onClick={showAllUsers} className="usersButton groupButton"> Show All Users </Button> 
+                                <br></br><br></br><br></br>
+                            <Button onClick={showPending} className="pendingButton groupButton"> Show My Friends </Button> 
+                                <br></br><br></br><br></br>
+                            <Button onClick={showFriends} className="showpending groupButton"> Show My Pending Requests </Button> 
+                                <br></br><br></br><br></br>
+                            <br></br><br></br><br></br>
+                            <input id="friend_search"  className = 'input-lg peButton groupButton' type="text" placeholder="Find User" name="searchTerm" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
+                            <Button onClick={searchUsers} className = "groupButton"> Search Users </Button>
 
+                        </ButtonToolbar>
+                        <Col xs={4} md={4}>
+                            <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this._user}'s</div> <div className="groupsNoteable">Noteable:</div> </div> 
+                            <div className = "usernameDisplay groupdisplay showingBlankGroups">showing {this.state.display} users </div>
+                            {this.state.user_components.map(user => <div>{user}</div>)} 
+                        </Col>
                     </Col>
-                    <h5>{this._username}</h5>
-                    <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
-                    <Button bsStyle='info' onClick={showFriends}> Show Friends </Button>
-                    <Col xs={8} md={8}>
-                        <h2>User Results: Showing {this.state.display} Users </h2> 
-                        {this.render_components.map(user => <div>{user}</div>)} 
-                    </Col>
+
                     </Row>
                 </Grid>      
             </div >);
+
+
+
+            //     <div> 
+            //     <Grid>
+                    
+            //          <Row>
+            //          <Col xs={1} md={1}>
+
+            //         </Col>
+            //         <h5>{this._username}</h5>
+            //         <Button bsStyle='success' onClick={showPending}>Show Pending </Button>
+            //         <Button bsStyle='info' onClick={showFriends}> Show Friends </Button>
+            //         <Col xs={8} md={8}>
+            //             <h2>User Results: Showing {this.state.display} Users </h2> 
+            //             {this.render_components.map(user => <div>{user}</div>)} 
+            //         </Col>
+            //         </Row>
+            //     </Grid>      
+            // </div >);
             }
         }
 
