@@ -66,17 +66,7 @@ class GroupPageContainer extends React.Component {
 
             this._active_tag_filters = ''
 
-            var passed_state =  this.props.location.state
-                if (passed_state){
-            
-                    this._username = passed_state['userViewing']
-                   
-                    this._displayGroupName = passed_state['groupName']['gName']
-                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
-                    
-                    console.log(this._username, ' as viewing and ', this._displayGroupName, ' as the group to be viewed')
-                
-                }
+        
 
              ///
             
@@ -89,6 +79,18 @@ class GroupPageContainer extends React.Component {
 
                 this._username = this.props.username
                 // state: {displayUserId: userId, userId: userViewing}
+
+                var passed_state =  this.props.location.state
+                if (passed_state){
+            
+                    this._username = passed_state['userViewing']
+                   
+                    this._displayGroupName = passed_state['groupName']
+                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
+                    
+                    console.log(this._username, ' as viewing and ', this._displayGroupName, ' as the group to be viewed')
+                
+                }
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
 
@@ -195,7 +197,7 @@ class GroupPageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         <div className = "usernameDisplay">{groupName}'s  notable:  </div>
+                         <div className = "usernameDisplay">Group {groupName}'s  notable:  </div>
                          <GroupArticleAdd groupname={groupName} />
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 

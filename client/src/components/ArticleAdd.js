@@ -96,7 +96,8 @@ class ArticleAdd extends React.Component {
 // }
   componentDidMount() {
     this._username = this.props.username
-   
+    this._username = "ozhang@princeton.edu"
+
   
   }
   render() {
@@ -112,6 +113,7 @@ class ArticleAdd extends React.Component {
       //               console.log(passed_state, " no passed variables found")
 
       //           }
+      console.log(this.props, " PROPS")
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;
       const status = 'Please Enter Article URL:';

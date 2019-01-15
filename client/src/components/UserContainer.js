@@ -11,7 +11,6 @@ import { withRouter, Redirect } from 'react-router-dom'
 import Group from 'components/Group'
 import UserBox from 'components/UserBox'
 
-import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 

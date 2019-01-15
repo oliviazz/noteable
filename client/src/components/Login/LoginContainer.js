@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 
-import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'
 import UserAdd from 'components/UserAdd'
 import GoogleLogin from 'react-google-login';
@@ -32,7 +31,7 @@ class LoginContainer extends React.Component {
         };
         this.signup = this.signup.bind(this);
         this._username = ''
-        console.log(this.props, " what r my propsss")
+        console.log(this.props, " what r my propsss!!!!")
   
     }
 

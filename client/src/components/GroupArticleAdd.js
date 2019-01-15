@@ -25,6 +25,7 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Select from 'react-select';
 import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
+import { Route , withRouter} from 'react-router-dom';
 
 
 const options = [
@@ -110,19 +111,21 @@ class GroupArticleAdd extends React.Component {
       const true_holder = true;
       const status = 'Please Enter Article URL:';
       this._groupname = this.props.groupname
+      var gn = this._groupname
+      var un = this._username
 
       const submitArticle = event => {
           event.preventDefault()
           alert('Submitted ' + this.state.article_url + "for user " + this._groupname);
           alert('Tags: ', JSON.stringify(this.my_selectedOption));
-          axios.post('/api/addarticletogroup', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), groupname: this._groupname})
+          axios.post('/api/addarticletogroup', { article_url: JSON.stringify(this.state.article_url), tags: JSON.stringify(this.my_selectedOption), groupname: JSON.stringify(this._groupname)})
               .then(res => {
                   console.log("Received response: ", res.data);
+                  window.location.reload();
               })
-          this.props.history.push({
-            pathname: '/mypage',
-            state: {username: this._username, displayUsername: this._username} // your data array of objects
-          }) 
+              console.log(this.props)
+     
+
           // this.props.router.push({
           //   pathname: '/other-page',
           //   state: {

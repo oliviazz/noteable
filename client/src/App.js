@@ -26,7 +26,6 @@ import Article from 'components/Article'
 import LoadingView from 'components/LoadingView'
 import { loadMe } from 'actions/appActions'
 
-import LoginForm from 'components/Login/LoginForm'
 import LoginContainer from 'components/Login/LoginContainer'
 import { login, setErrorMessage } from 'actions/appActions'
 import UserAdd from 'components/UserAdd'
@@ -102,13 +101,13 @@ class App extends React.Component {
       </header>
     </div>
       <div>
-        <PrivateRoute exact path="/" component={PageContainer} />
+        <PrivateRoute exact path="/" component={LoginContainer} handlerFromParent={this.handleData}/>
         <LoadingView currentlySending={loadingAuth} />
-        <Route path="/mypage" component={PageContainer} />
-        <PrivateRoute path="/quickadd" component={ArticleAdd} />
-        <Route path="/groups" component={GroupContainer} />
-        <PrivateRoute path="/users" component={UserContainer} />
-        <Route path="/grouppage" component={GroupPageContainer} />
+        <Route path="/mypage" component={PageContainer} handlerFromParent={this.handleData} />
+        <Route path="/quickadd" component={ArticleAdd} handlerFromParent={this.handleData}/>
+        <Route path="/groups" component={GroupContainer} handlerFromParent={this.handleData}/>
+        <PrivateRoute path="/users" component={UserContainer} handlerFromParent={this.handleData} />
+        <Route path="/grouppage" component={GroupPageContainer} handlerFromParent={this.handleData}/>
 
         <Route path="/login" component={LoginContainer} handlerFromParent={this.handleData}/>
         <Route path="/logout" component={LogoutContainer} />     
@@ -183,7 +182,7 @@ function PrivateRoute({ component: Component, ...rest }) {
     <Route {...rest}
      render={props => actualAuth.isAuthenticated ? 
       ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
-      (<Redirect  to={{  pathname: "/login", state: { from: props.location } }} />  )
+      (<Redirect  to={{  pathname: "/login", state: { from: props.location, fn: {handleData} } }} />  )
   } />
   
   );
@@ -239,5 +238,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
+
 
 

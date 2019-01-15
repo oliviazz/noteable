@@ -53,7 +53,7 @@ def displayArticlesHelper(article_query_results):
        
     return formatted_results
 
-def Article(json_payload, username):
+def modularAddArticle(json_payload, username):
     article = str(json_payload['article_url'])
     tags = str(json_payload['tags'])
     print 'Verifying that article and tags parsed', article, tags
@@ -504,14 +504,16 @@ def getgrouparticles():
 
     json_payload = request.get_json()
 
+
     print json_payload, "payload for get group articles"
 
     # PUT THIS BACK LATER
     groupname = json_payload['groupname'].replace('\"', '')   
     tags = ""
+    print(groupname, "yooo!!")
 
     article_query_results = database.getArticlesFromGroup(groupname)
-
+    print("fdafsa--------------------\n", article_query_results)
     formatted_results = displayArticlesHelper(article_query_results)
     database.disconnect()
     print('all done')
