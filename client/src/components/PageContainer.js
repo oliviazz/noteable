@@ -87,7 +87,8 @@ class PageContainer extends React.Component {
                 }
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-
+                this._username = this.props.username
+                
 
                 this._ismounted = true;
                 var article_names = [];
@@ -138,6 +139,7 @@ class PageContainer extends React.Component {
                     // {this.state.tags_components.map(tag => <div>{tag}</div>)}
 
                 })            
+
             }
 
             // ---------------------------------------

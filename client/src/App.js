@@ -118,14 +118,14 @@ render() {
           {!loadingAuth && (
             <div>
      
-              <Route exact path="/" component={LoginContainer} />
-              <Route path="/login" component={LoginContainer} />
+              <PrivateRoute exact path="/" component={LoginContainer} />
+              <PrivateRoute path="/login" component={LoginContainer} />
               <PrivateRoute path="/mypage" component={PageContainer} />
             
-              <Route path="/quickadd" component={ArticleAdd} />
-              <Route path="/groups" component={GroupContainer} />
-              <Route path="/users" component={UserContainer} />
-              <Route path="/grouppage" component={GroupPageContainer} />
+              <PrivateRoute path="/quickadd" component={ArticleAdd} />
+              <PrivateRoute path="/groups" component={GroupContainer} />
+              <PrivateRoute path="/users" component={UserContainer} />
+              <PrivateRoute path="/grouppage" component={GroupPageContainer} />
           
               <Route path="/logout" component={LogoutContainer} />
               <Route path="/protected" component={ProtectedContainer} />
@@ -329,9 +329,35 @@ function Protected() {
   return <h3>Protected</h3>;
 }
 
-const actualAuth = {
+// function needLogin(){
 
-  isAuth: (LoginContainer.returnUser()),
+//         return (
+//         <div ><Grid>
+//            <Row><Col xs={1} md={1}></Col>
+//                <Col xs={8} md={8}>
+//                     <h1> Welcome to Noteable </h1> <br></br>
+//                     <GoogleLogin
+//                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+//                       buttonText="Sign Up with Google"
+//                       onSuccess={responseGoogleSignUp}
+//                       onFailure={responseGoogle}/>
+//                       <br></br>
+//                       <h5> If you already have an account: </h5>
+//                     <GoogleLogin
+//                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+//                       buttonText="Login with Google"
+//                       onSuccess={responseGoogleLogin}
+//                       onFailure={responseGoogle}/>
+//                </Col>
+//             </Row>
+//         </Grid> </div>
+//         );
+
+// }
+const actualAuth = {
+  //isAuth: returnUser(),
+  isAuth: true,
+  username: 'ozhang@princeton.edu',
   authenticate(cb){
     this.isAuth = true
 
@@ -359,13 +385,13 @@ const fakeAuth = {
 
 function PrivateRoute({ component: Component, ...rest }) {
   console.log('props', rest)
-  var tusername = 'ozdadsafsfs@princeton.edu'
+  var username = 'ozhang@princeton.edu'
 
   return (
 
     <Route {...rest}
      render={props => fakeAuth.isAuthenticated ? 
-      ( props =  <Component {...props} username={tusername} />) : 
+      ( props =  <Component {...props} username={actualAuth.username} />) : 
       (<Redirect  to={{  pathname: "/login", state: { from: props.location } }} />  )
   } />
   
@@ -378,7 +404,7 @@ const AuthButton  =
       ({ history }) =>
         fakeAuth.isAuthenticated ? (
           <p>
-            Welcome!{" "}
+            Welcome {actualAuth.username}!{" "}
             <button
               onClick={() => {
                 fakeAuth.signout(() => history.push("/"));

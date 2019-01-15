@@ -96,6 +96,8 @@ class ArticleAdd extends React.Component {
 // }
   componentDidMount() {
     this._username = this.props.username
+   
+  
   }
   render() {
 
