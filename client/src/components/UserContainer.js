@@ -47,7 +47,7 @@ class UserContainer extends React.Component {
             this.searchTerm = ''
 
             this.view = ''
-            this._username = 'ozhang@princeton.edu'
+            this._username = ''
 
         }
 
@@ -55,7 +55,7 @@ class UserContainer extends React.Component {
         // ---------------------------------------
         componentDidMount() {
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-
+                this._username = this.props.username
                 this._ismounted = true;
                 var article_names = [];
                 var article = ""

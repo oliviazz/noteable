@@ -12,7 +12,7 @@ import {
         Link,
         Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import LoginContainer from 'components/Login/LoginContainer'
+
 import LogoutContainer from 'components/Logout/LogoutContainer'
 import ProtectedContainer from 'components/Protected/ProtectedContainer'
 import UserContainer from 'components/UserContainer'
@@ -26,6 +26,16 @@ import Article from 'components/Article'
 import LoadingView from 'components/LoadingView'
 import { loadMe } from 'actions/appActions'
 
+import LoginForm from 'components/Login/LoginForm'
+import { login, setErrorMessage } from 'actions/appActions'
+import UserAdd from 'components/UserAdd'
+import GoogleLogin from 'react-google-login';
+
+import Row from 'react-bootstrap/lib/Row';
+import Grid from 'react-bootstrap/lib/Grid';
+import Col from 'react-bootstrap/lib/Col';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+import axios from 'axios';
 import Button from 'react-bootstrap/lib/Button';
 import Nav from 'react-bootstrap/lib/Nav';
 import Navbar from 'react-bootstrap/lib/Navbar';
@@ -50,6 +60,7 @@ class App extends React.Component {
  
 
 render() {
+    console.log('is logged in', actualAuth.isAuth)
     const { loadingAuth } = this.props
     const onChange = event => {
       this.setState({value: event.target.value});
@@ -107,14 +118,14 @@ render() {
           {!loadingAuth && (
             <div>
      
-              <Route exact path="/" component={LoginContainer} />
-              <Route path="/login" component={LoginContainer} />
+              <PrivateRoute exact path="/" component={LoginContainer} />
+              <PrivateRoute path="/login" component={LoginContainer} />
               <PrivateRoute path="/mypage" component={PageContainer} />
             
-              <Route path="/quickadd" component={ArticleAdd} />
-              <Route path="/groups" component={GroupContainer} />
-              <Route path="/users" component={UserContainer} />
-              <Route path="/grouppage" component={GroupPageContainer} />
+              <PrivateRoute path="/quickadd" component={ArticleAdd} />
+              <PrivateRoute path="/groups" component={GroupContainer} />
+              <PrivateRoute path="/users" component={UserContainer} />
+              <PrivateRoute path="/grouppage" component={GroupPageContainer} />
           
               <Route path="/logout" component={LogoutContainer} />
               <Route path="/protected" component={ProtectedContainer} />
@@ -132,6 +143,184 @@ render() {
   }
 }
 
+class LoginContainer extends React.Component {
+
+
+  constructor(props) {
+        super(props);
+        this.state = {
+           loginError: false,
+           redirect: false
+        };
+        this.signup = this.signup.bind(this);
+        this._username = ''
+    }
+
+ 
+
+ 
+
+  login(res, type) {
+    let postData;
+
+    if (type === 'google' && res.w3.U3) {
+        postData = {
+          name: res.w3.ig,
+          provider: type,
+          email: res.w3.U3,
+          first_name: res.w3.ofa,
+          last_name: res.w3.wea,
+          provider_id: res.El,
+          token: res.Zi.access_token,
+          provider_pic: res.w3.Paa
+        }
+    }
+
+    if (postData) {
+          axios.post('api/checkuserexists', {pre_user_Id: postData['email']})
+          .then(res => {
+                    if (res.data['exists']){
+                        console.log('Welcome!')
+                        this._username = postData['email']
+                        
+                        this.props.history.push({
+                                    pathname: '/quickadd',
+                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
+                                  }) 
+                    }
+                    else{
+                      alert('Error: User not found ')
+                    }
+          })
+    }
+  }
+
+  
+
+  signup(res, type){
+        // postData connects to database, and must include all info needed
+        let postData;
+
+        if (type === 'google' && res.w3.U3) {
+            postData = {
+              name: res.w3.ig,
+              provider: type,
+              email: res.w3.U3,
+              first_name: res.w3.ofa,
+              last_name: res.w3.wea,
+              provider_id: res.El,
+              token: res.Zi.access_token,
+              provider_pic: res.w3.Paa
+            };
+        }
+
+        if (postData) {
+      
+          console.log("Working", postData)
+
+          axios.post('api/checkuserexists', {pre_user_Id: postData['email']})
+          .then(res => {
+                    console.log('Checking for existence of user ', postData['email'])
+                    if (! res.data['exists']){
+                        // ask for username
+                        console.log('bro u wrong')
+
+                          var relevantData = {
+                            'firstName':  postData['first_name'],
+                            'lastName': postData['last_name'],
+                            'pre_userId': postData['email'], 
+                            'username': postData['email']
+                          }
+                          this._username = postData['email']
+
+                          axios.post('/api/createuser', {data: relevantData})
+                          .then(res => {
+                                  console.log("Received response: ", res.data);
+                                  this.props.history.push({
+                                    pathname: '/quickadd',
+                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
+                                  }) 
+                          })
+                    }
+                    else{
+                      alert('Error: user already exists with that Google account. Please Log in Instead. ')
+                      console.log('tried to sign up for existing user')
+                    }
+
+                   
+          })
+        }
+      }
+    
+   
+
+
+  render() {
+    const { from } = this.props.location.state || { from: { pathname: '/' } }
+    const { redirectToReferrer } = this.state
+
+    if (redirectToReferrer === true) {
+      return <Redirect to={from} />
+    }
+
+    const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
+
+    // return (
+    //   <div>
+    //   <UserAdd />
+        // if (this.state.redirect || sessionStorage.getItem('userData')) {
+        //     return (<Redirect to={'/home'}/>)
+        // }
+      
+      const responseGoogleLogin = (response) => {
+            // 17:20 for google info demo
+ 
+            console.log(response);
+            this.login(response, 'google');
+        }
+      const responseGoogleSignUp = (response) => {
+
+        
+            console.log(response);
+            this.signup(response, 'google');
+
+      }
+
+      const responseGoogle = (response) => {
+        alert('Error: please try again')
+      }
+
+        return (
+        <div >
+        <Grid>
+                    
+            <Row>
+               <Col xs={1} md={1}>
+               </Col>
+               <Col xs={8} md={8}>
+                    <h1> Welcome to Noteable </h1> <br></br>
+                    <GoogleLogin
+                      clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+                      buttonText="Sign Up with Google"
+                      onSuccess={responseGoogleSignUp}
+                      onFailure={responseGoogle}/>
+                      <br></br>
+                      <h5> If you already have an account: </h5>
+                   
+                    <GoogleLogin
+                      clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+                      buttonText="Login with Google"
+                      onSuccess={responseGoogleLogin}
+                      onFailure={responseGoogle}/>
+               </Col>
+            </Row>
+        </Grid> 
+        </div>
+        
+        );
+    }
+}
+
 function Public() {
   return <h3>Public</h3>;
 }
@@ -140,14 +329,55 @@ function Protected() {
   return <h3>Protected</h3>;
 }
 
+// function needLogin(){
+
+//         return (
+//         <div ><Grid>
+//            <Row><Col xs={1} md={1}></Col>
+//                <Col xs={8} md={8}>
+//                     <h1> Welcome to Noteable </h1> <br></br>
+//                     <GoogleLogin
+//                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+//                       buttonText="Sign Up with Google"
+//                       onSuccess={responseGoogleSignUp}
+//                       onFailure={responseGoogle}/>
+//                       <br></br>
+//                       <h5> If you already have an account: </h5>
+//                     <GoogleLogin
+//                       clientId="911550655554-bbrflokkvhha58qunc6d51o2f2focvta.apps.googleusercontent.com"
+//                       buttonText="Login with Google"
+//                       onSuccess={responseGoogleLogin}
+//                       onFailure={responseGoogle}/>
+//                </Col>
+//             </Row>
+//         </Grid> </div>
+//         );
+
+// }
+const actualAuth = {
+  //isAuth: returnUser(),
+  isAuth: true,
+  username: 'ozhang@princeton.edu',
+  authenticate(cb){
+    this.isAuth = true
+
+  },
+  signout(cb){
+    this.isAuth = false
+  }
+}
+
+
 const fakeAuth = {
-  isAuthenticated: false,
+  isAuthenticated: true,
+  username: '',
   authenticate(cb) {
     this.isAuthenticated = true;
     setTimeout(cb, 100); // fake async
   },
   signout(cb) {
     this.isAuthenticated = false;
+    this.username = '';
     setTimeout(cb, 100);
   }
 };
@@ -155,23 +385,16 @@ const fakeAuth = {
 
 function PrivateRoute({ component: Component, ...rest }) {
   console.log('props', rest)
+  var username = 'ozhang@princeton.edu'
+
   return (
-    <Route
-      {...rest}
-      render={props =>
-        fakeAuth.isAuthenticated ? (
-          props = 
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location }
-            }}
-          />
-        )
-      }
-    />
+
+    <Route {...rest}
+     render={props => fakeAuth.isAuthenticated ? 
+      ( props =  <Component {...props} username={actualAuth.username} />) : 
+      (<Redirect  to={{  pathname: "/login", state: { from: props.location } }} />  )
+  } />
+  
   );
 }
   
@@ -181,7 +404,7 @@ const AuthButton  =
       ({ history }) =>
         fakeAuth.isAuthenticated ? (
           <p>
-            Welcome!{" "}
+            Welcome {actualAuth.username}!{" "}
             <button
               onClick={() => {
                 fakeAuth.signout(() => history.push("/"));

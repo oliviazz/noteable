@@ -102,6 +102,7 @@ class PageContainer extends React.Component {
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
+                this._username = this.props.username
                 var passed_state =  this.props.location.state
                 if (passed_state){
             
@@ -118,7 +119,8 @@ class PageContainer extends React.Component {
                 }
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-
+                this._username = this.props.username
+                
 
                 this._ismounted = true;
                 var article_names = [];
@@ -213,7 +215,7 @@ class PageContainer extends React.Component {
 //                            }
                 var loader = document.getElementById('loader')
                 loader.setAttribute('style', 'display:none')
-                
+
             }
 
             // ---------------------------------------

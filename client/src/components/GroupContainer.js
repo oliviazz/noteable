@@ -66,6 +66,9 @@ class GroupContainer extends React.Component {
         componentDidMount() {
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
 
+                this._user = this.props.username
+ 
+
                 this._ismounted = true;
                 var article_names = [];
                 var article = ""

@@ -57,6 +57,9 @@ class Article extends React.Component {
     console.log(`Option selected:`, selectedOption);
   }
 
+  componentDidMount() {
+   this._username = this.props.username
+ }
   
   render() {
     const { selectedOption } = this.my_selectedOption;

@@ -61,6 +61,7 @@ class UserContainer extends React.Component {
         // ---------------------------------------
         componentDidMount() {
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
+                console.log(this.state.username)
 
                 this._ismounted = true;
                 var article_names = [];

@@ -71,6 +71,9 @@ class GroupPageContainer extends React.Component {
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
+
+                 this._username = this.props.username
+    
                 // var passed_state =  this.props.location.state
                 // if (passed_state){
             
