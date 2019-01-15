@@ -32,7 +32,6 @@ chrome.tabs.query({ 'active': true, 'windowId': chrome.windows.WINDOW_ID_CURRENT
 // set proxy for chrome extension, re reoute to my backend
 
 document.addEventListener('DOMContentLoaded', function() {
-    alert(cur_url);
     var link = document.getElementById('submitButton');
 
     // onClick's logic below:
@@ -40,11 +39,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // snip
         event.preventDefault()
         var http = new XMLHttpRequest();
-        var url = 'localhost:5000/api/addarticle';
+        var url = 'http://localhost:5000/api/addarticleextension';
         var params = 'article_url=' + cur_url;
         http.open('POST', url, true);
 
         //Send the proper header information along with the request
+
         http.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
         http.onreadystatechange = function() { //Call a function when the state changes.
@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(http.responseText);
             }
         }
+        console.log('hi')
         http.send(params);
 
        
