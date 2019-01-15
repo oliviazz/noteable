@@ -250,6 +250,10 @@ class PageContainer extends React.Component {
         // ---------------------------------------    
         render() {
             
+            var selectButton = (event) =>{
+                console.log('hey')
+            }
+            
             // console.log(this.state.tags_components)
             return(
                 <div> 
