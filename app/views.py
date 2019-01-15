@@ -133,7 +133,7 @@ def index():
 @bp.route("/login", methods=["POST"])
 def login():
     json_payload = request.get_json()
-    # user_entry = User.get(json_payload['username'])
+    # user_entry = User.get(json_payload['username'].replace('\"', ''))
     username = 'livz'
     if (user_entry):
         user = User(*user_entry)
@@ -165,8 +165,6 @@ def checkuserexists():
 
   
     
-
-
 @bp.route("/createuser", methods=["POST"])
 def createuser():
     json_payload = request.get_json()
@@ -174,10 +172,9 @@ def createuser():
     print(user_data, ' \n\nuser data')
     database = Database()
     database.connect()
-    userId = hash(user_data['username'])
-    database.insertUser(str(user_data['firstName']), str(user_data['lastName']), str(user_data['username']))
-    return jsonify(message=("User" + user_data['username']+ "successfully entered")), 200
-
+    username = user_data['username'].replace('\"', '')
+    database.insertUser(str(user_data['firstName']), str(user_data['lastName']), str(username))
+    return jsonify(message=("User" + username + "successfully entered")), 200
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------#
 # GROUP SHIT                                                                                                                                         #
@@ -192,16 +189,15 @@ def creategroup():
     json_payload = request.get_json()
     database = Database()
     database.connect()
-    database.insertGroup(json_payload['groupname'])
+    database.insertGroup(json_payload['groupname'].replace('\"', ''))
     database.disconnect()
-    return jsonify(message="Created group: " + json_payload['groupname']), 200
+    return jsonify(message="Created group: " + json_payload['groupname'].replace('\"', '')), 200
 
 @bp.route("/joingroup", methods=["POST"])
 def joingroup():
     json_payload = request.get_json()
-    # username = str(json_payload['username'])
-    username = 'livz'
-    groupname = str(json_payload['groupname'])
+    username = str(json_payload['username'].replace('\"', ''))
+    groupname = str(json_payload['groupname'].replace('\"', ''))
     
     database = Database()
     database.connect()
@@ -217,9 +213,7 @@ def displayallgroups():
     print groups
     formatted_results = {}
     for i in range(0, len(groups)):
-        formatted_results[i] = {
-            'groupname': groups[i][0]
-        }
+        formatted_results[i] = {'groupname': groups[i][0].replace(",", "")}
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
@@ -228,14 +222,11 @@ def displaymygroups():
     database = Database()
     database.connect()
     json_payload = request.get_json()
-    # username = str(json_payload['username'])
-    username = 'livz'
+    username = str(json_payload['username'].replace('\"', ''))
     groups = database.displayAllGroupsFromUsername(username)
     formatted_results = {}
     for i in range(0, len(groups)):
-        formatted_results[i] = {
-            'groupname': groups[i][0]
-        }
+        formatted_results[i] = {'groupname': groups[i][0]}
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
@@ -248,8 +239,7 @@ def displaygrouparticles():
 
     print(json_payload, "payload in get articles")
     # PUT THIS BACK LATER
-    # groupname = json_payload['groupname']
-    groupname = 'livz'
+    groupname = json_payload['groupname'].replace('\"', '')
     tags = ""
 
     article_query_results = database.userTagArticles(groupname, tags)
@@ -263,9 +253,8 @@ def displaygrouparticles():
 @bp.route("/leavegroup", methods=["POST"])
 def leavegroup():
     json_payload = request.get_json()
-    # username = str(json_payload['username'])
-    username = 'livz'
-    groupname = str(json_payload['groupname'])
+    username = str(json_payload['username'].replace('\"', ''))
+    groupname = str(json_payload['groupname'].replace('\"', ''))
     
     database = Database()
     database.connect()
@@ -279,8 +268,8 @@ def addarticletogroup():
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
     # UPDATE LATER
-    # groupname = str(json_payload['groupname'])
-    groupname = 'groupname1'
+    groupname = str(json_payload['groupname'].replace('\"', ''))
+
     modularAddArticle(json_payload, groupname)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -293,7 +282,7 @@ def addarticletogroup():
 @bp.route("/addfriend", methods=["POST"])
 def addfriend():
     json_payload = request.get_json()
-    username = str(json_payload['username'])
+    username = str(json_payload['username'].replace('\"', ''))
     #username = 'livz'
     username2 = str(json_payload['username2'])
     #username2 = 'username2'
@@ -307,7 +296,7 @@ def addfriend():
 @bp.route("/removefriend", methods=["POST"])
 def removefriend():
     json_payload = request.get_json()
-    # username = str(json_payload['username'])
+    # username = str(json_payload['username'].replace('\"', ''))
     username = 'livz'
     # username2 = str(json_payload['username2'])
     username2 = 'username2'
@@ -322,25 +311,19 @@ def displaypending():
     json_payload = request.get_json()
     database = Database()
     database.connect()
-    username = str(json_payload['username'])
+    username = str(json_payload['username'].replace('\"', ''))
     allpending = database.displayPending(username)
 
     formatted_results = {}
     for i in range(0, len(allpending)):
-        formatted_results[i] = {
-            'firstname': allpending[i][0],
-            'lastname': allpending[i][1],
-            'username': allpending[i][2]
-        }
-
+        formatted_results[i] = {'firstname': allpending[i][0], 'lastname': allpending[i][1], 'username': allpending[i][2]}
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
 @bp.route("/checkfriends", methods=["POST"])
 def checkfriends():
     json_payload = request.get_json()
-    username = json_payload['username']
-   
+    username = json_payload['username'].replace('\"', '')
     username2 = json_payload['username2']
 
     database = Database()
@@ -354,7 +337,7 @@ def checkfriends():
 def friendarticles():
     json_payload = request.get_json()
     # PUT THIS BACK LATER
-    username = json_payload['username']
+    username = json_payload['username'].replace('\"', '')
 
     username2 = json_payload['username2']
 
@@ -378,18 +361,14 @@ def friendarticles():
 def allfriends():
     json_payload = request.get_json()
     # PUT THIS BACK LATER
-    username = json_payload['username']
+    username = json_payload['username'].replace('\"', '')
 
     database = Database()
     database.connect()
     friends = database.allUserFriends(username)
     formatted_results = {}
     for i in range(0, len(friends)):
-        formatted_results[i] = {
-            'firstname': friends[i][0],
-            'lastname': friends[i][1],
-            'username': friends[i][2]
-        }
+        formatted_results[i] = {'firstname': friends[i][0], 'lastname': friends[i][1], 'username': friends[i][2]}
     database.disconnect()
     return jsonify(results=formatted_results), 200
 
@@ -401,11 +380,7 @@ def allusers():
     formatted_results = {}
 
     for i in range(0, len(users)):
-        formatted_results[i] = {
-            'firstname': users[i][0],
-            'lastname': users[i][1],
-            'username': users[i][2]
-        }
+        formatted_results[i] = {'firstname': users[i][0], 'lastname': users[i][1], 'username': users[i][2]}
 
     database.disconnect()
     return jsonify(results=formatted_results), 200
@@ -419,9 +394,8 @@ def alltags():
     formatted_results = {}
 
     for i in range(0, len(tags)):
-        formatted_results[i] = {
-            'tagname': tags[i][0],
-        }
+        formatted_results[i] = {'tagname': tags[i][0]}
+
     print(formatted_results, "FORMATTED RESULTS")
     database.disconnect()
     return jsonify(results=formatted_results), 200
@@ -442,7 +416,7 @@ def feed():
 
     print(json_payload, "payload in get articles")
     # PUT THIS BACK LATER
-    # username = json_payload['username']
+    # username = json_payload['username'].replace('\"', '')
     username = 'livz'
     
     tags = ""
@@ -461,7 +435,7 @@ def addarticle():
     json_payload = request.get_json()
     print(json_payload, " addarticle json payload")
     # UPDATE LATER
-    username = str(json_payload['username'])
+    username = str(json_payload['username'].replace('\"', ''))
     print "now, testing that it exists after adding"
 
     
@@ -477,7 +451,7 @@ def deletearticle():
     json_payload = request.get_json()
     print json_payload, "!!!!!!!!"
 
-    username = str(json_payload['username'])
+    username = str(json_payload['username'].replace('\"', ''))
     article = str(json_payload['article_url'])
  
     database = Database()
@@ -511,7 +485,7 @@ def getarticles():
     print json_payload, "payload for get articles"
 
     # PUT THIS BACK LATER
-    username = json_payload['username']    
+    username = json_payload['username'].replace('\"', '')   
     tags = ""
 
     article_query_results = database.userTagArticles(username, tags)

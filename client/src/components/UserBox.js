@@ -29,7 +29,6 @@ class UserBox extends React.Component {
     this.state = {
       selectedOption: null,
       isFriend:false,
-
     }
   }
 

@@ -302,7 +302,7 @@ class Database:
     def allUsers(self):
         cursor = self._connection.cursor()
 
-        stmtStr = "SELECT users.firstName, users.lastName, users.username FROM users"
+        stmtStr = "SELECT users.firstName, users.lastName, users.username, users.userID FROM users"
 
         try:
             cursor.execute(stmtStr)
@@ -695,7 +695,8 @@ class Database:
         #check that user1, user2 exist, and that they are not already friends
         check1 = self.checkUser(userID)
         checkGroup = self.checkGroup(groupID)
-        check3 = self.checkFriends(groupname, username)
+
+        check3 = self.checkFriends(username, groupname)
 
         if check1 == True and checkGroup == True and check3 != True:
             self.internallyInsertFriend(groupID, userID, cursor)
@@ -717,7 +718,7 @@ class Database:
     def deleteUserFromGroup(self, username, groupname):
         userID = self.getUserID(username)
         groupID =  self.getGroupID(groupname)
-
+       
         cursor = self._connection.cursor()
 
         #check that user1, user2 exist, and that they are not already friends
@@ -897,6 +898,7 @@ class Database:
 
     def checkFriends(self, username1, username2):
         cursor = self._connection.cursor()
+
         userID1 = self.getUserID(username1)
         userID2 = self.getUserID(username2)
 
@@ -906,6 +908,10 @@ class Database:
         if (user1 == False):
             userID1 = self.getGroupID(username1)
             user1 = self.checkGroup(userID1)
+
+        elif (user2 == False):
+            userID2 = self.getGroupID(username2)
+            user2 = self.checkGroup(userID2)
 
         if (user1 == True and user2 == True):
             stmtStr = "SELECT EXISTS(SELECT 1 FROM friends WHERE userID1 = (?) AND userID2 = (?))"
@@ -926,6 +932,8 @@ class Database:
             except:
                 cursor.close()
                 return False
+
+        return False
 
     #-----------------------------------------------------------------------
     #
@@ -967,6 +975,7 @@ class Database:
     def getGroupID(self, groupname):
         cursereturn = []
         cursor = self._connection.cursor()
+
         stmtStr = "SELECT groups.groupID FROM groups WHERE groupname = (?)"
 
         try:
@@ -1598,7 +1607,7 @@ if __name__ == '__main__':
     # c.insertTags()
 
     # Test: Insert Users Dummy1-10
-    # c.insertUser('firstName', 'lastName', 'username1')
+    # c.insertUser('firstName', 'lastName', 'lkatzman@princeton.edu')
     # c.insertUser('firstName', 'lastName', 'username2')
     # c.insertUser('firstName', 'lastName', 'username3')
     # c.insertUser('firstName', 'lastName', 'username4')
@@ -1614,10 +1623,9 @@ if __name__ == '__main__':
     # c.insertUser('firstName', 'lastName', 'livz')
 
     # print c.allUsers()
-    # c.deleteUser('userID1')
+    # print c.displayAllGroupsFromUsername('lkatzman@princeton.edu')
     # print c.allUsers()
     # c.insertUser('firstName', 'lastName', 'username1', 'userID1')
-    # print c.allUsers()
 
     # Test: Insert/Delete Articles and User_Article_Tags and updating tags
     # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL987', 'Design Food Music')
@@ -1625,7 +1633,7 @@ if __name__ == '__main__':
     # c.insertArticle('livz', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL1', 'Design Architecture Holidays')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL2', 'Design News Politics')
     # c.insertArticle('userID1', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL3', 'Design World USA')
-    c.insertArticle('lkatzman@princeton.edu', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'https://stackoverflow.com/questions/32347207/how-does-the-toggle-button-work-with-checkboxes', 'Science')
+    # c.insertArticle('lkatzman@princeton.edu', 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'https://stackoverflow.com/questions/32347207/how-does-the-toggle-button-work-with-checkboxes', 'Science')
     # articles = c.allArticles()
     # for article in articles:
     #     print article
@@ -1637,11 +1645,11 @@ if __name__ == '__main__':
     # print c.userTagArticles('livz', "")
 
     # Test: UserArticles
-    articles = c.userTagArticles('lkatzman@princeton.edu', 'Science')
-    for article in articles:
-        print article
-        print
-    # Test: Add and Test Group Functionality
+    # articles = c.userTagArticles('lkatzman@princeton.edu', 'Science')
+    # for article in articles:
+    #     print article
+    #     print
+    # # Test: Add and Test Group Functionality
     # c.insertGroup("group1")
     # c.insertGroup("group2")
     # c.insertGroup("group3")
@@ -1651,11 +1659,11 @@ if __name__ == '__main__':
 
     # print c.allGroups()
     # c.addArticleToGroup("group1", 'articleTitle', 'articleIcon', 'articleBlurb', 'articleAuthor', 'articleDate', 'articleURL', 'Design Food Music')
-    # c.addUserToGroup('livz', 'group1')
+    # c.addUserToGroup('lkatzman@princeton.edu', 'group1')
     # c.addUserToGroup('livz', 'group2')
     # c.addUserToGroup('livz', 'group3')
     # c.addUserToGroup('livz', 'group4')
-    # print c.displayAllGroupsFromUsername('livz')
+    # print c.displayAllGroupsFromUsername('lkatzman@princeton.edu')
 
     # print c.allFriendPairings()
     # print c.printUsersInGroup('group1')
