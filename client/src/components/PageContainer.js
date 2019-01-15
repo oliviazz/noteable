@@ -75,6 +75,9 @@ class PageContainer extends React.Component {
             
                     this._username = passed_state['username']
                     this._displayUsername = passed_state['displayUsername']
+                    if (this._displayUsername == ''){
+                        this._displayUsername = this.props.username
+                    }
 
                     // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
                     
@@ -89,8 +92,8 @@ class PageContainer extends React.Component {
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
                 this._username = this.props.username
                 
-
-                this._ismounted = true;
+                this._username = this.props.username
+            
                 var article_names = [];
                 var article = ""
                 let components = []
