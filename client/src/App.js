@@ -53,7 +53,10 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this._username = ""
-    this.getData = this.getData.bind(this);
+    this.state = {
+      'username': ''
+    }
+    this.handleData = this.handleData.bind(this);
     
   }
   componentDidMount() {
@@ -99,15 +102,15 @@ class App extends React.Component {
       </header>
     </div>
       <div>
-        <PrivateRoute exact path="/" component={LoginContainer} />
+        <PrivateRoute exact path="/" component={PageContainer} />
         <LoadingView currentlySending={loadingAuth} />
-        <PrivateRoute path="/mypage" component={PageContainer} />
+        <Route path="/mypage" component={PageContainer} />
         <PrivateRoute path="/quickadd" component={ArticleAdd} />
-        <PrivateRoute path="/groups" component={GroupContainer} />
+        <Route path="/groups" component={GroupContainer} />
         <PrivateRoute path="/users" component={UserContainer} />
-        <PrivateRoute path="/grouppage" component={GroupPageContainer} />
+        <Route path="/grouppage" component={GroupPageContainer} />
 
-        <LoginRoute path="/login" component={LoginContainer} />
+        <Route path="/login" component={LoginContainer} handlerFromParent={this.handleData}/>
         <Route path="/logout" component={LogoutContainer} />     
       </div>
     </div>
@@ -117,7 +120,14 @@ class App extends React.Component {
 getData(val){
     // do not forget to bind getData in constructor
     console.log(val);
-}
+  }
+
+  handleData(data) {
+    this.setState({
+      username: data
+    });
+  }
+
 
 }
 
@@ -134,8 +144,8 @@ function Protected() {
 
 
 const actualAuth = {
-  isAuthenticated: true,
-  username: 'ozhang@princeton.edu',
+  isAuthenticated: false,
+  username: '',
   authenticate(cb){
     this.isAuthenticated = true
 
@@ -150,10 +160,29 @@ const actualAuth = {
 
 
 function PrivateRoute({ component: Component, ...rest }) {
+
+  var handleData = (langValue) => {
+
+      actualAuth.username = langValue
+      actualAuth.isAuthenticated = true
+      
+      console.log(actualAuth.username)
+      return (
+        <Route {...rest}
+         render={props => actualAuth.isAuthenticated ? 
+          ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
+          (<Redirect  to={{  pathname: "/mypage", state: { from: props.location } }} />  )
+      } />
+  
+      ); 
+
+  }
+    
+
   return (
     <Route {...rest}
      render={props => actualAuth.isAuthenticated ? 
-      ( props =  <Component {...props} username={actualAuth.username} />) : 
+      ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
       (<Redirect  to={{  pathname: "/login", state: { from: props.location } }} />  )
   } />
   
@@ -163,16 +192,19 @@ function PrivateRoute({ component: Component, ...rest }) {
 function LoginRoute({ component: Component, ...rest }) {
 
 
-
-  var handleLanguage = (langValue) => {
-        this.setState({language: langValue});
+   var handleData = (langValue) => {
+      actualAuth.username = langValue
+      actualAuth.isAuthenticated = true
+      this._username =  actualAuth.username 
+      console.log(actualAuth.username)
+      window.location.reload();
   }
 
   return (
     <Route {...rest}
      render={props => actualAuth.isAuthenticated ? 
-      ( props =  <Component {...props} username={actualAuth.username} sendData={this.getData} bob = "patrick"/>) : 
-      ( props =  <Component {...props}  onSelectLanguage={this.handleLanguage} sendData={this.getData} bob = "patrick"/> )
+      ( props =  <Component  {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
+      ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} /> )
   } />
   
   );

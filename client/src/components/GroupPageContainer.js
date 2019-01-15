@@ -11,6 +11,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
 import PageContainer from 'components/PageContainer'
 import ArticleAdd from 'components/ArticleAdd'
+import GroupArticleAdd from 'components/GroupArticleAdd'
 import UserBox from 'components/UserBox'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
@@ -59,9 +60,23 @@ class GroupPageContainer extends React.Component {
             // calculate the Id frm the username
             this._username = ''
             this._displayUsername = ''
+            this._displayGroupId = ''
+            this._displayGroupName = ''
 
 
             this._active_tag_filters = ''
+
+            var passed_state =  this.props.location.state
+                if (passed_state){
+            
+                    this._username = passed_state['userViewing']
+                   
+                    this._displayGroupName = passed_state['groupName']['gName']
+                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
+                    
+                    console.log(this._username, ' as viewing and ', this._displayGroupName, ' as the group to be viewed')
+                
+                }
 
              ///
             
@@ -72,23 +87,8 @@ class GroupPageContainer extends React.Component {
         // ---------------------------------------
         componentDidMount() {
 
-                 this._username = this.props.username
-    
-                // var passed_state =  this.props.location.state
-                // if (passed_state){
-            
-                //     this._username = passed_state['username']
-                //     this._displayUsername = passed_state['displayUsername']
-
-                //     // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
-                    
-                //     console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
-                
-                // }
-                // else{
-                //     console.log(passed_state, " no passed variables found")
-
-                // }
+                this._username = this.props.username
+                // state: {displayUserId: userId, userId: userViewing}
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
 
@@ -106,7 +106,7 @@ class GroupPageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
-                this.serverRequest = axios.post('api/getarticles', {'username': this._username})
+                this.serverRequest = axios.post('api/getgrouparticles', {'groupname': this._displayGroupName})
                     .then(res => {
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){
@@ -144,18 +144,6 @@ class GroupPageContainer extends React.Component {
             this.setState({selected})
         }
 
-
-        load_page_results = (selected) => {
-            
-
-            /// 
-            console.log('reloading this!!!')
-            
-
-            // make a http request 
-
-        }
-
         // { }
         // extract on tags 
         // save from everything 
@@ -173,6 +161,9 @@ class GroupPageContainer extends React.Component {
 
 
             //         })
+            this.groupName = this.props.groupName
+            var groupName = this._displayGroupName
+
 
             const tag_1 = 'food'
             const tag_2 = 'tech'
@@ -204,8 +195,8 @@ class GroupPageContainer extends React.Component {
                  
                     </Col>
                     <Col xs={4} md={4}>
-                         <div className = "usernameDisplay">{this._username}'s  notable:  </div>
-                         <ArticleAdd />
+                         <div className = "usernameDisplay">{groupName}'s  notable:  </div>
+                         <GroupArticleAdd groupname={groupName} />
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.article_components.map(article => <div>{article}</div>)} 
                     </Col>

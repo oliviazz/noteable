@@ -58,8 +58,28 @@ class PageContainer extends React.Component {
 
             //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
             // calculate the Id frm the username
-            this._username = ''
+            this._username = this.props.username
             this._displayUsername = ''
+
+            var passed_state =  this.props.location.state
+            if (passed_state){
+                if (this._username != passed_state['username']){
+                    console.log('hm, no username passed through props? Props: ', this.props.username)
+                    this._username = passed_state['username']
+                }
+                this._displayUsername = passed_state['displayUsername']
+
+                if (this._displayUsername == ''){
+                    // if displayUsername not passed it means you're viewing your own
+                    this._displayUsername = this.props.username
+                }
+
+                // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
+                
+                console.log('Passed user Id, username: ', this._username, ' display: ', this._displayUsername)
+            
+            }
+            else{ console.log(passed_state, "No passed variables found") }
 
             this._active_tag_filter = 'health'
             //this._active_tag_filter = 'all'
@@ -78,21 +98,6 @@ class PageContainer extends React.Component {
             // this._mega_tag_articles instantiated with all keys! 
             // ----------------------------------
 
-            axios.post('/api/alltags').then(res => {
-                    tags = res.data.results
-                    console.log('all tags bishhhh', tags)
-                    var formatted_tags = []
-                    console.log("Received response: tags ", tags);
-                    // for(var i = 0; i < Object.keys(tags).length; i++) {
-                    //     formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>Hello</ToggleButton>)
-                    // }
-                    // console.log(formatted_tags)
-                    // console.log('formatted tags the first time')
-                    // this.setState({tags_components:formatted_tags})
-                    // {this.state.tags_components.map(tag => <div>{tag}</div>)}
-
-                })  
-
              ///
             
 
@@ -102,30 +107,15 @@ class PageContainer extends React.Component {
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
-                this._username = this.props.username
-                var passed_state =  this.props.location.state
-                if (passed_state){
-            
-                    this._username = passed_state['username']
-                    this._displayUsername = passed_state['displayUsername']
-                    if (this._displayUsername == ''){
-                        this._displayUsername = this.props.username
-                    }
-
-                    // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
-                    
-                    console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
-                
-                }
-                else{
-                    console.log(passed_state, " no passed variables found")
-
-                }
+               
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
-                this._username = this.props.username
+               
                 
-                this._username = this.props.username
+                this._username = 'ozhang@princeton.edu'
+                if (this._displayUsername == ''){
+                    this._displayUsername = this._username
+                }
             
                 var article_names = [];
                 var article = ""
@@ -142,7 +132,7 @@ class PageContainer extends React.Component {
 
                 var mega_tag_articles = {}
                 var t_set = new Set()
-                this.serverRequest = axios.post('api/getarticles', {'username': this._username})
+                this.serverRequest = axios.post('api/getarticles', {'username': this._displayUsername})
                     .then(res => {
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){

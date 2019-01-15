@@ -270,7 +270,8 @@ def addarticletogroup():
     # UPDATE LATER
     groupname = str(json_payload['groupname'].replace('\"', ''))
 
-    modularAddArticle(json_payload, groupname)
+    result = modularAddArticle(json_payload, groupname)
+    return result
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------#
 # FRIEND FUNCTIONS                                                                                                                                   #
@@ -490,6 +491,26 @@ def getarticles():
 
     article_query_results = database.userTagArticles(username, tags)
     print "Article Query Results: ", article_query_results
+
+    formatted_results = displayArticlesHelper(article_query_results)
+    database.disconnect()
+    print('all done')
+    return jsonify(results=formatted_results)
+
+@bp.route("/getgrouparticles", methods=["POST"])
+def getgrouparticles():
+    database = Database()
+    database.connect()
+
+    json_payload = request.get_json()
+
+    print json_payload, "payload for get group articles"
+
+    # PUT THIS BACK LATER
+    groupname = json_payload['groupname'].replace('\"', '')   
+    tags = ""
+
+    article_query_results = database.getArticlesFromGroup(groupname)
 
     formatted_results = displayArticlesHelper(article_query_results)
     database.disconnect()

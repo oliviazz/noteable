@@ -77,7 +77,7 @@ class UserBox extends React.Component {
 
     //                 })
     var userId = this.props.userId
-    var userViewing = this.props.userViewing 
+    var userViewing = this.props.username
     this.state.isFriend = this.props.arefriends
     console.log(userId, userViewing, " one user!!")
     return (
@@ -98,9 +98,10 @@ class UserBox extends React.Component {
                 <br></br>
               <Link to={{
                 pathname: '/mypage',
-                state: {displayUserId: {userId}, userId: userViewing}
-
-              }}> View {this.props.username}'s Noteable' </Link>
+                state: {username: {userId},
+                        displayUsername: {userViewing}}
+                    
+              }}> View {this.props.firstname}'s Noteable' </Link>
               </Panel.Body>
      
             </Panel>

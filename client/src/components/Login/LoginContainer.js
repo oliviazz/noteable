@@ -32,6 +32,8 @@ class LoginContainer extends React.Component {
         };
         this.signup = this.signup.bind(this);
         this._username = ''
+        console.log(this.props, " what r my propsss")
+  
     }
 
   componentWillMount() {
@@ -61,7 +63,9 @@ class LoginContainer extends React.Component {
                         console.log('Welcome!')
                         this._username = postData['email']
                         console.log(this.props, " props")
-                        this.props.sendData(this._username);
+                        this.props.handlerFromParent(this._username);
+    
+   
                         
                         // this.props.history.push({
                         //             pathname: '/quickadd',
@@ -114,8 +118,11 @@ class LoginContainer extends React.Component {
                           axios.post('/api/createuser', {data: relevantData})
                           .then(res => {
                                   console.log("Received response: ", res.data);
+                                  // console.log(this.props, " props")
+                                  // this.props.sendData(this._username);
                                   console.log(this.props, " props")
-                                  this.props.sendData(this._username);
+                                 this.props.handlerFromParent(this._username);
+    
                                   // this.props.history.push({
                                   //   pathname: '/quickadd',
                                   //   state: {username: this._username, displayUsername: this._username} // your data array of objects
