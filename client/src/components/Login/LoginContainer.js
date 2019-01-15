@@ -60,11 +60,13 @@ class LoginContainer extends React.Component {
                     if (res.data['exists']){
                         console.log('Welcome!')
                         this._username = postData['email']
+                        console.log(this.props, " props")
+                        this.props.sendData(this._username);
                         
-                        this.props.history.push({
-                                    pathname: '/quickadd',
-                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
-                                  }) 
+                        // this.props.history.push({
+                        //             pathname: '/quickadd',
+                        //             state: {username: this._username, displayUsername: this._username} // your data array of objects
+                        //           }) 
                     }
                     else{
                       alert('Error: User not found ')
@@ -72,6 +74,8 @@ class LoginContainer extends React.Component {
           })
     }
   }
+
+ 
 
   signup(res, type){
         // postData connects to database, and must include all info needed
@@ -98,9 +102,7 @@ class LoginContainer extends React.Component {
           .then(res => {
                     console.log('Checking for existence of user ', postData['email'])
                     if (! res.data['exists']){
-                        // ask for username
-                        console.log('bro u wrong')
-
+                  
                           var relevantData = {
                             'firstName':  postData['first_name'],
                             'lastName': postData['last_name'],
@@ -112,11 +114,14 @@ class LoginContainer extends React.Component {
                           axios.post('/api/createuser', {data: relevantData})
                           .then(res => {
                                   console.log("Received response: ", res.data);
-                                  this.props.history.push({
-                                    pathname: '/quickadd',
-                                    state: {username: this._username, displayUsername: this._username} // your data array of objects
-                                  }) 
+                                  console.log(this.props, " props")
+                                  this.props.sendData(this._username);
+                                  // this.props.history.push({
+                                  //   pathname: '/quickadd',
+                                  //   state: {username: this._username, displayUsername: this._username} // your data array of objects
+                                  // }) 
                           })
+
                     }
                     else{
                       alert('Error: user already exists with that Google account. Please Log in Instead. ')
@@ -134,11 +139,6 @@ class LoginContainer extends React.Component {
   render() {
     const { from } = this.props.location.state || { from: { pathname: '/' } }
     const { redirectToReferrer } = this.state
-
-    if (redirectToReferrer === true) {
-      return <Redirect to={from} />
-    }
-
     const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
 
     // return (

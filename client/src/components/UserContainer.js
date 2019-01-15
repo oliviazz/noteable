@@ -175,7 +175,6 @@ class UserContainer extends React.Component {
                             .then(res => {
                                 
                                 var areFriends = res.data.results
-                                alert(u +  'after response')
                                 console.log(this._username, ' and ', u, 'are friends: ', areFriends)
                                 components = []
                                 components.push(
