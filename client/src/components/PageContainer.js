@@ -60,8 +60,8 @@ class PageContainer extends React.Component {
             this._username = ''
             this._displayUsername = ''
 
+            this._active_tag_filter = 'health'
             //this._active_tag_filter = 'all'
-            this._active_tag_filter = 'all'
             var tags = []
                       
                     
@@ -157,8 +157,10 @@ class PageContainer extends React.Component {
                             for (var i in split_tags) {
                                 split_tags[i] = String(split_tags[i].replace(/['"]+/g, ''));
                                 var taggo = split_tags[i]
-                                console.log(taggo)
-                                this._mega_tag_articles[taggo].push(this_component)
+                                if (taggo.length > 0){
+                                    console.log(taggo, " broken sad")
+                                    this._mega_tag_articles[taggo].push(this_component)
+                                }
                               
                             }
                         }
