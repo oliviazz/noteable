@@ -1251,9 +1251,9 @@ class Database:
             return (False, e)
 
         allEntries = cursor.fetchall() 
-        print(allEntries, '1')
+        print(allEntries, '---------- dsfsdfdsf ------------ 1')
         cursor.close()
-        print(allEntries, '2')
+        print(allEntries, '2-----f-df-saf-dsaf-ds-f-fa')
         return allEntries
 
     #-----------------------------------------------------------------------

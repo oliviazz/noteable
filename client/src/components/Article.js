@@ -43,7 +43,7 @@ class Article extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._username = 'lkatzman@princeton.edu'
+    this._username = 'zob@princeton.edu'
     
   
   }

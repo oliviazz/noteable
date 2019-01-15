@@ -35,6 +35,7 @@ class PageContainer extends React.Component {
             this.state = {
                 'full_article_info':[],
                 'article_components':[],
+                'display_article_components':[],
                 'tags_components':[],
                 'holder':'', 
                 'username':'',
@@ -59,14 +60,45 @@ class PageContainer extends React.Component {
             this._username = ''
             this._displayUsername = ''
 
+            //this._active_tag_filter = 'all'
+            this._active_tag_filter = 'all'
+            var tags = []
+                      
+                    
+            // set up mega_tag_articles
+            // ----------------------------------
+            this._mega_tag_articles = {}
+            //t_list represents list of all possible tags 
+            var t_list = ['news', 'politics', 'food', 'business', 'reading', 'technology', 'blogs', 'Money', 'Productivity', 'Games', 'School', 'Environment', 'Media', 'Travel', 'sports', 'Religion', 'health', 'Weather', 'Celebrity', 'science', 'Design', 'Art', 'Comedy', 'film', 'Music', 'fashion', 'race', 'World', 'Economy', 'Later', 'Popular', 'College', 'history', 'entrepreneurship', 'Animals', 'Architecture', 'holidays', 'kids', 'entertainment', 'Baking', 'Cooking', 'AI', 'Journalism', 'Advice', 'Creative', 'Lists', 'World', 'USA', 'NYC', 'tech', 'long_read']
+            for (var i = 0; i < t_list.length; i++){
+                    var tag = t_list[i]
+                    this._mega_tag_articles[tag] = []
+                }
+            // this._mega_tag_articles instantiated with all keys! 
+            // ----------------------------------
 
-            this._active_tag_filters = ''
+            axios.post('/api/alltags').then(res => {
+                    tags = res.data.results
+                    console.log('all tags bishhhh', tags)
+                    var formatted_tags = []
+                    console.log("Received response: tags ", tags);
+                    // for(var i = 0; i < Object.keys(tags).length; i++) {
+                    //     formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>Hello</ToggleButton>)
+                    // }
+                    // console.log(formatted_tags)
+                    // console.log('formatted tags the first time')
+                    // this.setState({tags_components:formatted_tags})
+                    // {this.state.tags_components.map(tag => <div>{tag}</div>)}
+
+                })  
 
              ///
             
 
         }
 
+    
+    
         // Called right after component mounts
         // ---------------------------------------
         componentDidMount() {
@@ -75,7 +107,6 @@ class PageContainer extends React.Component {
             
                     this._username = passed_state['username']
                     this._displayUsername = passed_state['displayUsername']
-
                     // this.setState({'username': this._username, 'displayUsername': this._displayUsername})
                     
                     console.log('Passed user Id, now set: ', this._username, ' as viewing and ', this._displayUsername, ' as the page ot be viewed')
@@ -103,57 +134,86 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
+                var mega_tag_articles = {}
+                var t_set = new Set()
                 this.serverRequest = axios.post('api/getarticles', {'username': this._username})
                     .then(res => {
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){
                             var info = this.state.full_article_info[article]
-                            components.push(< Article title = { info['title'] }
+                            var this_component = < Article title = { info['title'] }
                                         link = {info['url']}
                                         descrip = {info['blurb']}
                                         image = {info['icon']}
                                         tag = {info['tag']}
-                                    />);
-                            // create tag list
-                            var tag_list = info['tag'].split(",");
-                            console.log(tag_list);
-                            // save in dictionary
-                            for (var i = 0; i < Object.keys(tag_list).length; i++){
-                                if (tag_dict[tag_list[i]] == null){
-                                    tag_dict[tag_list[i]] = []
-                                }
-                                tag_dict[tag_list[i]].push(< Article title = { info['title'] }
-                                        link = {info['url']}
-                                        descrip = {info['blurb']}
-                                        image = {info['icon']}
-                                        tag = {info['tag']}
-                                    />);
+                                    />
+
+                            components.push(this_component)
+                            // Setting up mega tag articles -------------------------------------------------
+                            var split_tags = info['tag'].split(",");
+//                            
+                            for (var i in split_tags) {
+                                split_tags[i] = String(split_tags[i].replace(/['"]+/g, ''));
+                                var taggo = split_tags[i]
+                                console.log(taggo)
+                                this._mega_tag_articles[taggo].push(this_component)
+                              
                             }
                         }
-                        console.log(tag_dict)
-                         this.setState({
+                            // assume that mega_tag_articles already has all its keys hardcoded
+                            // --------------------------------------------------
+                            // Add this component to the dicts of all tags its under
+                      
+                            
+                        
+                    // This is buggy -- only one article showing up under long read?
+                        console.log(this._mega_tag_articles, "!!!!All articles should be added ")
+                        this.setState({
                                 article_components: components,
-                                articles_by_tag: tag_dict            
+                                articles_by_tag: tag_dict, 
+                                mega_tag_articles: mega_tag_articles
                         })
+                    
+                     if (this._active_tag_filter != "all"){
+                        console.log('Active tag selected!!! ', this._active_tag_filter)
+                        // write logic to check that this._active_tag_filter is a valid trag
+                        this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
+//                        console.log(this.state.display_article_components, " check its an array of components")
+                        this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
+                    }
+                    else if (this._active_tag_filter == "all"){
+                        this.setState({display_article_components:this.state.article_components})
+                    }
+
+                    console.log(this.state.display_article_components, " heyheyhey")
+
 
                     })
+            
+           
+                            // save in dictionary
+//                            for (var i = 0; i < Object.keys(tag_list).length; i++){
+//                                if (tag_dict.hasOwnProperty(tag_list[i])){
+//                                    console.log("CHECK TRUE")
+//                                    //tag_dict[tag_list[i]] = []
+//                                    tag_dict[tag_list[i]].push(< Article title = { info['title'] }
+//                                        link = {info['url']}
+//                                        descrip = {info['blurb']}
+//                                        image = {info['icon']}
+//                                        tag = {info['tag']}
+//                                    />);
+//                                }
+//                                tag_dict[tag_list[i]] = []
+//                                tag_dict[tag_list[i]].push(< Article title = { info['title'] }
+//                                        link = {info['url']}
+//                                        descrip = {info['blurb']}
+//                                        image = {info['icon']}
+//                                        tag = {info['tag']}
+//                                    />);
+//                            }
                 var loader = document.getElementById('loader')
                 loader.setAttribute('style', 'display:none')
-                var tags = []
-
-                axios.post('/api/alltags').then(res => {
-                    tags = res.data.results
-                    var formatted_tags = []
-                    console.log("Received response: tags ", tags);
-                    // for(var i = 0; i < Object.keys(tags).length; i++) {
-                    //     formatted_tags.push(<ToggleButton className = "navButton" onChange={this.handleChange}>Hello</ToggleButton>)
-                    // }
-                    // console.log(formatted_tags)
-                    // console.log('formatted tags the first time')
-                    // this.setState({tags_components:formatted_tags})
-                    // {this.state.tags_components.map(tag => <div>{tag}</div>)}
-
-                })            
+                
             }
 
             // ---------------------------------------
@@ -189,23 +249,8 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
-            // this.tags = []
-            // make api call and save returned "tags" as a call 
-            // this.serverRequest = axios.post('api/alltags')
-            //         .then(res => {
-            //             this.tags = res.data.results 
-
-
-            //         })
-
-            // const tag_1 = 'food'
-            // const tag_2 = 'tech'
-            // const tag_3 = 'business'
-            // const tag_4 = 'funny'
-            // const tag_5 = 'politics'
-            // const tag_6 = 'health'
-            // const tag_7 = 'music'
-            console.log(this.state.tags_components)
+            
+            // console.log(this.state.tags_components)
             return(
                 <div> 
                 <Grid>
@@ -251,7 +296,7 @@ class PageContainer extends React.Component {
                     <Col xs={4} md={4}>
                          <div className = "usernameDisplay">{this._username}'s notable:  </div>
                         <img id = "loader" src="loading.gif" ></img>
-                        {this.state.article_components.map(article => <div>{article}</div>)} 
+                        {this.state.display_article_components.map(article => <div>{article}</div>)} 
                     </Col>
 
                     </Row>

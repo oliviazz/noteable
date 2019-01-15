@@ -81,19 +81,17 @@ class Group extends React.Component {
       //       <a href={this.props.link} target="_blank" rel="noopener noreferrer">
       //       <Panel.Body>
             
-<<<<<<< HEAD
-              <span className ="link-spanner"></span>
-              {this.props.descrip}
-              <h4> {this.props.sitename} </h4>
-              <br></br>
-              <br></br>
-              <br></br>
-              <img src={this.props.image} className="img-responsive center-block"/>  
-              {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
-              {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
-              </Panel.Body>
-               </a>
-=======
+//              <span className ="link-spanner"></span>
+//              {this.props.descrip}
+//              <h4> {this.props.sitename} </h4>
+//              <br></br>
+//              <br></br>
+//              <br></br>
+//              <img src={this.props.image} className="img-responsive center-block"/>  
+//              {this.state.isMember ?  <Button bsStyle="success" disabled>Member </Button> : <Button onClick={joinGroup}> 'Join Group'</Button>} 
+//              {this.state.isMember ?  <Button bsStyle="error"  onClick={leaveGroup}>Leave Group </Button> : <h3 style="visibility:none"></h3>} 
+//              </Panel.Body>
+//               </a>
       //         <span className ="link-spanner"></span>
       //         {this.props.descrip}
       //         <h4> {this.props.sitename} </h4>
@@ -106,7 +104,6 @@ class Group extends React.Component {
                
       //         </Panel.Body>
       //          </a>
->>>>>>> d9520dfda58e8b0786977a12476b14384c1bb2d3
 
       //       </Panel>
           
