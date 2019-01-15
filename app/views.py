@@ -195,10 +195,13 @@ def creategroup():
 
 @bp.route("/joingroup", methods=["POST"])
 def joingroup():
+
     json_payload = request.get_json()
     username = str(json_payload['username'].replace('\"', ''))
     groupname = str(json_payload['groupname'].replace('\"', ''))
-    
+    print("username: " + username)
+    print("groupname: " + groupname)
+
     database = Database()
     database.connect()
     database.addUserToGroup(username, groupname)
@@ -255,7 +258,6 @@ def leavegroup():
     json_payload = request.get_json()
     username = str(json_payload['username'].replace('\"', ''))
     groupname = str(json_payload['groupname'].replace('\"', ''))
-    
     database = Database()
     database.connect()
     database.deleteUserFromGroup(username, groupname)
@@ -284,28 +286,24 @@ def addarticletogroup():
 def addfriend():
     json_payload = request.get_json()
     username = str(json_payload['username'].replace('\"', ''))
-    #username = 'livz'
-    username2 = str(json_payload['username2'])
-    #username2 = 'username2'
-    
+    friendname = str(json_payload['friendname'].replace('\"', ''))
 
     database = Database()
     database.connect()
-    database.addfriend(username, username2)
+    database.addFriend(username, friendname)
     database.disconnect()
+    return "addedfriend"
     
 @bp.route("/removefriend", methods=["POST"])
 def removefriend():
     json_payload = request.get_json()
-    # username = str(json_payload['username'].replace('\"', ''))
-    username = 'livz'
-    # username2 = str(json_payload['username2'])
-    username2 = 'username2'
-    
+    username = str(json_payload['username'].replace('\"', ''))
+    friendname = str(json_payload['friendname'].replace('\"', ''))
     database = Database()
     database.connect()
-    database.deleteFriend(username, username2)
+    database.deleteFriend(username, friendname)
     database.disconnect()
+    return "deletedfriend"
 
 @bp.route("/displaypending", methods=["POST"])
 def displaypending():
@@ -325,28 +323,26 @@ def displaypending():
 def checkfriends():
     json_payload = request.get_json()
     username = json_payload['username'].replace('\"', '')
-    username2 = json_payload['username2']
-
+    friendname = json_payload['friendname'].replace('\"', '')
+    
     database = Database()
     database.connect()
-    friendsLogic = database.checkFriends(username, username2)
+    friendsLogic = database.checkFriends(username, friendname)
 
     return jsonify(results=friendsLogic), 200
-
 
 @bp.route("/friendarticles", methods=["POST"])
 def friendarticles():
     json_payload = request.get_json()
     # PUT THIS BACK LATER
     username = json_payload['username'].replace('\"', '')
-
-    username2 = json_payload['username2']
+    friendname = json_payload['friendname']
 
     tags = ""
 
     database = Database()
     database.connect()
-    friendsLogic = database.checkFriends(username, username2)
+    friendsLogic = database.checkFriends(username, friendname)
 
     if friendsLogic == True:
         article_query_results = database.userTagArticles(username, tags)

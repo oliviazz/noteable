@@ -884,6 +884,48 @@ class Database:
         cursor.close()
         return curse
 
+    #-----------------------------------------------------------------------
+    #
+    # Parameters: two users, both strings - first is the CURRENT USERID FROM GOOGLE 
+    # and the second is the username2, parsed from the text on the page
+    # Does: Checks if two users are friends by only checking one direction
+    # of selection with the table 'friends'. Does not include pending 
+    # requests
+    # Returns: Returns 'True' if friends, 'False' if not 
+    # IMPORTANT: USERNAME1 MUST ALWAYS BE THE GROUPNAME, USERNAME2 MUST BE THE USER IF YOU ARE CHECKING FOR GROUPS
+    #----------------------------------------------------------------------- 
+
+    def checkIfPending(self, username1, username2):
+        print "checkfriends"
+        cursor = self._connection.cursor()
+
+        userID1 = self.getUserID(username1)
+        userID2 = self.getUserID(username2)
+
+        user1 = self.checkUser(userID1)
+        user2 = self.checkUser(userID2)
+
+        if (user1 == True and user2 == True):
+            stmtStr = "SELECT EXISTS(SELECT 1 FROM pendingFriends WHERE userID1 = (?) AND userID2 = (?))"
+
+            try:
+                cursor.execute(stmtStr, [str(userID2), str(userID1)])
+                self._connection.commit()
+            except Exception, e:
+                print >>stderr, e
+                return (False, e)
+
+            status = cursor.fetchall()
+
+            try:
+                returnable = (status[0][0] == 1)
+                cursor.close()
+                return returnable
+            except:
+                cursor.close()
+                return False
+
+        return False
 
     #-----------------------------------------------------------------------
     #
@@ -897,6 +939,7 @@ class Database:
     #----------------------------------------------------------------------- 
 
     def checkFriends(self, username1, username2):
+        print "checkfriends"
         cursor = self._connection.cursor()
 
         userID1 = self.getUserID(username1)
@@ -908,10 +951,6 @@ class Database:
         if (user1 == False):
             userID1 = self.getGroupID(username1)
             user1 = self.checkGroup(userID1)
-
-        elif (user2 == False):
-            userID2 = self.getGroupID(username2)
-            user2 = self.checkGroup(userID2)
 
         if (user1 == True and user2 == True):
             stmtStr = "SELECT EXISTS(SELECT 1 FROM friends WHERE userID1 = (?) AND userID2 = (?))"
@@ -1182,10 +1221,19 @@ class Database:
         userID1 = self.getUserID(username1)
         userID2 = self.getUserID(username2)
 
+        user1 = self.checkUser(userID1)
+        user2 = self.checkUser(userID2)
+
+        if (user1 == False):
+            userID1 = self.getGroupID(username1)
+            user1 = self.checkGroup(userID1)
+
         cursor = self._connection.cursor()
         self.internallyDeletePending(userID1, userID2, cursor)
         self.internallyDeletePending(userID2, userID1, cursor)
         
+        # print "delete friend: " + str(userID1)
+        # print "delete friend: " + str(userID2)
         stmtStr = "DELETE FROM friends WHERE userID1 = (?) and userID2 = (?)"
         try:
             cursor.execute(stmtStr, [str(userID1), str(userID2)])
@@ -1673,11 +1721,12 @@ if __name__ == '__main__':
     # Test Friendships
     # print c.allUserFriends('livz')
     # c.displayPending('username9')
-    # c.addFriend('livz', 'username9')
-    # c.addFriend('username9', 'livz')
+    c.addFriend('lkatzman@princeton.edu', 'username9')
+    c.addFriend('username9', 'lkatzman@princeton.edu')
     # c.addFriend('userID1', 'username1')
     # print c.feed('livz', 'Design')
     # c.deleteFriend('livz', 'other')
+    # print c.checkIfPending('username1', 'username2')
 
     # Test: 
     # print c.displayAllGroupsFromUsername('username1')

@@ -37,14 +37,16 @@ class Group extends React.Component {
   }
 
   componentDidMount() {
+
     this.groupName = this.props.groupName
     
     console.log("Group ", this.groupId, "being viewed by ", this.userViewing)
     console.log("hi1")
     axios.post('/api/checkfriends', {username2: JSON.stringify(this.username), username: JSON.stringify(this.props.groupName)}).then(res => {
+
+    axios.post('/api/checkfriends', {friendname: JSON.stringify(this.groupName), username: JSON.stringify(this.username)}).then(res => {
+
         this.state.isMember = res.data.results;
-        console.log("hi2")
-        console.log(this.state.isMember)
     })
   }
 
@@ -92,24 +94,31 @@ class Group extends React.Component {
 
     const leaveGroup = (event) => {
         this.setState({isMember: false})
+        console.log("leaving now")
         axios.post('/api/leavegroup', {username: JSON.stringify(this.username), groupname: JSON.stringify(this.props.groupName)}).then(res => {
             console.log("Received response: ", res.data.results);
+        })
+        axios.post('/api/checkfriends', {username2: JSON.stringify(this.username), username: JSON.stringify(this.props.groupName)}).then(res => {
+          this.state.isMember = res.data.results;
         })
     }
 
     const joinGroup = (event) => {
       this.setState({isMember: true})
-                axios.post('/api/joingroup', {username: JSON.stringify(this.username), groupname: JSON.stringify(this.props.groupName)}).then(res => {
-                  console.log("Received response: ", res.data);
-              }) 
-            }
+      axios.post('/api/joingroup', {username: JSON.stringify(this.username), groupname: JSON.stringify(this.props.groupName)}).then(res => {
+            console.log("Received response: ", res.data);
+        }) 
+      }
+      axios.post('/api/checkfriends', {username2: JSON.stringify(this.username), username: JSON.stringify(this.props.groupName)}).then(res => {
+        this.state.isMember = res.data.results;
+      })
 
     return (
       <div className = "container">
         <div className="row groupContainer">
             <div className = "row groupInside groupName" href={this.group_link_obj} target="_blank" rel="noopener noreferrer" name="groupname">{this.props.groupName}</div>
             <div className = "row groupInside articleBottom ">
-              <Button bsStyle="info" href = {this.props.groupPage} className="showgroupButton viewGroup"> View Group </Button>
+              {this.state.isMember ? <Button bsStyle="error" href = {this.props.groupPage} className="showgroupButton viewGroup"> View Group </Button> : <Button className="groupButton" disabled> 'View Group'</Button>} 
               {this.state.isMember ? <Button bsStyle="success" className="groupButton" disabled>Join Group </Button> : <Button onClick={joinGroup} className="groupButton"> 'Join Group'</Button>}
               {this.state.isMember ? <Button bsStyle="error" className="groupButton" onClick={leaveGroup} name='leavegroup'>Leave Group </Button> : <Button onClick={leaveGroup} className="groupButton" disabled> 'Leave Group'</Button>} 
             </div>   

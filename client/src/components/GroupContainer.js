@@ -271,7 +271,7 @@ class GroupContainer extends React.Component {
                     </Col>
                     
                     <Col xs={4} md={4}>
-                        <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this._user}'s</div> <div className="groupsNoteable">Noteable:</div> </div> 
+                        <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this.username}'s</div> <div className="groupsNoteable">Noteable:</div> </div> 
                         <div className = "usernameDisplay groupdisplay showingBlankGroups">showing {this.state.display} groups </div>
                         {this.state.group_components.map(group => <div>{group}</div>)} 
                     </Col>
