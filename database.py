@@ -1648,9 +1648,9 @@ class Database:
 if __name__ == '__main__':
     # # test user is 2018
     c = Database()
-    # c.oneTimeOnly()
+    c.oneTimeOnly()
 
-    c.connect()
+    #c.connect()
     # Initialize Tags Setup
     # c.insertTags()
 
@@ -1721,8 +1721,8 @@ if __name__ == '__main__':
     # Test Friendships
     # print c.allUserFriends('livz')
     # c.displayPending('username9')
-    c.addFriend('lkatzman@princeton.edu', 'username9')
-    c.addFriend('username9', 'lkatzman@princeton.edu')
+    #c.addFriend('lkatzman@princeton.edu', 'username9')
+    #c.addFriend('username9', 'lkatzman@princeton.edu')
     # c.addFriend('userID1', 'username1')
     # print c.feed('livz', 'Design')
     # c.deleteFriend('livz', 'other')

@@ -41,7 +41,8 @@ class PageContainer extends React.Component {
                 'username':'',
                 'displayUsername':'',
                 'articles_by_tag':{},
-                'clicked':{}
+                'clicked':{},
+                '_active_tag_filter':'all'
             }
 
             this._retrieved_articles = [];
@@ -60,6 +61,8 @@ class PageContainer extends React.Component {
             // calculate the Id frm the username
             this._username = localStorage.getItem('username')
             this._displayUsername = ''
+
+            this.toggleDisplay=this.toggleDisplay.bind(this);
 
             var passed_state =  this.props.location.state
             if (passed_state){
@@ -81,7 +84,7 @@ class PageContainer extends React.Component {
             }
             else{ console.log(passed_state, "No passed variables found") }
 
-            this._active_tag_filter = 'health'
+            this._active_tag_filter = 'all'
             //this._active_tag_filter = 'all'
             var tags = []
                       
@@ -236,6 +239,14 @@ class PageContainer extends React.Component {
 
         }
 
+        toggleDisplay(event){
+                let value = event.target.value;
+                console.log(value)
+                this.setState({
+                    '_active_tag_filter':event.target.value
+                  
+                });
+        }
         //tagFilter = {}
         // { }
         // extract on tags 
@@ -244,10 +255,26 @@ class PageContainer extends React.Component {
         // in the component
         // ---------------------------------------    
         render() {
+
+//                if (this._active_tag_filter != "all"){
+//                         console.log('Active tag selected!!! ', this._active_tag_filter)
+//                         // write logic to check that this._active_tag_filter is a valid trag
+//                         this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
+// //                        console.log(this.state.display_article_components, " check its an array of components")
+//                         //this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
+//                     }
+//                     else if (this._active_tag_filter == "all"){
+//                         //this.setState({display_article_components:this.state.article_components})
+//                         this.state.display_article_components = this.state.article_components
+//                     }
+
+
+                 
             
             var selectButton = (event) =>{
                 console.log('hey')
             }
+            this._active_tag_filter = this.state._active_tag_filter
 
             // const tagFilter(newclicked) = (event) => {
             //         // find where onClick is coming from and extract name property
@@ -283,41 +310,23 @@ class PageContainer extends React.Component {
                      <Col xs={3} md={2}>
                         <div className="tagsHeader">tags</div>
                         <ButtonToolbar>
-                            <ToggleButtonGroup type="checkbox">
-                                <ToggleButton className = "navButton tagsButton" name = "advice" >Advice</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "art">Art</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "blogs">Blogs</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "business">Business</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "college">College</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "comedy">Comedy</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "cooking">Cooking</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "design">Design</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "economy">Economy</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "entrepreneurship">Entrepreneurship</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "environment">Environment</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "fashion">Fashion</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "film">Film</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "games">Games</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "healthy">Health</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "history">History</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "holidays">Holidays</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "journalism">Journalism</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "media">Media</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "money">Money</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "politics">Politics</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "productivity">Productivity</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "race">Race</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "reading">Reading</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "religion">Religion</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "sports">Sports</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "technology">Technology</ToggleButton>
-                                <ToggleButton className = "navButton tagsButton" name = "travel">Travel</ToggleButton>
-                            </ToggleButtonGroup>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "news">News </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "for_later">For Later </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "food">Food </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "business">Business</Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "tech">Tech </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "humor">Humor </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "beauty">Beauty</Button>
+                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "all">All</Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "science">Science</Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "noteable">Noteable </Button>
+                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "politics">Politics</Button>
                         </ButtonToolbar>
+              
                         <br></br>
                  
                     </Col>
-                    <Col xs={4} md={4}>
+                    <Col xs={7} md={4}>
                          <div className = "usernameDisplay">{this._username}'s notable:  </div>
                          <h4> Displaying results with {this._active_tag_filter} as filter</h4>
                         <img id = "loader" src="loading.gif" ></img>
