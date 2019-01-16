@@ -58,7 +58,7 @@ class PageContainer extends React.Component {
 
             //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
             // calculate the Id frm the username
-            this._username = this.props.username
+            this._username = localStorage.getItem('username')
             this._displayUsername = ''
 
             var passed_state =  this.props.location.state
@@ -111,8 +111,6 @@ class PageContainer extends React.Component {
 
                 const { loggedIn, handleSubmit, currentlySending, formState, errorMessage } = this.props
                
-                
-                this._username = 'ozhang@princeton.edu'
                 if (this._displayUsername == ''){
                     this._displayUsername = this._username
                 }

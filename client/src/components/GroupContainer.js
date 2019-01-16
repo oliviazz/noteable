@@ -53,7 +53,7 @@ class GroupContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this.username = 'lkatzman@princeton.edu'
+            this.username =  localStorage.getItem('username')
 
             this._active_tag_filters = ''
         }

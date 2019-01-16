@@ -54,7 +54,7 @@ class UserContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this.username = 'lkatzman@princeton.edu'
+            this.username = localStorage.getItem('username')
 
             this._active_tag_filters = ''
         }
@@ -243,7 +243,9 @@ class UserContainer extends React.Component {
                         friends = res.data.results;
                         for(var j = 0; j < Object.keys(friends).length; j++){  
                             friendo = friends[j]['username'].replace(/['"]+/g, '') 
-                            searchy = JSON.stringify(this.state.searchTerm).replace(/['"]+/g, '')
+                            if (this.state.searchTerm != ""){
+                                searchy = JSON.stringify(this.state.searchTerm).replace(/['"]+/g, '')
+                            }
 
                             if(friendo.includes(searchy, 0)){
                                 thisUsername = <UserBox friendname = {friends[j]['username']} friendPage = 'insertURL.com'/>
@@ -283,7 +285,7 @@ class UserContainer extends React.Component {
                     </Col>
                     
                     <Col xs={4} md={4}>
-                        <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this.username}'s</div> <div className="groupsNoteable">Noteable:</div> </div> 
+                        <div className = "usernameDisplay groupdisplay"><div className="groupUser">{this.username}'s Noteable </div> <div className="groupsNoteable">Noteable:</div> </div> 
                         <div className = "usernameDisplay groupdisplay showingBlankGroups">showing {this.state.display} users </div>
                         {this.state.friend_usernames.map(friend => <div>{friend}</div>)} 
                     </Col>

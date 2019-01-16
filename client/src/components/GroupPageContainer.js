@@ -58,7 +58,7 @@ class GroupPageContainer extends React.Component {
 
             //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
             // calculate the Id frm the username
-            this._username = ''
+            this._username = localStorage.getItem('username')
             this._displayUsername = ''
             this._displayGroupId = ''
             this._displayGroupName = ''

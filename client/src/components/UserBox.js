@@ -23,7 +23,7 @@ class UserBox extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this.username = 'lkatzman@princeton.edu'
+    this.username = localStorage.getItem('username')
     this.state = {
       'isFriend':false
     }
@@ -93,39 +93,16 @@ class UserBox extends React.Component {
     var userViewing = this.props.username
     this.state.isFriend = this.props.arefriends
     console.log(userId, userViewing, " one user!!")
-    return (
-      <div>
-         <div className = "container">
-         
-            <Panel>
-              <Panel.Heading>
-                <Panel.Title componentClass="h2">{this.props.firstname} {this.props.lastname}'s noteable</Panel.Title>
-              </Panel.Heading>
-            
-              <Panel.Body>
-              <h4>{this.props.username}</h4>
-              <h5>{this.props.userId}</h5>
-              <h5>{this.props.arefriends}</h5>
-
-              {this.state.isFriend ?  <Button bsStyle="success" disabled>Friends!</Button> : <Button onClick={sendRequest}> 'Add Friend'</Button>} 
-                <br></br>
-              <Link to={{
-                pathname: '/mypage',
-                state: {username: {userId},
-                        displayUsername: {userViewing}}
-                    
-              }}> View {this.props.firstname}'s Noteable' </Link>
-              </Panel.Body>
-     
-            </Panel>
+  
 
 
     const addfriend = (event) => {
       console.log(this.state.isFriend)
-      axios.post('/api/addfriend', {username: JSON.stringify(this.username), friendname: JSON.stringify(this.props.friendname)}).then(res => {
+      axios.post('/api/addfriend', {username: JSON.stringify(this.username), friendname: JSON.stringify(this.props.friendname) } )
+      .then(res => {
             console.log("Received response: ", res.data);
             this.forceUpdate()
-        })
+        });
       }
 
     return (

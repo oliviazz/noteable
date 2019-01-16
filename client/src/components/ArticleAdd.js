@@ -55,7 +55,7 @@ class ArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._username = ""
+    this._username = localStorage.getItem('username')
     
   
   }
@@ -95,24 +95,11 @@ class ArticleAdd extends React.Component {
 //   next();
 // }
   componentDidMount() {
-    this._username = this.props.username
-    this._username = "ozhang@princeton.edu"
+    this._username = localStorage.getItem('username')
 
   
   }
   render() {
-
-      // var passed_state =  this.props.location.state
-      //           if (passed_state){
-      //               this._username = passed_state['username']
-                    
-      //               console.log('Passed username, now set: ', this._username)
-                
-      //           }
-      //           else{
-      //               console.log(passed_state, " no passed variables found")
-
-      //           }
       console.log(this.props, " PROPS")
       const { selectedOption } = this.my_selectedOption;
       const true_holder = true;

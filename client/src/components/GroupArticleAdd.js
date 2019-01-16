@@ -49,7 +49,7 @@ class GroupArticleAdd extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._username = ""
+    this._username = localStorage.getItem('username')
     this._groupname = ""
     
   

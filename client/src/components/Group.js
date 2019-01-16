@@ -42,9 +42,9 @@ class Group extends React.Component {
     
     console.log("Group ", this.groupId, "being viewed by ", this.userViewing)
     console.log("hi1")
-    axios.post('/api/checkfriends', {username2: JSON.stringify(this.username), username: JSON.stringify(this.props.groupName)}).then(res => {
-
-    axios.post('/api/checkfriends', {friendname: JSON.stringify(this.groupName), username: JSON.stringify(this.username)}).then(res => {
+   
+    axios.post('/api/checkfriends', {friendname: JSON.stringify(this.groupName), username: JSON.stringify(this.username)})
+    .then(res => {
 
         this.state.isMember = res.data.results;
     })
@@ -118,16 +118,14 @@ class Group extends React.Component {
         <div className="row groupContainer">
             <div className = "row groupInside groupName" href={this.group_link_obj} target="_blank" rel="noopener noreferrer" name="groupname">{this.props.groupName}</div>
             <div className = "row groupInside articleBottom ">
-              {this.state.isMember ? <Button bsStyle="error" href = {this.props.groupPage} className="showgroupButton viewGroup"> View Group </Button> : <Button className="groupButton" disabled> 'View Group'</Button>} 
+              {this.state.isMember ? <Button bsStyle="error" className="showgroupButton viewGroup">  <Link to={{ pathname: '/grouppage',
+                      state: {userViewing: 'lkatzman@princeton.edu',
+                      groupName: gName}    
+              }}> View Noteable' </Link></Button> : <Button className="groupButton" disabled> 'View Group'</Button>} 
               {this.state.isMember ? <Button bsStyle="success" className="groupButton" disabled>Join Group </Button> : <Button onClick={joinGroup} className="groupButton"> 'Join Group'</Button>}
               {this.state.isMember ? <Button bsStyle="error" className="groupButton" onClick={leaveGroup} name='leavegroup'>Leave Group </Button> : <Button onClick={leaveGroup} className="groupButton" disabled> 'Leave Group'</Button>} 
             </div>   
-            <Link to={{ pathname: '/grouppage',
-                      state: {userViewing: 'lkatzman@princeton.edu',
-                      groupName: gName}
-                    
-                    
-              }}> View {this.props.groupName}'s Noteable' </Link>'
+           
       
         </div>
       </div>

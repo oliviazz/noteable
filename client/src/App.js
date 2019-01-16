@@ -55,15 +55,39 @@ class App extends React.Component {
     this.state = {
       'username': ''
     }
-    this.handleData = this.handleData.bind(this);
+    this.handleCB=this.handleCB.bind(this);
     
   }
   componentDidMount() {
     this.props.loadUser()
   }
 
+  // handleCB = (event) =>{
+  //   let value = event.target.value;
+  //   this.setState({
+  //     username:value
+  //   });
+  // }
+
+  handleCB(event){
+    let value = event.target.value;
+    console.log('its working bitchsss')
+    this.setState({
+      username:value
+    });
+  }
+
   render() {
-      console.log('is logged in', actualAuth.isAuth)
+     
+
+    const username = localStorage.getItem('username');
+    console.log(username)
+    if (username != ''){
+      actualAuth.isAuthenticated = true;
+      actualAuth.username = username;
+
+    }
+   
       const { loadingAuth } = this.props
       const onChange = event => {
         this.setState({value: event.target.value});
@@ -92,43 +116,33 @@ class App extends React.Component {
                   <NavItem eventKey={2} href="/groups">Groups</NavItem>
                   <NavItem eventKey={3} href="/mypage">My Noteable</NavItem>
                   <NavItem eventKey={4} href="/users">Friends</NavItem>
-                  <Navbar.Form pullRight>   
-                      <FormGroup><FormControl type="text" placeholder="search users" name="searchTerm"  onChange = {onChange}/>
-                      </FormGroup><Button type="submit" onClick={(e) => onSubmit()}>Submit</Button>
-                  </Navbar.Form>
+                  
               </Nav>
             <AuthButton /></Navbar>
       </header>
     </div>
       <div>
-        <PrivateRoute exact path="/" component={LoginContainer} handlerFromParent={this.handleData}/>
-        <LoadingView currentlySending={loadingAuth} />
-        <Route path="/mypage" component={PageContainer} handlerFromParent={this.handleData} />
-        <Route path="/quickadd" component={ArticleAdd} handlerFromParent={this.handleData}/>
-        <Route path="/groups" component={GroupContainer} handlerFromParent={this.handleData}/>
-        <PrivateRoute path="/users" component={UserContainer} handlerFromParent={this.handleData} />
-        <Route path="/grouppage" component={GroupPageContainer} handlerFromParent={this.handleData}/>
+        <PrivateRoute exact path="/" component={PageContainer} mhandleCB={this.handleCB} />
+        <LoadingView currentlySending={loadingAuth} mhandleCB={this.handleCB}/>
+        <PrivateRoute path="/mypage" component={PageContainer} mhandleCB={this.handleCB} />
+        <PrivateRoute path="/quickadd" component={ArticleAdd} mhandleCB={this.handleCB}/>
+        <PrivateRoute path="/groups" component={GroupContainer} mhandleCB={this.handleCB}/>
+        <PrivateRoute path="/users" component={UserContainer} mhandleCB={this.handleCB} />
+        <PrivateRoute path="/grouppage" component={GroupPageContainer} mhandleCB={this.handleCB}/>
 
-        <Route path="/login" component={LoginContainer} handlerFromParent={this.handleData}/>
-        <Route path="/logout" component={LogoutContainer} />     
+        <Route path="/login" component={LoginContainer} mhandleCB={this.handleCB}/>
+        <Route path="/logout" component={LogoutContainer} mhandleCB={this.handleCB}/>     
       </div>
     </div>
     </Router>
-    )}
-
-getData(val){
-    // do not forget to bind getData in constructor
-    console.log(val);
-  }
-
-  handleData(data) {
-    this.setState({
-      username: data
-    });
-  }
-
-
+  )}
 }
+
+
+//     // do not forget to bind getData in constructor
+//     console.log(val);
+//   }
+
 
 function Public() {
   return <h3>Public</h3>;
@@ -139,7 +153,12 @@ function Protected() {
 }
 
 
-
+function handleCB(data) {
+    this.setState({
+      username: data
+    });
+    console.log(data)
+  }
 
 
 const actualAuth = {
@@ -152,62 +171,36 @@ const actualAuth = {
   signout(cb){
     this.isAuthenticated = false
     this.username = '';
+    localStorage.setItem('username', '')
     window.location.reload();
   }
 }
 
-
-
 function PrivateRoute({ component: Component, ...rest }) {
 
-  var handleData = (langValue) => {
-
-      actualAuth.username = langValue
-      actualAuth.isAuthenticated = true
-      
-      console.log(actualAuth.username)
-      return (
-        <Route {...rest}
-         render={props => actualAuth.isAuthenticated ? 
-          ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
-          (<Redirect  to={{  pathname: "/mypage", state: { from: props.location } }} />  )
-      } />
-  
-      ); 
-
-  }
-    
-
   return (
     <Route {...rest}
      render={props => actualAuth.isAuthenticated ? 
-      ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
-      (<Redirect  to={{  pathname: "/login", state: { from: props.location, fn: {handleData} } }} />  )
+      ( props =  <Component {...props} username={actualAuth.username} mhandleCB = {handleCB}  />) : 
+      (<Redirect  to={{  pathname: "/login", state: { from: props.location} }} />  )
   } />
   
   );
 }
 
-function LoginRoute({ component: Component, ...rest }) {
+// function LoginRoute({ component: Component, ...rest }) {
 
+//  var handleData = 'hi'
 
-   var handleData = (langValue) => {
-      actualAuth.username = langValue
-      actualAuth.isAuthenticated = true
-      this._username =  actualAuth.username 
-      console.log(actualAuth.username)
-      window.location.reload();
-  }
-
-  return (
-    <Route {...rest}
-     render={props => actualAuth.isAuthenticated ? 
-      ( props =  <Component  {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
-      ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} /> )
-  } />
+//   return (
+//     <Route {...rest}
+//      render={props => actualAuth.isAuthenticated ? 
+//       ( props =  <Component  {...props} username={actualAuth.username} handlerFromParent={handleData} />) : 
+//       ( props =  <Component {...props} username={actualAuth.username} handlerFromParent={handleData} /> )
+//   } />
   
-  );
-}
+//   );
+// }
   
 
 const AuthButton  = 
@@ -215,7 +208,7 @@ const AuthButton  =
       ({ history }) =>
         actualAuth.isAuthenticated ? (
           <p>
-            Welcome {actualAuth.username}!{" "}
+            {actualAuth.username}{" "}
             <button
               onClick={() => {
                 actualAuth.signout(() => history.push("/login"));
@@ -238,6 +231,4 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
-
-
 
