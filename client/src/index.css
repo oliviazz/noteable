@@ -35,7 +35,8 @@
 }
 
 .navBarMain{
-  background-color: #C3CDE6;
+  background-color: #C2D6F6;
+  color:white;
 }
 
 
@@ -43,6 +44,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Montserrat';
+  background-color:#ecf2fc
 }
 
 a{
@@ -50,14 +52,19 @@ a{
     height: 100%;
     width: 100%;
     text-decoration: none;
+   
+}
+
+.greetingMessage{
+
+  size:48px;
+  color: cornflowerblue;
 }
 
 a.headerLink{
 	display: inline;
     
 }
-
-
 
 div.box:hover {
     cursor: hand;
@@ -66,7 +73,7 @@ div.box:hover {
 }
 
 .navbar-header{
-  background-color:#C3CDE6;
+  background-color: #C2D6F6;
   color:white;
 }
 .navbar-div{
@@ -105,6 +112,7 @@ a.divLink {
 
 .container {
   margin-left: 4px;
+
 }
 
 .preview_img{
@@ -117,10 +125,11 @@ a.divLink {
   width:100%;
   font-size:13pt;
   border-color:#E7E7E7;
+  
 }
 
 .navButton:hover { 
-  background-color: #C3CDE6;
+  background-color: rgb(255, 56, 105);
   color:white;
   border-color:#E7E7E7;
 }
@@ -129,20 +138,35 @@ a.divLink {
   background-color: #74819F;
 }
 
-.articleAuthor {
-  float: left;
-  margin-right: 2%;
-}
-
 .sideTagNav {
   background-color: blue;
   float: left;
   width: 100%;
 }
 .navButton {
-  background-color: black;
+  background-color: #C2D6F6;
+  color:white;
   float: left;
 }
+
+/* ---------------------------  Article  Box --------------------------- */
+.articleAuthor {
+  float: left;
+  margin-right: 2%;
+}
+
+
+.articleTitle {
+  height: 20%;
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  white-space: nowrap;
+  margin-top: 1%;
+  float: left;
+  font-size: 25px;
+}
+
+
 .articleDate {
   float: left;
   border-left-style: solid;
@@ -182,7 +206,7 @@ a.divLink {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: grayscale(100%);
+  /* filter: grayscale(100%); */
 }
 
 .articleContent {
@@ -201,13 +225,13 @@ a.divLink {
 .articleTopBar {
   height: 15%;
   color: #FF1493;
-  font-family: 'Arvo', serif;
+  font-family: 'Montserrat', serif;
 }
 
 .articleTags {
   float: left;
   color: #FF1493;
-  font-family: 'Arvo', serif;
+  font-family: 'Montserrat', serif;
 }
 
 .articleDeleteButton {
@@ -217,8 +241,8 @@ a.divLink {
 
 .articleDelete {
   background: #fff;
-  color: #FF1493;
-  border: 2px solid #FF1493;
+  color: rgba(230, 0, 0, 0.849);
+  border: 2px solid rgba(230, 0, 0, 0.849);
   border-radius: 3px;
   padding: 3px 7px;
   text-transform: uppercase;
@@ -226,9 +250,9 @@ a.divLink {
   font-size: 10px;
   font-weight: bold;
 }
-
+/* ---------------------------  Article  Box --------------------------- */
 .groupButton {
-  background: #f7f3aa;
+  background: #e6fdff;
   color: #FF1493;
   border: 2px solid #FF1493;
   border-radius: 3px;
@@ -249,15 +273,6 @@ a.divLink {
   font-size: 10px;
 }
 
-.articleTitle {
-  height: 30%;
-  text-overflow: ellipsis; 
-  overflow: hidden; 
-  white-space: nowrap;
-  margin-top: 1%;
-  float: left;
-  font-size: 30px;
-}
 .showgroupButton {
   background: #C3CDE6;
   color: #FF1493;
@@ -295,19 +310,19 @@ a.divLink {
   width: 50px;
 }
 .usernameDisplay {
-  font-family: 'Arvo', serif;
+  font-family: 'Montserrat', serif;
   margin-left: 20%;
 }
 
 .tagsButton {
-  background: #f7f3aa;
+  background: #C2D6F6;
   border: 2px solid #7b98e0;
   border-radius: 5px;
   padding: 3px 7px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   margin-bottom: 5px;
-  font-size: 10px;
-  color: #FF1493;
+  font-size: 15px;
+  color:white;
   margin-right: none;
 /*  font-weight: bold;
 */}
@@ -315,7 +330,7 @@ a.divLink {
 .tagsHeader {
   font-size: 30px;
   margin-bottom: 10px;
-  font-family: 'Arvo', serif;
+  font-family: 'Montserrat', serif;
 }
 
 .groupdisplay {
@@ -334,7 +349,7 @@ a.divLink {
 .groupName {
   font-weight: bold;
   font-size: 30px;
-  font-family: 'Arvo', serif;
+  font-family: 'Montserrat', serif;
 }
 input[type=button] {
 	height:30px;
@@ -359,44 +374,9 @@ header {
 	align-content: center;
 	text-align: center;
 	align-self: center;
-	color: #0B3861;
+	color: white;
 	font-size:16px;
 	background-color: white;
   font-family: 'Montserrat';
 }
 
-  /*width:500px;
-}
-}
-}
-}
-*/
-/*.container{
-    width:200px;
-    height:200px;
-    background-color:black;
-    color:white;
-    /*Important:
-    position:relative;
-}*/
-
-/*Important:*/
-/*.link-spanner{
-  position:absolute; 
-  width:100%;
-  top:0;
-  left: 0;
-  z-index: 1;
-  height:100px;
-   edit: fixes overlap error in IE7/8, 
-     make sure you have an empty gif 
-  background-image: url('empty.gif');
-}   */
-
-/*.app_container {
-  
-  text-align: center;
-  align-self: center;
-  background-color: #CCCCFF;
-  height:100%;
-}*/

@@ -24,7 +24,6 @@ import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import ToggleButton from 'react-bootstrap/lib/ToggleButton';
 import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
-
 class PageContainer extends React.Component {
         // 
         // Set some initial properties we want to 
@@ -98,12 +97,6 @@ class PageContainer extends React.Component {
                     var tag = t_list[i]
                     this._mega_tag_articles[tag] = []
                 }
-            // this._mega_tag_articles instantiated with all keys! 
-            // ----------------------------------
-
-             ///
-            
-
         }
     
     
@@ -117,6 +110,8 @@ class PageContainer extends React.Component {
                 if (this._displayUsername == ''){
                     this._displayUsername = this._username
                 }
+
+                
             
                 var article_names = [];
                 var article = ""
@@ -131,10 +126,33 @@ class PageContainer extends React.Component {
                 }
                 this._source = axios.CancelToken.source();
 
+                this.timeOfDay = "morning"
+                let myDate = new Date()
+                this.month = myDate.getMonth()+1
+                this.day = myDate.getDate()
+                this.year = myDate.getFullYear()
+                this.dateString = myDate.toString();
+                console.log(this.dateString, this.month, this.day, this.year)
+
+                let cur_hour = myDate.getHours()
+                console.log(cur_hour)
+                if (cur_hour < 12){
+                    this.timeOfDay = "morning";
+                }
+                else if (cur_hour > 12 && cur_hour < 17){
+                    this.timeOfDay = "afternoon";
+
+                }
+                else {
+                    this.timeOfDay = "night"
+                }
+
                 var mega_tag_articles = {}
                 var t_set = new Set()
                 this.serverRequest = axios.post('api/getarticles', {'username': this._displayUsername})
                     .then(res => {
+
+                        console.log("do we got the results?", res.data.results)
                         this.setState({'full_article_info': res.data.results})
                         for(var article in this.state.full_article_info){
                             var info = this.state.full_article_info[article]
@@ -176,6 +194,10 @@ class PageContainer extends React.Component {
                      if (this._active_tag_filter != "all"){
                         console.log('Active tag selected!!! ', this._active_tag_filter)
                         // write logic to check that this._active_tag_filter is a valid trag
+                        if (!this._active_tag_filter in this._mega_tag_articles){
+                            console.log('error')
+                        }
+                        else
                         this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
 //                        console.log(this.state.display_article_components, " check its an array of components")
                         this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
@@ -233,8 +255,6 @@ class PageContainer extends React.Component {
 
             /// 
             console.log('reloading this!!!')
-            
-
             // make a http request 
 
         }
@@ -246,6 +266,8 @@ class PageContainer extends React.Component {
                     '_active_tag_filter':event.target.value
                   
                 });
+                
+                this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
         }
         //tagFilter = {}
         // { }
@@ -256,26 +278,22 @@ class PageContainer extends React.Component {
         // ---------------------------------------    
         render() {
 
-//                if (this._active_tag_filter != "all"){
-//                         console.log('Active tag selected!!! ', this._active_tag_filter)
-//                         // write logic to check that this._active_tag_filter is a valid trag
-//                         this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
-// //                        console.log(this.state.display_article_components, " check its an array of components")
-//                         //this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
-//                     }
-//                     else if (this._active_tag_filter == "all"){
-//                         //this.setState({display_article_components:this.state.article_components})
-//                         this.state.display_article_components = this.state.article_components
-//                     }
-
-
-                 
-            
+               if (this._active_tag_filter != "all"){
+                        console.log('Active tag selected!!! ', this._active_tag_filter)
+                        // write logic to check that this._active_tag_filter is a valid trag
+                        this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
+//                        console.log(this.state.display_article_components, " check its an array of components")
+                        //this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
+                    }
+                    else if (this._active_tag_filter == "all"){
+                        //this.setState({display_article_components:this.state.article_components})
+                        this.state.display_article_components = this.state.article_components
+                    }
             var selectButton = (event) =>{
                 console.log('hey')
             }
             this._active_tag_filter = this.state._active_tag_filter
-
+       
             // const tagFilter(newclicked) = (event) => {
             //         // find where onClick is coming from and extract name property
             //         // var newclicked = 'test'
@@ -307,17 +325,15 @@ class PageContainer extends React.Component {
                 <Grid>
                    
                      <Row>
-                     <Col xs={3} md={2}>
-                        <div className="tagsHeader">tags</div>
+                     <Col xs={4} md={2}>
+                        <div className="tagsHeader">Tags</div>
                         <ButtonToolbar>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "news">News </Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "for_later">For Later </Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "food">Food </Button>
-                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "business">Business</Button>
+                            {/* <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "business">Business</Button> */}
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "tech">Tech </Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "humor">Humor </Button>
-                            <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "beauty">Beauty</Button>
-                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "all">All</Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "science">Science</Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "noteable">Noteable </Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "politics">Politics</Button>
@@ -326,9 +342,12 @@ class PageContainer extends React.Component {
                         <br></br>
                  
                     </Col>
-                    <Col xs={7} md={4}>
-                         <div className = "usernameDisplay">{this._username}'s notable:  </div>
-                         <h4> Displaying results with {this._active_tag_filter} as filter</h4>
+                    <h2 className = "greetingMessage">It's {this.timeOfDay} on {this.month} {this.day}, {this.year}. Happy Reading! </h2>
+                    <h3 className = "usernameDisplay">{this._username}'s notable:  </h3>
+                    
+                    <Col xs={8} md={4}>
+                         
+                    <h4> Displaying results with {this._active_tag_filter} as filter</h4>
                         <img id = "loader" src="loading.gif" ></img>
                         {this.state.display_article_components.map(article => <div>{article}</div>)} 
                     </Col>

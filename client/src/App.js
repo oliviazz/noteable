@@ -1,4 +1,3 @@
-
 // #-----------------------------------------------------------------------
 // # app.js
 // # Author: Olivia Zhang, Zoë Barnswell, Lyra Katzman 
@@ -53,7 +52,7 @@ class App extends React.Component {
     super(props)
     this._username = ""
     this.state = {
-      'username': ''
+      'username': 'livya.zhang@gmail.com'
     }
     this.handleCB=this.handleCB.bind(this);
     
@@ -71,7 +70,6 @@ class App extends React.Component {
 
   handleCB(event){
     let value = event.target.value;
-    console.log('its working bitchsss')
     this.setState({
       username:value
     });
@@ -138,7 +136,6 @@ class App extends React.Component {
   )}
 }
 
-
 //     // do not forget to bind getData in constructor
 //     console.log(val);
 //   }
@@ -155,7 +152,7 @@ function Protected() {
 
 function handleCB(data) {
     this.setState({
-      username: data
+      username: "livya.zhang@gmail.com"
     });
     console.log(data)
   }
@@ -185,7 +182,7 @@ function PrivateRoute({ component: Component, ...rest }) {
       (<Redirect  to={{  pathname: "/login", state: { from: props.location} }} />  )
   } />
   
-  );
+  )
 }
 
 // function LoginRoute({ component: Component, ...rest }) {

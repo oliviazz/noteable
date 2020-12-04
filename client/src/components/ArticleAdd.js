@@ -96,8 +96,6 @@ class ArticleAdd extends React.Component {
 // }
   componentDidMount() {
     this._username = localStorage.getItem('username')
-
-  
   }
   render() {
       console.log(this.props, " PROPS")
@@ -106,6 +104,7 @@ class ArticleAdd extends React.Component {
       const status = 'Please Enter Article URL:';
 
       const submitArticle = event => {
+          this._username = "livya.zhang@gmail.com"
           event.preventDefault()
           alert('Submitted ' + this.state.article_url + "for user " + this._username);
           alert('Tags: ', JSON.stringify(this.my_selectedOption));
@@ -115,7 +114,10 @@ class ArticleAdd extends React.Component {
               })
           this.props.history.push({
             pathname: '/mypage',
-            state: {username: this._username, displayUsername: this._username} // your data array of objects
+            // state: {username: this._username, displayUsername: this._username} //
+            
+            state: {username: "livya.zhang@gmail.com", displayUsername: this._username} 
+            // your data array of objects
           }) 
           // this.props.router.push({
           //   pathname: '/other-page',
@@ -152,8 +154,6 @@ class ArticleAdd extends React.Component {
         );
     }
 }
-
-
 const mapStateToProps = state => ({
     loggedIn: state.loggedIn
 })

@@ -16,7 +16,7 @@ class Database:
 
     #-----------------------------------------------------------------------
     #
-    # HELPER FUNCTIONS FOR NUMBERS!!!! DO NOT USE EXTERNALLY
+    # HELPER FUNCTIONS FOR NUMBERS
     #
     #-----------------------------------------------------------------------
     def numUsers(self, cursor):
@@ -89,7 +89,7 @@ class Database:
 
     #-----------------------------------------------------------------------
     #
-    # SETUP AND BREAKDOWN
+    # SETUP AND BREAKDOWN DB
     #
     #-----------------------------------------------------------------------
 

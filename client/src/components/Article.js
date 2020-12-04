@@ -109,10 +109,7 @@ class Article extends React.Component {
           </div>
           
           <div className= "col-sm-8 articleContent">
-            <div className = "row articleTopBar articleInside">
-              <div className = "col-sm-10 articleTags">{this.props.tag}</div>
-              <div className = "articleDeleteButton col-sm-2"><button onClick={handleDelete} className="articleDelete">remove</button></div>
-            </div>
+         
             <a href={this.props.link} target="_blank" rel="noopener noreferrer"> 
            
             <div className = "row articleInside articleTitle">{this.props.title}</div>
@@ -120,7 +117,12 @@ class Article extends React.Component {
             <div className = "row articleInside articleBottom">
               <div className = "col articlefooter articleAuthor">Author</div>
               <div className = "col articlefooter articleDate">Date</div>
+              <div className = "col-sm-10 articleTags">{this.props.tag}</div>
             </div>
+            <div className = "row articleTopBar articleInside">
+             
+             <div className = "articleDeleteButton col-sm-2"><button onClick={handleDelete} className="articleDelete">remove</button></div>
+           </div>
             </a>
        
           </div>

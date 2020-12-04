@@ -177,7 +177,7 @@ def createuser():
     return jsonify(message=("User" + username + "successfully entered")), 200
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------#
-# GROUP SHIT                                                                                                                                         #
+# GROUP CODE                                                                                                                                      #
 #                                                                                                                                                    #
 #                                                                                                                                                    #
 #                                                                                                                                                    #
@@ -387,7 +387,7 @@ def alltags():
     database = Database()
     database.connect()
     tags = database.allTags()
-    print(tags, "AGGGGGG")
+    print(tags, "all tags")
     formatted_results = {}
 
     for i in range(0, len(tags)):
@@ -446,7 +446,7 @@ def addarticle():
 @bp.route("/deletearticle", methods=["POST"])
 def deletearticle():
     json_payload = request.get_json()
-    print json_payload, "!!!!!!!!"
+    print json_payload, "json payload delete article"
 
     username = str(json_payload['username'].replace('\"', ''))
     article = str(json_payload['article_url'])

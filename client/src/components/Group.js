@@ -11,13 +11,13 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { changeForm } from 'actions/appActions'
 import axios from 'axios';
+import Button from 'react-bootstrap/lib/Button';
+
 import Panel from 'react-bootstrap/lib/Panel';
 import { Redirect } from 'react-router-dom'
-
 import { withRouter } from "react-router-dom";
-
 import Select from 'react-select';
-import Button from 'react-bootstrap/lib/Button';
+
 
 
 class Group extends React.Component {
@@ -39,7 +39,6 @@ class Group extends React.Component {
   componentDidMount() {
 
     this.groupName = this.props.groupName
-    
     console.log("Group ", this.groupId, "being viewed by ", this.userViewing)
     console.log("hi1")
    
@@ -47,6 +46,7 @@ class Group extends React.Component {
     .then(res => {
 
         this.state.isMember = res.data.results;
+        console.log(this.state.isMember)
     })
   }
 
