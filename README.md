@@ -1,4 +1,4 @@
-## noteable 
+## Noteable Web App -- developed in React + Flask
 
 ### COS 333 Semester Project: Olivia Zhang, Lyra Katzman, Zoe Barnswell 
 
