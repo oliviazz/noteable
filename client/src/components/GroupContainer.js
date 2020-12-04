@@ -9,9 +9,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
 import Group from 'components/Group'
-import UserBox from 'components/UserBox'
-
-import ArticleAdd from 'components/ArticleAdd'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 
@@ -140,26 +137,18 @@ class GroupContainer extends React.Component {
 
 
         load_page_results = (selected) => {
-            console.log('reloading this!!!')
+            console.log('reloading!!!')
             
 
             // make a http request 
 
         }
 
-      
-
-        // { }
-        // extract on tags 
-        // save from everything 
-
-
-        // Defines the HTML code atually returned and shown
-        // in the component
+    
         // ---------------------------------------    
         render() {
             const onChange = (event) => {
-                alert('heyyy')
+                alert('changed event')
             }
 
             const displayallgroups = (event) => {
@@ -251,7 +240,6 @@ class GroupContainer extends React.Component {
                      <Row>
                     
                      <Col xs={3} md={2} className = "buttonToolbar">
-                
                         <ButtonToolbar>
                              <div className = "groupsToolbar tagsHeader">groups toolbar </div>
                             <Button onClick={displayallgroups} className="groupButton"> Show All Groups </Button> 
@@ -263,7 +251,6 @@ class GroupContainer extends React.Component {
                             <br></br><br></br><br></br>
                             <input id="group_search"  className = 'input-lg groupButton' type="text" placeholder="Find Group" name="searchTerm" value={this.state.value} onChange = { (e) => this.handleChange(e)}/><br></br>
                             <Button onClick={searchGroups} className="groupButton"> Search Groups </Button>
-
                          
                         </ButtonToolbar>
                     

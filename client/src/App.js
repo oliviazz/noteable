@@ -27,15 +27,7 @@ import { loadMe } from 'actions/appActions'
 
 import LoginContainer from 'components/Login/LoginContainer'
 import { login, setErrorMessage } from 'actions/appActions'
-import UserAdd from 'components/UserAdd'
-import GoogleLogin from 'react-google-login';
-
-import Row from 'react-bootstrap/lib/Row';
-import Grid from 'react-bootstrap/lib/Grid';
-import Col from 'react-bootstrap/lib/Col';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon';
-import axios from 'axios';
-import Button from 'react-bootstrap/lib/Button';
+import UserAdd from 'components
 import Nav from 'react-bootstrap/lib/Nav';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
@@ -60,13 +52,6 @@ class App extends React.Component {
   componentDidMount() {
     this.props.loadUser()
   }
-
-  // handleCB = (event) =>{
-  //   let value = event.target.value;
-  //   this.setState({
-  //     username:value
-  //   });
-  // }
 
   handleCB(event){
     let value = event.target.value;
@@ -136,10 +121,6 @@ class App extends React.Component {
   )}
 }
 
-//     // do not forget to bind getData in constructor
-//     console.log(val);
-//   }
-
 
 function Public() {
   return <h3>Public</h3>;
@@ -152,6 +133,7 @@ function Protected() {
 
 function handleCB(data) {
     this.setState({
+      // hardcoded now
       username: "livya.zhang@gmail.com"
     });
     console.log(data)

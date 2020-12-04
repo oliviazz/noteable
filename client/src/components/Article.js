@@ -43,8 +43,8 @@ class Article extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this._username = 'zob@princeton.edu'
-    
+    //hardcoded for now 
+    this._username = 'zob@princeton.edu'  
   
   }
 
@@ -131,48 +131,6 @@ class Article extends React.Component {
             
         </div>
       </div>
-      
-      
-      // <div>
-      //    <div className = "container">
-      //       <Panel>
-      //       <Panel.Heading>
-
-      //         <Panel.Title componentClass="h3">{this.props.title}
-      //          <button onClick={handleDelete}>X</button></Panel.Title>
-             
-      //       </Panel.Heading>
-      //       <a href={this.props.link} target="_blank" rel="noopener noreferrer">
-      //       <Panel.Body>
-            
-      //         <span className ="link-spanner"></span>
-      //         {this.props.descrip}
-      //         <h4> {this.props.sitename} </h4>
-      //         <br></br>
-      //         <br></br>
-      //         <br></br>
-      //         <Image src={this.props.image} className="img-responsive left-block" rounded/>   
-      //         </Panel.Body>
-      //          </a>
-
-
-
-      //          <Select
-      //           value={selectedOption}
-      //           onChange={this.handleChange}
-      //           options={options}
-      //           isMulti={true_holder}
-      //         />
-      //         <a onClick = {editTag}><h5>{this.props.tag} </h5></a>
-          
-
-
-
-      //       </Panel>
-          
-      //   </div>
-        
-      // </div> 
     );
   }
 }

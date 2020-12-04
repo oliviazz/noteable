@@ -109,9 +109,7 @@ class PageContainer extends React.Component {
                
                 if (this._displayUsername == ''){
                     this._displayUsername = this._username
-                }
-
-                
+                }   
             
                 var article_names = [];
                 var article = ""
@@ -210,8 +208,7 @@ class PageContainer extends React.Component {
 
 
                     })
-            
-           
+                    // To fix: tag dictionary
                             // save in dictionary
 //                            for (var i = 0; i < Object.keys(tag_list).length; i++){
 //                                if (tag_dict.hasOwnProperty(tag_list[i])){
@@ -241,21 +238,14 @@ class PageContainer extends React.Component {
 
         componentWillUnmount() {
             this._ismounted = false;
-
         }
 
         handleChange = (selected) => {
-            // console.log('selected', selected);
-            // this.setState({selected})
         }
 
 
         load_page_results = (selected) => {
-            
-
-            /// 
-            console.log('reloading this!!!')
-            // make a http request 
+            console.log('reloading')
 
         }
 
@@ -293,7 +283,8 @@ class PageContainer extends React.Component {
                 console.log('hey')
             }
             this._active_tag_filter = this.state._active_tag_filter
-       
+            // currently glitching -- commented for now, revisit this tag solutiion 
+
             // const tagFilter(newclicked) = (event) => {
             //         // find where onClick is coming from and extract name property
             //         // var newclicked = 'test'
@@ -318,12 +309,10 @@ class PageContainer extends React.Component {
             //         // }
             //         // this.setState({display_article_components:components})
             // }
-
             // console.log(this.state.tags_components)
             return(
                 <div> 
                 <Grid>
-                   
                      <Row>
                      <Col xs={4} md={2}>
                         <div className="tagsHeader">Tags</div>

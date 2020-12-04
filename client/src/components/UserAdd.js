@@ -100,7 +100,6 @@ class UserAdd extends React.Component {
             <Grid>
             <Row>
                     <Col xs={2} md={2}>
-                
                     </Col>
                     <Col xs={5} md={4}>
                         <h1> Noteable </h1> 

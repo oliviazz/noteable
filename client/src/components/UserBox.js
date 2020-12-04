@@ -10,12 +10,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { changeForm } from 'actions/appActions'
 import axios from 'axios';
-import Panel from 'react-bootstrap/lib/Panel';
-import { Redirect } from 'react-router-dom'
-
-import { withRouter } from "react-router-dom";
-
-import Select from 'react-select';
 import Button from 'react-bootstrap/lib/Button'
 
 class UserBox extends React.Component {
