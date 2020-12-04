@@ -342,7 +342,7 @@ class PageContainer extends React.Component {
                         <br></br>
                  
                     </Col>
-                    <h2 className = "greetingMessage">It's {this.timeOfDay} on {this.month} {this.day}, {this.year}. Happy Reading! </h2>
+                    <h2 className = "greetingMessage">It's {this.timeOfDay} on {this.month}/{this.day}/{this.year}. Happy Reading! </h2>
                     <h3 className = "usernameDisplay">{this._username}'s notable:  </h3>
                     
                     <Col xs={8} md={4}>

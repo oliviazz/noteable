@@ -67,9 +67,11 @@ class Article extends React.Component {
     var mylink = this.props.link
 
     const handleDelete = (event) => {
-        var r = window.confirm('Are you sure you want to delete this article from your page?')
+          
         
-        if (r == true){
+        // if (r == true){
+          console.log('deleing aticle')
+          var r = window.confirm('Are you sure you want to delete this article from your page?')
            this.serverRequest = axios.post('/api/deletearticle', {username: this._username, article_url: mylink})
             .then(res => {
                 if(res.data){
@@ -79,8 +81,8 @@ class Article extends React.Component {
                  }
             })
             window.location.reload();  
-        }
-        else{ return }
+        
+       return
     }
 
     const editTag = (event) => {

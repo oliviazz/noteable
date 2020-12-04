@@ -19,3 +19,13 @@
         .sidebar-head {
             margin-top: 20px;
         }
+    
+
+.notLoggedIn {
+    align-content: center;
+    display: block;
+    color:blue;
+    margin-top: 10%;
+
+
+}

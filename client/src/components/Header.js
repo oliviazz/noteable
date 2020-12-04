@@ -131,7 +131,7 @@ const AuthButton  =
             </button>
           </p>
         ) : (
-          <p>You are not logged in.</p>
+          <p className="notLoggedIn">You are not logged in.</p>
         )
     );
 

@@ -447,8 +447,10 @@ def addarticle():
 def deletearticle():
     json_payload = request.get_json()
     print json_payload, "json payload delete article"
-
-    username = str(json_payload['username'].replace('\"', ''))
+    if 'username' in json_payload:
+        username = str(json_payload['username'].replace('\"', ''))
+    else:
+        username = "livya.zhang@gmail.com"
     article = str(json_payload['article_url'])
  
     database = Database()

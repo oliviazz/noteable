@@ -32,7 +32,7 @@ class LoginContainer extends React.Component {
         };
         this.signup = this.signup.bind(this);
         this._username = localStorage.getItem('username')
-        console.log(this.props, " what r my propsss!!!!")
+        console.log(this.props, " properties")
   
     }
 
@@ -43,7 +43,7 @@ class LoginContainer extends React.Component {
   login(res, type) {
     let postData;
 
-    if (type === 'google' && res.w3.U3) {
+    if (type === 'google') {
         postData = {
           name: res.w3.ig,
           provider: type,
@@ -84,6 +84,7 @@ class LoginContainer extends React.Component {
   signup(res, type){
         // postData connects to database, and must include all info needed
         let postData;
+        console.log(res, "HERE")
 
         if (type === 'google' && res.w3.U3) {
             postData = {
