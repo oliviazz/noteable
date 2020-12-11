@@ -27,7 +27,7 @@ import { loadMe } from 'actions/appActions'
 
 import LoginContainer from 'components/Login/LoginContainer'
 import { login, setErrorMessage } from 'actions/appActions'
-import UserAdd from 'components
+import UserAdd from 'components/UserAdd'
 import Nav from 'react-bootstrap/lib/Nav';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
@@ -105,13 +105,13 @@ class App extends React.Component {
       </header>
     </div>
       <div>
-        <PrivateRoute exact path="/" component={PageContainer} mhandleCB={this.handleCB} />
+        <Route exact path="/" component={PageContainer} mhandleCB={this.handleCB} />
         <LoadingView currentlySending={loadingAuth} mhandleCB={this.handleCB}/>
-        <PrivateRoute path="/mypage" component={PageContainer} mhandleCB={this.handleCB} />
-        <PrivateRoute path="/quickadd" component={ArticleAdd} mhandleCB={this.handleCB}/>
-        <PrivateRoute path="/groups" component={GroupContainer} mhandleCB={this.handleCB}/>
-        <PrivateRoute path="/users" component={UserContainer} mhandleCB={this.handleCB} />
-        <PrivateRoute path="/grouppage" component={GroupPageContainer} mhandleCB={this.handleCB}/>
+        <Route path="/mypage" component={PageContainer} mhandleCB={this.handleCB} />
+        <Route path="/quickadd" component={ArticleAdd} mhandleCB={this.handleCB}/>
+        <Route path="/groups" component={GroupContainer} mhandleCB={this.handleCB}/>
+        <Route path="/users" component={UserContainer} mhandleCB={this.handleCB} />
+        <Route path="/grouppage" component={GroupPageContainer} mhandleCB={this.handleCB}/>
 
         <Route path="/login" component={LoginContainer} mhandleCB={this.handleCB}/>
         <Route path="/logout" component={LogoutContainer} mhandleCB={this.handleCB}/>     

@@ -5,11 +5,11 @@
 // Team Noteable -  Olivia, Zoe, and Lyra
 //----------------------------------------
 
+
+// - import statements 
 import React from 'react'
 import { connect } from 'react-redux'
-import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
-import UserBox from 'components/UserBox'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 
@@ -17,18 +17,11 @@ import Button from 'react-bootstrap/lib/Button';
 import Row from 'react-bootstrap/lib/Row';
 import Grid from 'react-bootstrap/lib/Grid';
 import Col from 'react-bootstrap/lib/Col';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import Nav from 'react-bootstrap/lib/Nav';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-import ToggleButton from 'react-bootstrap/lib/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
 
+
+// - import statements 
 class PageContainer extends React.Component {
-        // 
-        // Set some initial properties we want to 
-        // access across functions
-        // ---------------------------------------
         constructor(props) {
             super(props)
             this.state = {
@@ -44,8 +37,10 @@ class PageContainer extends React.Component {
                 '_active_tag_filter':'all'
             }
 
-            this._retrieved_articles = [];
+            //~~~~  ideally things that don't change 
+            //~~~~ REDUCE - minimzie the number of data stores. See what can be claculated 
 
+            this._retrieved_articles = [];
             this._ismounted = true;
             // Stores valid article URLs
             this._article_urls = [];
@@ -53,6 +48,7 @@ class PageContainer extends React.Component {
             this._full_article_info = [];
             // Stores the rendered Article components
             this._ArticleComponents = [];
+            this._active_tag_filter = 'all'
 
             this._gotfulldata = false;
 
@@ -60,7 +56,6 @@ class PageContainer extends React.Component {
             // calculate the Id frm the username
             this._username = localStorage.getItem('username')
             this._displayUsername = ''
-
             this.toggleDisplay=this.toggleDisplay.bind(this);
 
             var passed_state =  this.props.location.state
@@ -82,12 +77,6 @@ class PageContainer extends React.Component {
             
             }
             else{ console.log(passed_state, "No passed variables found") }
-
-            this._active_tag_filter = 'all'
-            //this._active_tag_filter = 'all'
-            var tags = []
-                      
-                    
             // set up mega_tag_articles
             // ----------------------------------
             this._mega_tag_articles = {}
@@ -246,7 +235,6 @@ class PageContainer extends React.Component {
 
         load_page_results = (selected) => {
             console.log('reloading')
-
         }
 
         toggleDisplay(event){
@@ -257,7 +245,9 @@ class PageContainer extends React.Component {
                   
                 });
                 
-                this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
+                this.setState({
+                    display_article_components:this._mega_tag_articles[this.state._active_tag_filter]
+                })
         }
         //tagFilter = {}
         // { }
@@ -271,6 +261,7 @@ class PageContainer extends React.Component {
                if (this._active_tag_filter != "all"){
                         console.log('Active tag selected!!! ', this._active_tag_filter)
                         // write logic to check that this._active_tag_filter is a valid trag
+                        // lol you're not supposed to setState 
                         this.state.display_article_components = this._mega_tag_articles[ this._active_tag_filter]
 //                        console.log(this.state.display_article_components, " check its an array of components")
                         //this.setState({display_article_components:this._mega_tag_articles[ this._active_tag_filter]})
@@ -316,6 +307,9 @@ class PageContainer extends React.Component {
                      <Row>
                      <Col xs={4} md={2}>
                         <div className="tagsHeader">Tags</div>
+                        {/* this could be done programmatically using the loop  */}
+
+                        
                         <ButtonToolbar>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "news">News </Button>
                             <Button className = "navButton tagsButton" onClick = {this.toggleDisplay} value = "for_later">For Later </Button>

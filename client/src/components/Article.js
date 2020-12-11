@@ -68,9 +68,8 @@ class Article extends React.Component {
 
     const handleDelete = (event) => {
           
-        
         // if (r == true){
-          console.log('deleing aticle')
+          console.log('deleting aticle')
           var r = window.confirm('Are you sure you want to delete this article from your page?')
            this.serverRequest = axios.post('/api/deletearticle', {username: this._username, article_url: mylink})
             .then(res => {

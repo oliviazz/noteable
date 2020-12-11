@@ -88,7 +88,7 @@ class LoginContainer extends React.Component {
 
         if (type === 'google' && res.w3.U3) {
             postData = {
-              name: res.w3.ig,
+              // name: res.w3.ig,
               provider: type,
               email: res.w3.U3,
               first_name: res.w3.ofa,
@@ -171,8 +171,7 @@ class LoginContainer extends React.Component {
 
         return (
         <div>
-        <Grid>
-                    
+        <Grid>     
             <Row>
                <Col xs={1} md={1}>
                </Col>
