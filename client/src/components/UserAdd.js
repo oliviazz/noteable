@@ -5,28 +5,20 @@
 // Team Noteable -  Olivia, Zoe, and Lyra
 //----------------------------------------
 import React from 'react'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { changeForm } from 'actions/appActions'
 import axios from 'axios';
-import Nav from 'react-bootstrap/lib/Nav';
-import Navbar from 'react-bootstrap/lib/Navbar';
-import NavDropdown from 'react-bootstrap/lib/NavDropdown';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-import FormGroup from 'react-bootstrap/lib/FormGroup';
-import FormControl from 'react-bootstrap/lib/FormControl';
-import NavItem from 'react-bootstrap/lib/NavItem';
 import Row from 'react-bootstrap/lib/Row';
 import Grid from 'react-bootstrap/lib/Grid';
 import Col from 'react-bootstrap/lib/Col';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 import Button from 'react-bootstrap/lib/Button';
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
-import Select from 'react-select';
-import ToggleButton from 'react-bootstrap/lib/ToggleButton';
-import ToggleButtonGroup from 'react-bootstrap/lib/ToggleButtonGroup';
+import { changeForm } from 'actions/appActions'
+import { connect } from 'react-redux'
 
-
+// ###################################################
+// # UserAdd Component 
+// #
+// # Input to add a new user to the community  
+// #  
+// ###################################################
 class UserAdd extends React.Component {
 
 

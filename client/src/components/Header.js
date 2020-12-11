@@ -25,13 +25,14 @@ class Header extends React.Component {
     this.state = {
       searchTerm: ""
     }
-    
+    this._username = "livya.zhang@gmail.com"
+    this.loggedIn_hardcode = true
   
   }
 
   render() {
     // const { loggedIn } = this.props
-
+    console.log(this.loggedIn_hardcode, "ok")
     const onChange = event => {
       this.setState({value: event.target.value});
     }
@@ -105,7 +106,7 @@ function Protected() {
 }
 
 const fakeAuth = {
-  isAuthenticated: false,
+  isAuthenticated: true,
   authenticate(cb) {
     this.isAuthenticated = true;
     setTimeout(cb, 100); // fake async
@@ -119,7 +120,9 @@ const fakeAuth = {
 const AuthButton  = 
       withRouter(
       ({ history }) =>
-        fakeAuth.isAuthenticated ? (
+        // fakeAuth.isAuthenticated ? (
+          this.loggedIn_hardcode ? (
+            
           <p>
             Welcome!{" "}
             <button

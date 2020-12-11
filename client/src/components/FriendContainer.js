@@ -4,12 +4,18 @@
 //
 // Team Noteable -  Olivia, Zoe, and Lyra
 //----------------------------------------
-
+// ###################################################
+// # FriendContainer Component 
+// #
+// # Form to add an article to a noteable list. 
+// # Attach tags and input URL; makes POST 
+// # Statement to API 
+// ###################################################
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
-import Group from 'components/Group'
-import UserBox from 'components/UserBox'
+import Group from './Group/node_modules/components/Groups/Group'
+import UserBox from './Group/node_modules/components/UserBox'
 
 import LoginForm from 'components/Login/LoginForm'
 import { login, setErrorMessage } from 'actions/appActions'

@@ -11,7 +11,7 @@ import { withRouter, Redirect } from 'react-router-dom'
 import Article from 'components/Article'
 import PageContainer from 'components/PageContainer'
 import ArticleAdd from 'components/ArticleAdd'
-import GroupArticleAdd from 'components/GroupArticleAdd'
+import GroupArticleAdd from 'components/Group/GroupArticleAdd'
 import UserBox from 'components/UserBox'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
@@ -58,7 +58,8 @@ class GroupPageContainer extends React.Component {
 
             //userId represents the person whose page you're viewing. eventually we'll have to replace w/ username and later on in the text 
             // calculate the Id frm the username
-            this._username = localStorage.getItem('username')
+            //this._username = localStorage.getItem('username')
+            this.username = 'livya.zhang@gmail.com'
             this._displayUsername = ''
             this._displayGroupId = ''
             this._displayGroupName = ''

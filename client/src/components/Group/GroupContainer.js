@@ -8,7 +8,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { withRouter, Redirect } from 'react-router-dom'
-import Group from 'components/Group'
+import Group from 'components/Group/Group'
 import { login, setErrorMessage } from 'actions/appActions'
 import axios from 'axios'
 
@@ -50,8 +50,8 @@ class GroupContainer extends React.Component {
 
             this._gotfulldata = false;
 
-            this.username =  localStorage.getItem('username')
-
+            //this.username =  localStorage.getItem('username')
+            this.username = 'livya.zhang@gmail.com'
             this._active_tag_filters = ''
         }
 

@@ -4,17 +4,16 @@
 //
 // Team Noteable -  Olivia, Zoe, and Lyra
 //----------------------------------------
-
-// !------> indicates comments/things to change from December 2020
-//
 // // !------> Always add intro text for clean code 
-// ###################################
-//  ArticleAdd Component 
-//
-//  Form to add an article to a noteable list. 
-//  Attach tags and input URL; makes POST 
-//  Statement to API 
-// ####################################
+// ###################################################
+// # ArticleAdd Component 
+// #
+// # Form to add an article to a noteable list. 
+// # Attach tags and input URL; makes POST 
+// # Statement to API 
+// ###################################################
+// (!------> indicates comments/things to change from December 2020) 
+
 
 
 // Imports
@@ -28,9 +27,9 @@ import Col from 'react-bootstrap/lib/Col';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Select from 'react-select';
+
+
 // =================================
-
-
 //!------>  PRINCIPLE: DONT HARDCODE THINGS! 
 //!------> Don't hardcode things. You should pass this tag dictionary into a dummy parent component that 
 //          can then pass this onto both ArticleAdd and PageContainer via props, programmatically. 
@@ -52,12 +51,12 @@ const options = [
 class ArticleAdd extends React.Component {
   constructor() {
     super()
-    // !------> Provide comments defining class variables! 
-
-    // to store tags selected 
+    // !------> comments to define class variables! 
+    // to store tags that aer selected 
     this.my_selectedOption = ""
-    // for display + POST requrerst purposes 
-    this._username = localStorage.getItem('username')
+    // for display + POST requerst purposes. Need to find better method than localStorage
+    //this._username = localStorage.getItem('username')
+    this.username = 'livya.zhang@gmail.com'
   }
 
   // !------> Comment what each function does.
@@ -68,18 +67,11 @@ class ArticleAdd extends React.Component {
             [e.target.name]: e.target.value
         })
   }
-
   state = {
       selectedOption: null,
   }
 
-  // handleChange_searchtag = (selectedOption) => {
-      
-  // }
-
-
   // !------>  Again, comment what this function is for. 
-
   // This function is to help process the string of selected tags inputted by the user
   handleChange_tag = (selectedOption) => {
       var tag_string = ""
@@ -102,15 +94,14 @@ class ArticleAdd extends React.Component {
 //   next();
 // }
 
-
+// Lifecycle Methods 
 // ==============================================
-// Start lifecycle methods
-
 //======================== Component has been rendered to the DOM the first time 
 componentDidMount() {
     this._username = localStorage.getItem('username')
 }
 
+// ======================== Regenerates when setState changed 
 render() {
       //!----------> 
       console.log(this.props, "passed props")
@@ -150,7 +141,7 @@ render() {
                   <div className = "status" > {status} </div>
                   <form onSubmit = { submitArticle } className = "addarticleForm addarticle" >
                     {/* !------> Note: could programmatically generate these CSS classes for more flexibility
-                        in the JS */}
+                        in the JS and speedd */}
                     <input className="form-control input-lg addarticleForm" className = "article_input addarticle" name = "article_url" ref = "article_add_place" type = "text" onChange = { (e) => this.handleChange(e)}></input> 
                     <ButtonToolbar>
                       <Select className = "addarticle"
@@ -166,7 +157,6 @@ render() {
               </Row>
             </Grid>
            </div> 
-
         );
     }
 }
@@ -177,7 +167,7 @@ const mapStateToProps = state => ({
     loggedIn: state.loggedIn
 })
 
-// This is part of react redux also 
+// This is part of react redux 
 const mapDispatchToProps = dispatch => ({
     // handleChange:values => dispatch(changeForm(values))
 })

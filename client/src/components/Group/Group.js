@@ -13,11 +13,13 @@ import { changeForm } from 'actions/appActions'
 import axios from 'axios';
 import Button from 'react-bootstrap/lib/Button';
 
-import Panel from 'react-bootstrap/lib/Panel';
-import { Redirect } from 'react-router-dom'
-import { withRouter } from "react-router-dom";
-import Select from 'react-select';
-
+// ###################################################
+// # Group Component 
+// #
+// # Form to add an article to a noteable list. 
+// # Attach tags and input URL; makes POST 
+// # Statement to API 
+// ###################################################
 
 
 class Group extends React.Component {
@@ -25,7 +27,7 @@ class Group extends React.Component {
   constructor() {
     super()
     this.my_selectedOption = ""
-    this.username = 'lkatzman@princeton.edu'
+    this.username = 'livya.zhang@gmail.com'
     this.state = {
       'isMember':false
     }
